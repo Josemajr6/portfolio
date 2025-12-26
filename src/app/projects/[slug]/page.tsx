@@ -64,10 +64,18 @@ export default function ProjectDetail({
     }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
-  };
+// Dentro del componente ProjectDetail
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      type: "spring" as const, // <--- AÑADIR "as const" AQUÍ TAMBIÉN
+      stiffness: 100 
+    } 
+  }
+};
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 relative overflow-x-hidden font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
