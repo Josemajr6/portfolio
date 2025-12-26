@@ -12,7 +12,6 @@ import { Project } from "@/data/project";
 
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
-  // Backend & Web
   if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
   if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
   if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
@@ -22,33 +21,41 @@ const getTechIcon = (techName: string) => {
   if (normalize.includes("java")) return <FaCode className="text-orange-500" />;
   if (normalize.includes("swagger")) return <SiSwagger className="text-green-600" />;
   if (normalize.includes("docker")) return <SiDocker className="text-blue-500" />;
-  
-  // Mobile & Ecosystem
   if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
   if (normalize.includes("dart")) return <SiDart className="text-blue-500" />;
   if (normalize.includes("android")) return <SiAndroid className="text-green-500" />;
   if (normalize.includes("swift")) return <SiSwift className="text-orange-500" />;
   if (normalize.includes("ios")) return <SiApple className="text-gray-100" />;
   if (normalize.includes("macos")) return <FaDesktop className="text-gray-300" />;
-  
-  // APIs & Servicios
   if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
   if (normalize.includes("weather")) return <FaCloudSun className="text-yellow-400" />;
   if (normalize.includes("rest countries")) return <FaGlobeAmericas className="text-green-400" />;
-  
   return <FaCode className="text-zinc-500" />; 
 };
 
 export default function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isCompleted = project.status === "Completed";
   
+  // --- CONFIGURACIÓN INDIVIDUAL DE IMÁGENES ---
+  // Lista de proyectos que necesitan 'contain' (verse enteros sin recorte)
+  // Incluimos: Nexus, LePokedex, AuraMovies, ManyWorker, AuraNotch.
+  const projectsWithContain = [
+    "nexus-app", 
+    "manyworker-api", 
+    "aura-notch",
+    "moneyflow" // Añado MoneyFlow por si acaso (suele ser móvil vertical)
+  ];
+
+  // Si está en la lista, usamos CONTAIN. Si no (Weather, Quiz, Notes), usamos COVER.
+  const useContainMode = projectsWithContain.includes(project.slug);
+
   return (
     <motion.article 
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
-      className="group relative w-full h-[500px] bg-zinc-950 border border-zinc-800 hover:border-emerald-500/50 transition-colors duration-500 overflow-hidden flex flex-col"
+      className="group relative w-full h-[600px] bg-zinc-950 border border-zinc-800 hover:border-emerald-500/50 transition-colors duration-500 overflow-hidden flex flex-col"
     >
       {/* HUD Corners */}
       <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
@@ -67,17 +74,30 @@ export default function ProjectCard({ project, index }: { project: Project; inde
         <span className="font-mono text-[10px] text-zinc-500">SECURE_DATA</span>
       </div>
 
-      {/* Main Image */}
-      <div className="relative h-56 w-full overflow-hidden border-b border-zinc-800 bg-black group-hover:h-48 transition-all duration-500 ease-in-out">
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-40 group-hover:opacity-10 transition-opacity" />
+      {/* Main Image Container */}
+      <div className="relative h-72 w-full overflow-hidden border-b border-zinc-800 bg-black group-hover:h-64 transition-all duration-500 ease-in-out">
+        
+        {/* Fondo sutil (útil para imágenes con 'contain' que dejan huecos negros) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05),transparent_70%)]" />
+        
+        {/* Efecto Scanlines */}
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" />
         
         <Image
-          src={project.mainImage} // CAMBIO AQUI
+          src={project.mainImage} 
           alt={project.title}
           fill
-          className="object-cover opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
+          // LÓGICA DE CLASES APLICADA:
+          className={`
+            transition-all duration-700
+            ${useContainMode 
+              ? "object-contain p-4 opacity-90 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105" 
+              : "object-cover opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110" 
+            }
+          `}
         />
         
+        {/* Badge Status */}
         <div className={`
           absolute bottom-2 right-2 px-2 py-0.5 bg-black/70 backdrop-blur-sm border text-[10px] font-mono z-20
           ${isCompleted 

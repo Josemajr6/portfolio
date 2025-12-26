@@ -40,6 +40,7 @@ export const projectsData: Project[] = [
     status: "Completed",
     isFeatured: true // SALDRÁ EN HOME
   },
+  /*
   {
     slug: "moneyflow",
     title: "MoneyFlow",
@@ -50,14 +51,15 @@ export const projectsData: Project[] = [
     mainImage: "/images/projects/moneyflow.png",
     galleryImages: [],
     status: "Completed",
-    isFeatured: true // SALDRÁ EN HOME
+    isFeatured: false // SALDRÁ EN HOME
   },
+  */
   {
     slug: "aura-movies",
     title: "Aura Movies",
     category: "Swift/iOS",
     tech: ["Swift", "SwiftUI", "TMDB API", "iOS"],
-    description: "Explorador de cine completo...",
+    description: "Experiencia inmersiva para descubrir películas. Utiliza la API de TMDB (The Movie Database).",
     githubUrl: "https://github.com/josemajr6/aura-movies",
     mainImage: "/images/projects/auramovies.png",
     galleryImages: [],
@@ -70,11 +72,11 @@ export const projectsData: Project[] = [
     title: "ManyWorker API",
     category: "Backend",
     tech: ["Spring Boot", "Swagger", "JUNIT"],
-    description: "API REST pura...",
+    description: "API REST en desarrollo",
     githubUrl: "https://github.com/Josemajr6/ManyWorker",
     mainImage: "/images/projects/api.png",
     galleryImages: [],
-    status: "Completed",
+    status: "In Progress",
     isFeatured: false 
   },
   
@@ -82,7 +84,7 @@ export const projectsData: Project[] = [
     slug: "aura-weather",
     title: "Aura Weather",
     category: "Swift/iOS",
-    tech: ["Swift", "SwiftUI", "Weather API", "CoreLocation", "iOS"],
+    tech: ["Swift", "SwiftUI", "Weather API", "CoreLocation", "macOS"],
     description: "Aplicación meteorológica elegante con geolocalización automática y previsión detallada por horas.",
     githubUrl: "https://github.com/josemajr6/aura-weather",
     mainImage: "/images/projects/auraweather.png",
@@ -98,7 +100,8 @@ export const projectsData: Project[] = [
     githubUrl: "https://github.com/josemajr6/aura-quiz",
     mainImage: "/images/projects/auraquiz.png",
     galleryImages: [],
-    status: "Completed"
+    status: "Completed",
+    isFeatured: true
   },
   {
     slug: "aura-notes",

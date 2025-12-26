@@ -208,7 +208,7 @@ export default function Home() {
                /// END_OF_TRANSMISSION ///
             </div>
             <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 text-lg md:text-xl font-bold text-zinc-300">
-               <span>Codeado con</span>
+               <span>Desarrollado con</span>
                <div className="relative">
                   <FaHeart className="text-red-600 animate-pulse drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" size={24} />
                </div>
