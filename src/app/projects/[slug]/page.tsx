@@ -64,18 +64,17 @@ export default function ProjectDetail({
     }
   };
 
-// Dentro del componente ProjectDetail
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      type: "spring" as const, // <--- AÑADIR "as const" AQUÍ TAMBIÉN
-      stiffness: 100 
-    } 
-  }
-};
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        type: "spring" as const,
+        stiffness: 100 
+      } 
+    }
+  };
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 relative overflow-x-hidden font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
@@ -183,21 +182,22 @@ const itemVariants = {
                   </div>
               </motion.div>
 
-              {/* Columna Derecha: Imagen HUD (FULL COVER) */}
+              {/* Columna Derecha: Imagen HUD */}
               <motion.div variants={itemVariants} className="relative group w-full">
                  <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-950 shadow-2xl">
                      
-                     {/* IMAGEN A PANTALLA COMPLETA */}
+                     {/* Fondo sutil interno para cuando la imagen no llena todo */}
+                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
+
+                     {/* IMAGEN PRINCIPAL: object-contain + padding */}
                      <Image 
                         src={project.mainImage}
                         alt={project.title}
                         fill
-                        /* object-cover: llena todo el hueco
-                           object-top: si se corta, prioriza la parte de arriba (bueno para webs/apps) */
-                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
                      />
 
-                     {/* Efectos de Pantalla */}
+                     {/* Efectos de Pantalla Overlay */}
                      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,6px_100%] pointer-events-none z-20 mix-blend-overlay opacity-50" />
                      
                      {/* Esquinas HUD */}
@@ -228,7 +228,7 @@ const itemVariants = {
              </div>
           </motion.div>
 
-          {/* --- GALERÍA FULL COVER --- */}
+          {/* --- GALERÍA --- */}
           {project.galleryImages && project.galleryImages.length > 0 && (
              <motion.div variants={itemVariants}>
                 <div className="flex items-center gap-4 mb-8">
@@ -251,14 +251,13 @@ const itemVariants = {
                             </div>
                          </div>
                          
-                         {/* IMAGEN GALERÍA (COVER) */}
+                         {/* IMAGEN GALERÍA: object-contain + padding */}
                          <div className="relative w-full h-full pt-8">
                             <Image 
                                 src={img}
                                 alt={`Screenshot ${idx + 1}`}
                                 fill
-                                /* Forzamos que llene todo el cuadro */
-                                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
                             />
                          </div>
 

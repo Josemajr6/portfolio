@@ -12,6 +12,7 @@
     "@heroui/button": "^2.2.29",
     "@heroui/system": "^2.4.25",
     "@heroui/theme": "^2.4.25",
+    "@meronex/icons": "^4.0.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",

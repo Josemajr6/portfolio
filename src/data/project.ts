@@ -95,7 +95,7 @@ export const projectsData: Project[] = [
     slug: "aura-quiz",
     title: "Aura Quiz",
     category: "Swift/iOS",
-    tech: ["Swift", "SwiftUI", "REST Countries API", "GameKit", "iOS"],
+    tech: ["Swift", "SwiftUI", "REST Countries API", "GameKit", "iOS", "macOS"],
     description: "Juego tipo trivial geográfico. Lógica de juego dinámica consumiendo datos reales de países vía API REST.",
     githubUrl: "https://github.com/josemajr6/aura-quiz",
     mainImage: "/images/projects/auraquiz.png",
@@ -112,7 +112,7 @@ export const projectsData: Project[] = [
     githubUrl: "https://github.com/josemajr6/aura-notes",
     mainImage: "/images/projects/auranotes.png",
     galleryImages: [],
-    status: "In Progress"
+    status: "Completed"
   },
   {
     slug: "aura-notch",
@@ -123,6 +123,6 @@ export const projectsData: Project[] = [
     githubUrl: "https://github.com/josemajr6/aura-notch",
     mainImage: "/images/projects/auranotch.png",
     galleryImages: [],
-    status: "On Hold"
+    status: "Completed"
   }
 ];
