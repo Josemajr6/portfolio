@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 export default function FeaturedProjects() {
   // Solo mostramos los primeros 4 proyectos destacados
-  const featured = projectsData.slice(0, 4);
+  const featured = projectsData.filter(p => p.isFeatured).slice(0, 4);
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4">

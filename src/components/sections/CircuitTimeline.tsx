@@ -1,110 +1,159 @@
 "use client";
 import { experienceData } from "@/data/experience";
 import { motion } from "framer-motion";
-import { FaBriefcase, FaGraduationCap, FaCalendarAlt, FaMicrochip } from "react-icons/fa";
+import { FaBriefcase, FaGraduationCap, FaCalendarAlt, FaMicrochip, FaHashtag, FaBolt } from "react-icons/fa";
 
 export default function CircuitTimeline() {
   return (
-    <div className="relative max-w-5xl mx-auto py-12 px-4">
+    <div className="relative max-w-7xl mx-auto py-32 px-4 md:px-8 overflow-hidden">
       
-      {/* --- LÍNEA CENTRAL (BACKBONE) --- */}
-      {/* Fondo oscuro de la línea */}
-      <div className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-[2px] md:-translate-x-1/2 bg-zinc-800">
-        {/* Luz interior que crece */}
-        <motion.div 
-            initial={{ height: 0 }}
-            whileInView={{ height: "100%" }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="w-full bg-gradient-to-b from-emerald-500 via-cyan-500 to-indigo-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+      {/* --- AMBIENTE DE FONDO --- */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.02),transparent_60%)] pointer-events-none" />
+
+      {/* --- COLUMNA VERTEBRAL (QUANTUM SPINE) --- */}
+      {/* Usamos mask-image para que se desvanezca elegantemente en los extremos */}
+      <div className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-[2px] md:-translate-x-1/2 bg-zinc-800 [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] z-0">
+        {/* Energía latente */}
+        <div className="absolute inset-0 bg-emerald-500/20" />
+        
+        {/* Pulso de datos viajando (Más rápido y fino) */}
+        <motion.div
+          animate={{ top: ["-10%", "110%"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent via-emerald-400 to-transparent shadow-[0_0_20px_rgba(52,211,153,0.5)] z-10"
         />
       </div>
 
-      <div className="space-y-12 md:space-y-24">
+      <div className="relative z-10 space-y-24">
         {experienceData.map((item, index) => {
           const isLeft = index % 2 === 0; 
+          const isWork = item.type === 'work';
           
+          // Paleta de Colores "Industrial Neon"
+          // Work: Violeta Eléctrico | Education: Cian Cibernético
+          const theme = isWork ? {
+             primary: "text-indigo-400",
+             border: "group-hover:border-indigo-500/40",
+             bg_gradient: "from-indigo-500/5 to-transparent",
+             glow: "group-hover:shadow-[0_0_30px_-5px_rgba(99,102,241,0.15)]",
+             icon_bg: "bg-indigo-500/10",
+             icon_border: "border-indigo-500/20",
+             connector: "from-indigo-500/40"
+          } : {
+             primary: "text-emerald-400",
+             border: "group-hover:border-emerald-500/40",
+             bg_gradient: "from-emerald-500/5 to-transparent",
+             glow: "group-hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.15)]",
+             icon_bg: "bg-emerald-500/10",
+             icon_border: "border-emerald-500/20",
+             connector: "from-emerald-500/40"
+          };
+
           return (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative flex flex-col md:flex-row items-start md:items-center w-full ${
+              transition={{ duration: 0.7, delay: index * 0.1 }}
+              className={`relative flex flex-col md:flex-row items-center w-full ${
                 isLeft ? "md:flex-row-reverse" : ""
               }`}
             >
               
-              {/* --- ESPACIADOR (Para mantener la estructura centrada en escritorio) --- */}
+              {/* --- ESPACIADOR PARA GRID --- */}
               <div className="hidden md:block md:w-1/2" />
 
-              {/* --- NODO CENTRAL (El conector en la línea) --- */}
-              <div className="absolute left-[14px] md:left-1/2 md:-translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full z-20 bg-zinc-950 border-2 border-zinc-700 shadow-[0_0_10px_black] group-hover:border-emerald-500 transition-colors">
-                 <div className={`w-3 h-3 rounded-full ${item.type === 'work' ? 'bg-indigo-500 shadow-[0_0_10px_#6366f1]' : 'bg-emerald-500 shadow-[0_0_10px_#10b981]'} animate-pulse`} />
+              {/* --- NODO DE ANCLAJE (El "Lock" en la línea) --- */}
+              <div className="absolute left-[28px] md:left-1/2 md:-translate-x-1/2 flex items-center justify-center z-20">
+                 {/* Círculo Base */}
+                 <div className="w-4 h-4 rounded-full bg-zinc-950 border-2 border-zinc-700 shadow-[0_0_10px_black] relative z-20 group-hover:border-zinc-500 transition-colors duration-500">
+                    <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 ${theme.bg_gradient} transition-opacity duration-500`} />
+                 </div>
+                 
+                 {/* Anillo de Energía al Hover */}
+                 <div className={`absolute w-10 h-10 rounded-full border border-dashed opacity-0 group-hover:opacity-40 animate-spin-slow transition-opacity duration-500 ${theme.primary.replace('text-', 'border-')}`} />
               </div>
 
-              {/* --- CABLE CONECTOR DECORATIVO --- */}
-              <div className={`hidden md:block absolute top-1/2 h-[2px] w-12 bg-zinc-800 -z-10 ${isLeft ? "right-1/2 mr-4" : "left-1/2 ml-4"}`} />
+              {/* --- HAZ CONECTOR (Beam) --- */}
+              <div className={`hidden md:block absolute top-1/2 h-[1px] w-[calc(50%-40px)] -z-10 bg-zinc-800 
+                  ${isLeft ? "right-1/2 mr-0 origin-right" : "left-1/2 ml-0 origin-left"}
+                  group-hover:scale-x-100 transition-transform duration-500`} 
+              >
+                  {/* Luz líquida viajando */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${theme.connector} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isLeft ? 'bg-gradient-to-l' : ''}`} />
+              </div>
 
-              {/* --- TARJETA DE CONTENIDO --- */}
-              <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isLeft ? "md:pr-16" : "md:pl-16"}`}>
+              {/* --- TARJETA DE DATOS --- */}
+              <div className={`w-full md:w-1/2 pl-20 md:pl-16 ${isLeft ? "md:pr-16 md:pl-0" : ""}`}>
                 
-                {/* Caja estilo Cyberpunk: Fondo oscuro, borde sutil, brillo al hover */}
-                <div className="group relative bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/50 p-6 rounded-2xl backdrop-blur-sm transition-all hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] hover:-translate-y-1">
+                <div className={`group relative bg-zinc-900/40 border border-zinc-800 p-6 md:p-8 rounded-xl backdrop-blur-md transition-all duration-500 hover:-translate-y-1 ${theme.border} ${theme.glow}`}>
                   
-                  {/* Decoración Esquina Tech (Triángulo) */}
-                  <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden rounded-tr-2xl pointer-events-none">
-                    <div className={`absolute top-0 right-0 w-[200%] h-[200%] -translate-y-1/2 translate-x-1/2 rotate-45 ${item.type === 'work' ? 'bg-indigo-500/10' : 'bg-emerald-500/10'}`} />
+                  {/* Trama de fondo "Digital Noise" (Sutil) */}
+                  <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')] pointer-events-none rounded-xl" />
+                  
+                  {/* Gradiente de fondo activo */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${theme.bg_gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-xl pointer-events-none`} />
+
+                  {/* --- HEADER --- */}
+                  <div className="relative z-10 flex flex-col gap-1 mb-6">
+                      <div className="flex justify-between items-start mb-2">
+                          {/* Icono Flotante */}
+                          <div className={`w-10 h-10 flex items-center justify-center rounded-lg border backdrop-blur-sm ${theme.icon_bg} ${theme.icon_border} ${theme.primary} shadow-sm`}>
+                              {isWork ? <FaBriefcase size={14}/> : <FaGraduationCap size={16}/>}
+                          </div>
+
+                          {/* Periodo Code-Style */}
+                          <div className="flex items-center gap-2 px-3 py-1 rounded bg-zinc-950/50 border border-zinc-800/50 text-[10px] font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-200 group-hover:border-zinc-700 transition-colors">
+                             <FaCalendarAlt size={10} className={theme.primary} />
+                             {item.period}
+                          </div>
+                      </div>
+
+                      <h3 className="text-xl md:text-2xl font-bold text-zinc-100 tracking-tight group-hover:text-white transition-colors">
+                          {item.role}
+                      </h3>
+                      
+                      <div className={`flex items-center gap-2 text-sm font-medium ${theme.primary} opacity-90`}>
+                          <FaBolt size={10} className="animate-pulse" />
+                          <span>{item.company}</span>
+                      </div>
                   </div>
 
-                  {/* HEADER */}
-                  <div className="flex flex-col mb-4 relative z-10">
-                    <div className="flex items-center gap-3 mb-2">
-                        {/* Icono Tipo (Trabajo/Estudio) */}
-                        <span className={`p-2 rounded-lg border ${item.type === 'work' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`}>
-                            {item.type === 'work' ? <FaBriefcase size={14} /> : <FaGraduationCap size={16} />}
-                        </span>
-                        
-                        {/* Fecha */}
-                        <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 text-zinc-500 bg-zinc-950 px-2 py-1 rounded border border-zinc-800">
-                            <FaCalendarAlt size={10} /> {item.period}
-                        </span>
-                    </div>
-                    
-                    {/* Título Rol */}
-                    <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
-                      {item.role}
-                    </h3>
-                    
-                    {/* Empresa */}
-                    <div className="text-sm font-medium text-zinc-400 mt-1">
-                      @{item.company}
-                    </div>
-                  </div>
-
-                  {/* DESCRIPCIÓN */}
-                  <p className="text-sm leading-relaxed mb-6 text-zinc-400 border-l-2 border-zinc-800 pl-3 group-hover:border-emerald-500/30 transition-colors">
-                    {item.description}
+                  {/* --- DESCRIPCIÓN --- */}
+                  <p className="relative z-10 text-zinc-400 text-sm leading-relaxed mb-6 font-light border-l-2 border-zinc-800 pl-4 group-hover:border-zinc-600 transition-colors">
+                      {item.description}
                   </p>
 
-                  {/* TECH TAGS */}
+                  {/* --- TECH ARSENAL --- */}
                   {item.techs && (
-                    <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-zinc-800/50">
-                      {item.techs.map((tech) => (
-                        <span key={tech} className="flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-mono border transition-colors bg-zinc-950 text-zinc-500 border-zinc-800 group-hover:text-zinc-300 group-hover:border-zinc-700">
-                          <FaMicrochip size={10} />
-                          {tech}
-                        </span>
-                      ))}
+                    <div className="relative z-10">
+                      <div className="h-[1px] w-full bg-zinc-800/50 mb-4" />
+                      <div className="flex flex-wrap gap-2">
+                        {item.techs.map((tech) => (
+                          <span key={tech} className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[10px] font-mono uppercase tracking-wider border transition-all duration-300
+                              bg-zinc-950/30 text-zinc-500 border-zinc-800 
+                              group-hover:text-zinc-300 group-hover:border-zinc-700 group-hover:bg-zinc-900/80`}>
+                            <FaHashtag size={8} className="opacity-50" />
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
 
-                  {/* Número de fondo (01, 02...) decorativo */}
-                  <div className="absolute bottom-2 right-4 text-6xl font-black select-none pointer-events-none z-0 font-mono text-zinc-800/20 group-hover:text-emerald-500/5 transition-colors">
-                    0{index + 1}
+                  {/* --- DECORACIONES HUD (Esquinas) --- */}
+                  <div className={`absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-100 transition-opacity duration-500 ${theme.primary}`}>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M1 0V11H12" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
                   </div>
-                  
+                  <div className={`absolute bottom-0 left-0 p-3 opacity-20 group-hover:opacity-100 transition-opacity duration-500 ${theme.primary} rotate-180`}>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M1 0V11H12" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                  </div>
+
                 </div>
               </div>
 
@@ -112,15 +161,10 @@ export default function CircuitTimeline() {
           );
         })}
       </div>
-      
-      {/* Mensaje Final del Log */}
-      <div className="flex justify-center mt-16 relative z-10">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono uppercase tracking-widest animate-pulse bg-zinc-900 border border-emerald-500/30 text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-          <div className="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]" />
-          System_Log: Execution Complete
-        </div>
-      </div>
 
+      {/* --- DECORACIÓN FINAL DEL FLUJO --- */}
+      <div className="absolute bottom-0 left-[28px] md:left-1/2 md:-translate-x-1/2 w-[2px] h-32 bg-gradient-to-b from-zinc-800 to-transparent z-0" />
+      
     </div>
   );
 }

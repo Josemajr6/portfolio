@@ -5,22 +5,38 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaTerminal } from "react-icons/fa";
 import { projectsData } from "@/data/project";
 
-const categories = ["Todos", "Full Stack", "Backend", "Mobile", "Android"];
+// Categorías del filtro
+const categories = ["Todos", "Full Stack", "Backend", "Mobile", "Android", "Swift"];
 
 export default function ProjectsSection() {
   const [filter, setFilter] = useState("Todos");
 
-  // Lógica de filtrado corregida para que funcione y no de error
+  // Lógica de filtrado PRECISA
   const filteredProjects = projectsData.filter((p) => {
-    // Si es "Todos", enseñamos todo
     if (filter === "Todos") return true;
 
-    // Si el filtro es "Mobile", enseñamos tanto Android como Flutter
+    // Filtro MOBILE:
+    // Incluye: Android, Flutter, Swift/iOS
+    // EXCLUYE: Proyectos de macOS (Aura Notes, Aura Notch)
     if (filter === "Mobile") {
+      const isMobileTech = ["Android", "Flutter", "Swift/iOS"].includes(p.category);
+      const isMacOS = p.tech.includes("macOS");
+      return isMobileTech && !isMacOS;
+    }
+    
+    // Filtro ANDROID:
+    // Incluye nativo Android Y también Flutter (MoneyFlow)
+    if (filter === "Android") {
       return p.category === "Android" || p.category === "Flutter";
     }
 
-    // Para el resto (Backend, Full Stack, Android específico), coincidencia exacta
+    // Filtro SWIFT:
+    // Muestra TODO lo de Apple (iOS y macOS)
+    if (filter === "Swift") {
+      return p.category === "Swift/iOS" || p.tech.includes("Swift");
+    }
+
+    // Resto de categorías (Backend, Full Stack...)
     return p.category === filter;
   });
 
@@ -31,7 +47,7 @@ export default function ProjectsSection() {
       <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-6 bg-zinc-900/50 p-4 border border-zinc-800 rounded-lg backdrop-blur-sm">
         <div className="flex items-center gap-3 text-emerald-500 font-mono text-sm">
           <FaTerminal />
-          <span className="animate-pulse">root@portfolio:~/projects $ filter --type=</span>
+          <span className="animate-pulse">root@portfolio:~/projects $ filter --type={filter.toLowerCase()}</span>
         </div>
 
         <div className="flex flex-wrap justify-center gap-2">

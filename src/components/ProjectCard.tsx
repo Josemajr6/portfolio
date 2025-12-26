@@ -2,33 +2,46 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaGithub, FaExternalLinkAlt, FaCode } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaCode, FaCloudSun, FaDesktop, FaGlobeAmericas } from "react-icons/fa";
 import { 
   SiSpring, SiAngular, SiPostgresql, SiFlutter, SiDart, 
-  SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger 
+  SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger,
+  SiSwift, SiApple, SiThemoviedatabase
 } from "react-icons/si";
 import { Project } from "@/data/project";
 
-// Mapeo inteligente de String -> Icono Real
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
+  // Backend & Web
   if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
   if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
   if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
   if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
-  if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
-  if (normalize.includes("dart")) return <SiDart className="text-blue-500" />;
-  if (normalize.includes("android")) return <SiAndroid className="text-green-500" />;
   if (normalize.includes("react")) return <SiTypescript className="text-blue-400" />;
   if (normalize.includes("type")) return <SiTypescript className="text-blue-600" />;
   if (normalize.includes("java")) return <FaCode className="text-orange-500" />;
   if (normalize.includes("swagger")) return <SiSwagger className="text-green-600" />;
   if (normalize.includes("docker")) return <SiDocker className="text-blue-500" />;
   
-  return <FaCode className="text-zinc-500" />; // Fallback
+  // Mobile & Ecosystem
+  if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
+  if (normalize.includes("dart")) return <SiDart className="text-blue-500" />;
+  if (normalize.includes("android")) return <SiAndroid className="text-green-500" />;
+  if (normalize.includes("swift")) return <SiSwift className="text-orange-500" />;
+  if (normalize.includes("ios")) return <SiApple className="text-gray-100" />;
+  if (normalize.includes("macos")) return <FaDesktop className="text-gray-300" />;
+  
+  // APIs & Servicios
+  if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
+  if (normalize.includes("weather")) return <FaCloudSun className="text-yellow-400" />;
+  if (normalize.includes("rest countries")) return <FaGlobeAmericas className="text-green-400" />;
+  
+  return <FaCode className="text-zinc-500" />; 
 };
 
 export default function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const isCompleted = project.status === "Completed";
+  
   return (
     <motion.article 
       initial={{ opacity: 0, y: 50 }}
@@ -37,16 +50,16 @@ export default function ProjectCard({ project, index }: { project: Project; inde
       transition={{ delay: index * 0.1, duration: 0.5 }}
       className="group relative w-full h-[500px] bg-zinc-950 border border-zinc-800 hover:border-emerald-500/50 transition-colors duration-500 overflow-hidden flex flex-col"
     >
-      {/* --- DECORACIÓN DE ESQUINAS (HUD) --- */}
+      {/* HUD Corners */}
       <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
       <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
       <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
       <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
       
-      {/* --- CABECERA TIPO TERMINAL --- */}
+      {/* Header Terminal */}
       <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/80 border-b border-zinc-800 z-10">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <div className={`w-2 h-2 rounded-full animate-pulse ${isCompleted ? 'bg-emerald-500' : 'bg-amber-500'}`} />
           <span className="font-mono text-xs text-emerald-500 tracking-widest">
             PRJ-0{index + 1} // {project.category.toUpperCase()}
           </span>
@@ -54,28 +67,29 @@ export default function ProjectCard({ project, index }: { project: Project; inde
         <span className="font-mono text-[10px] text-zinc-500">SECURE_DATA</span>
       </div>
 
-      {/* --- IMAGEN CON EFECTO CRT/SCANLINE --- */}
+      {/* Main Image */}
       <div className="relative h-56 w-full overflow-hidden border-b border-zinc-800 bg-black group-hover:h-48 transition-all duration-500 ease-in-out">
-        {/* Scanlines Overlay */}
         <div className="absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-40 group-hover:opacity-10 transition-opacity" />
         
-        {/* Imagen Real */}
         <Image
-          src={project.image}
+          src={project.mainImage} // CAMBIO AQUI
           alt={project.title}
           fill
           className="object-cover opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
         />
         
-        {/* Badge de Estado */}
-        <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/70 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 backdrop-blur-sm">
-          STATUS: COMPLETED
+        <div className={`
+          absolute bottom-2 right-2 px-2 py-0.5 bg-black/70 backdrop-blur-sm border text-[10px] font-mono z-20
+          ${isCompleted 
+            ? "border-emerald-500/30 text-emerald-400" 
+            : "border-amber-500/30 text-amber-400 animate-pulse"}
+        `}>
+          STATUS: {project.status.toUpperCase()}
         </div>
       </div>
 
-      {/* --- CUERPO DE DATOS --- */}
+      {/* Body */}
       <div className="p-6 flex flex-col flex-grow relative bg-zinc-950/90">
-        {/* Fondo de rejilla sutil */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         <div className="relative z-10">
@@ -91,7 +105,7 @@ export default function ProjectCard({ project, index }: { project: Project; inde
           </p>
         </div>
 
-        {/* --- FOOTER: TECH STACK & ACTIONS --- */}
+        {/* Footer */}
         <div className="mt-auto relative z-10">
           <div className="text-[10px] text-zinc-600 font-mono mb-2 uppercase tracking-wider">
             Used_Technologies:
