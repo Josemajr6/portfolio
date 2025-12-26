@@ -1,10 +1,10 @@
 export interface Project {
   slug: string;
   title: string;
-  category: "Spring Boot" | "Android" | "Flutter" | "Swift" | "Backend";
+  category: "Spring Boot" | "Android" | "Flutter" | "Swift" | "Backend" | "Full Stack";
   tech: string[];
   description: string;
-  longDescription?: string; // Para la página de detalle
+  longDescription?: string;
   githubUrl?: string;
   image: string;
 }
@@ -13,41 +13,37 @@ export const projectsData: Project[] = [
   {
     slug: "nexus-app",
     title: "Nexus App",
-    category: "Spring Boot",
+    category: "Full Stack",
     tech: ["Spring Boot", "Angular", "PostgreSQL", "JWT"],
-    description: "Plataforma de gestión de artículos de segunda mano con arquitectura escalable.",
-    longDescription: "Sistema completo de compra-venta desarrollado como Proyecto Final. Implementa seguridad robusta con JWT, gestión de roles, carga de imágenes y una arquitectura backend basada en capas (Controller, Service, Repository).",
+    description: "Plataforma de compra-venta con arquitectura escalable y seguridad avanzada.",
     githubUrl: "https://github.com/tu-usuario/nexus-app",
-    image: "/projects/nexus.webp" // Asegúrate de tener imágenes o usa placeholders
-  },
-  {
-    slug: "manyworker-api",
-    title: "ManyWorker API",
-    category: "Spring Boot", // O "Backend"
-    tech: ["Spring Boot", "Swagger", "Postman", "JUnit"],
-    description: "API REST pura para sistemas de trabajo colaborativo y gestión de tareas.",
-    longDescription: "Backend diseñado para la gestión de flujos de trabajo. Documentación exhaustiva con OpenAPI/Swagger y suite de pruebas de integración.",
-    githubUrl: "https://github.com/tu-usuario/manyworker",
-    image: "/projects/api.webp"
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop"
   },
   {
     slug: "lepokedex",
     title: "LePokedex",
     category: "Android",
     tech: ["Java", "Android Studio", "XML", "Retrofit"],
-    description: "App Android nativa con consumo de API externa y patrón MVVM.",
-    longDescription: "Aplicación móvil nativa que consume la PokeAPI. Implementa RecyclerViews optimizados, caché local y diseño XML responsive.",
+    description: "App nativa optimizada con consumo de API y patrón MVVM.",
     githubUrl: "https://github.com/tu-usuario/lepokedex",
-    image: "/projects/pokedex.webp"
+    image: "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?q=80&w=2070&auto=format&fit=crop"
   },
   {
     slug: "moneyflow",
     title: "MoneyFlow",
     category: "Flutter",
     tech: ["Flutter", "Dart", "SQLite"],
-    description: "Aplicación multiplataforma para el control y gestión de gastos mensuales.",
-    longDescription: "Solución móvil para finanzas personales. Incluye gráficos de gastos, persistencia local de datos y exportación a PDF.",
+    description: "Control de gastos multiplataforma con gráficos y persistencia local.",
     githubUrl: "https://github.com/tu-usuario/moneyflow",
-    image: "/projects/moneyflow.webp"
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2026&auto=format&fit=crop"
+  },
+  {
+    slug: "manyworker-api",
+    title: "ManyWorker API",
+    category: "Backend",
+    tech: ["Spring Boot", "Swagger", "JUNIT"],
+    description: "API REST pura documentada para gestión de flujos de trabajo.",
+    githubUrl: "https://github.com/tu-usuario/manyworker",
+    image: "https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=2668&auto=format&fit=crop"
   }
 ];

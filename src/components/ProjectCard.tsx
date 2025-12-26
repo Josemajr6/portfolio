@@ -1,49 +1,128 @@
 "use client";
-import { Github, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { FaGithub, FaExternalLinkAlt, FaCode } from "react-icons/fa";
+import { 
+  SiSpring, SiAngular, SiPostgresql, SiFlutter, SiDart, 
+  SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger 
+} from "react-icons/si";
 import { Project } from "@/data/project";
 
-export default function ProjectCard({ project }: { project: Project }) {
+// Mapeo inteligente de String -> Icono Real
+const getTechIcon = (techName: string) => {
+  const normalize = techName.toLowerCase();
+  if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
+  if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
+  if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
+  if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
+  if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
+  if (normalize.includes("dart")) return <SiDart className="text-blue-500" />;
+  if (normalize.includes("android")) return <SiAndroid className="text-green-500" />;
+  if (normalize.includes("react")) return <SiTypescript className="text-blue-400" />;
+  if (normalize.includes("type")) return <SiTypescript className="text-blue-600" />;
+  if (normalize.includes("java")) return <FaCode className="text-orange-500" />;
+  if (normalize.includes("swagger")) return <SiSwagger className="text-green-600" />;
+  if (normalize.includes("docker")) return <SiDocker className="text-blue-500" />;
+  
+  return <FaCode className="text-zinc-500" />; // Fallback
+};
+
+export default function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <motion.article 
-      layout 
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      className="group relative flex flex-col justify-between bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-600 transition-colors"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="group relative w-full h-[500px] bg-zinc-950 border border-zinc-800 hover:border-emerald-500/50 transition-colors duration-500 overflow-hidden flex flex-col"
     >
-      <div>
-        <div className="flex justify-between items-start mb-4">
-          <span className="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">
-            {project.category}
+      {/* --- DECORACIÓN DE ESQUINAS (HUD) --- */}
+      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
+      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
+      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
+      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-zinc-700 group-hover:border-emerald-400 transition-colors z-20" />
+      
+      {/* --- CABECERA TIPO TERMINAL --- */}
+      <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/80 border-b border-zinc-800 z-10">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="font-mono text-xs text-emerald-500 tracking-widest">
+            PRJ-0{index + 1} // {project.category.toUpperCase()}
           </span>
-          <div className="flex gap-2">
-             {project.githubUrl && (
-               <a href={project.githubUrl} target="_blank" className="text-zinc-400 hover:text-white transition-colors">
-                 <Github size={18} />
-               </a>
-             )}
-          </div>
         </div>
-        
-        <Link href={`/projects/${project.slug}`} className="block">
-            <h3 className="text-xl font-bold text-zinc-100 mb-2 group-hover:text-indigo-400 transition-colors">
-            {project.title}
-            </h3>
-        </Link>
-        
-        <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-          {project.description}
-        </p>
+        <span className="font-mono text-[10px] text-zinc-500">SECURE_DATA</span>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-auto">
-        {project.tech.map((t) => (
-          <span key={t} className="text-xs text-zinc-500 border border-zinc-800 px-2 py-1 rounded bg-zinc-950">
-            {t}
-          </span>
-        ))}
+      {/* --- IMAGEN CON EFECTO CRT/SCANLINE --- */}
+      <div className="relative h-56 w-full overflow-hidden border-b border-zinc-800 bg-black group-hover:h-48 transition-all duration-500 ease-in-out">
+        {/* Scanlines Overlay */}
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-40 group-hover:opacity-10 transition-opacity" />
+        
+        {/* Imagen Real */}
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          className="object-cover opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
+        />
+        
+        {/* Badge de Estado */}
+        <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/70 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 backdrop-blur-sm">
+          STATUS: COMPLETED
+        </div>
+      </div>
+
+      {/* --- CUERPO DE DATOS --- */}
+      <div className="p-6 flex flex-col flex-grow relative bg-zinc-950/90">
+        {/* Fondo de rejilla sutil */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
+        <div className="relative z-10">
+          <Link href={`/projects/${project.slug}`} className="group/title block w-fit">
+            <h3 className="text-2xl font-bold text-zinc-100 font-mono tracking-tight group-hover/title:text-emerald-400 transition-colors mb-2 flex items-center gap-3">
+              {project.title}
+              <FaExternalLinkAlt size={14} className="opacity-0 -translate-x-2 group-hover/title:opacity-100 group-hover/title:translate-x-0 transition-all" />
+            </h3>
+          </Link>
+
+          <p className="text-zinc-400 text-sm leading-relaxed mb-6 font-mono border-l-2 border-zinc-800 pl-3 line-clamp-3">
+            {project.description}
+          </p>
+        </div>
+
+        {/* --- FOOTER: TECH STACK & ACTIONS --- */}
+        <div className="mt-auto relative z-10">
+          <div className="text-[10px] text-zinc-600 font-mono mb-2 uppercase tracking-wider">
+            Used_Technologies:
+          </div>
+          <div className="flex flex-wrap gap-3 mb-6">
+            {project.tech.map((t) => (
+              <div key={t} className="flex items-center gap-1.5 px-2 py-1 bg-zinc-900 border border-zinc-800 rounded text-zinc-300 hover:border-zinc-600 hover:text-white transition-colors cursor-help" title={t}>
+                <span className="text-lg">{getTechIcon(t)}</span>
+                <span className="text-[10px] font-mono">{t}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-4">
+            {project.githubUrl && (
+              <a 
+                href={project.githubUrl} 
+                target="_blank" 
+                className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-900 border border-zinc-700 hover:bg-emerald-500/10 hover:border-emerald-500/50 hover:text-emerald-400 text-zinc-300 text-xs font-mono uppercase tracking-wider transition-all"
+              >
+                <FaGithub size={14} /> Source_Code
+              </a>
+            )}
+             <Link 
+                href={`/projects/${project.slug}`}
+                className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-100 text-zinc-950 border border-zinc-100 hover:bg-white font-bold text-xs font-mono uppercase tracking-wider transition-all"
+              >
+                View_Details &gt;
+              </Link>
+          </div>
+        </div>
       </div>
     </motion.article>
   );

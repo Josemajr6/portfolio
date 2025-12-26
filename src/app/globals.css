@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* SOLO MODO OSCURO (Cyber-Void) */
+  --background: #09090b; /* zinc-950 */
+  --foreground: #ffffff;
+  --grid-color: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {
@@ -12,21 +14,52 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  /* Textura de ruido */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Rejilla técnica fija */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 70%, transparent 110%);
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; 
 }
 
 @layer components {
-  .btn-social {
-    @apply flex items-center px-6 py-3 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white hover:border-zinc-600 transition-all cursor-pointer;
+  /* Clase para cajas estilo cristal oscuro */
+  .cyber-box {
+    @apply bg-zinc-900/50 border border-zinc-800 backdrop-blur-md transition-colors duration-300;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+@media (pointer: fine) {
+  body {
+    cursor: none; /* Oculta el cursor por defecto */
+  }
+  
+  /* Asegura que los enlaces y botones tampoco muestren la mano por defecto */
+  a, button, [role="button"], input, select, textarea {
+    cursor: none !important;
   }
 }
