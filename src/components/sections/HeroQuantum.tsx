@@ -24,7 +24,11 @@ const itemVariants: Variants = {
     opacity: 1, 
     filter: "blur(0px)", 
     scale: 1,
-    transition: { type: "spring", stiffness: 100, damping: 15 }
+    transition: { 
+      type: "spring" as const, // <--- AÑADIR "as const" AQUÍ
+      stiffness: 100, 
+      damping: 15 
+    }
   },
 };
 
@@ -35,13 +39,13 @@ const titleVariants: Variants = {
       y: 0, 
       opacity: 1,
       transition: { 
-          type: "spring", 
+          type: "spring" as const, // <--- AÑADIR "as const" AQUÍ TAMBIÉN
           damping: 20, 
           stiffness: 100 
-          // He quitado 'duration' porque en spring se usa stiffness/damping, no duration
       }
     },
 };
+
 
 export default function HeroQuantum() {
   const mouseX = useMotionValue(0);
