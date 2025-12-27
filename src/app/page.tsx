@@ -3,6 +3,7 @@ import HeroQuantum from "@/components/sections/HeroQuantum";
 import TechArsenal from "@/components/sections/TechArsenal";
 import CircuitTimeline from "@/components/sections/CircuitTimeline";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
+import Certifications from "@/components/sections/Certifications";
 import CyberHeader from "@/components/layout/CyberHeader";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/ui/ScrollReveal";
@@ -10,8 +11,8 @@ import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaSatelliteDish, FaHe
 
 export default function Home() {
   return (
-    // IMPORTANTE: overflow-x-hidden previene que el timeline rompa el ancho en móvil
-    <main className="bg-zinc-950 min-h-screen text-zinc-200 overflow-x-hidden selection:bg-emerald-500/30 flex flex-col">
+    // --- CORRECCIÓN AQUÍ: Añadido pt-24 para que el header no se coma el contenido ---
+    <main className="bg-zinc-950 min-h-screen text-zinc-200 overflow-x-hidden selection:bg-emerald-500/30 flex flex-col pt-24">
       
       <CyberHeader />
       <HeroQuantum />
@@ -19,7 +20,8 @@ export default function Home() {
       <div className="w-full max-w-7xl mx-auto px-4 md:px-6 relative z-10 flex-grow">
         
         {/* --- INTRODUCCIÓN --- */}
-        <Section id="about" className="pt-16 md:pt-32">
+        {/* Ajustado el padding superior aquí también ligeramente */}
+        <Section id="about" className="pt-12 md:pt-24">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="relative">
                     <ScrollReveal mode="slide-right">
@@ -30,7 +32,6 @@ export default function Home() {
                     </ScrollReveal>
 
                     <ScrollReveal mode="cyber-glitch" className="mb-6 md:mb-8">
-                        {/* TIPOGRAFÍA RESPONSIVE: Ajustada para no romper en móvil */}
                         <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight md:leading-none">
                             Desarrollo <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Inteligente.</span>
@@ -92,6 +93,33 @@ export default function Home() {
             </ScrollReveal>
         </Section>
 
+        {/* --- LICENCIAS Y CERTIFICACIONES --- */}
+        {/* Aumentado el padding inferior para separar de la siguiente sección */}
+        <Section id="certifications" className="pb-20">
+            <div className="flex flex-col items-center mb-12 text-center">
+                 <ScrollReveal mode="slide-right">
+                    <span className="font-mono text-yellow-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 animate-pulse block">
+                    // VALIDATION_TOKENS
+                    </span>
+                </ScrollReveal>
+                <div className="flex items-center gap-3">
+                    <ScrollReveal mode="pop">
+                       <span className="h-2 w-2 bg-yellow-400 rounded-full shadow-[0_0_10px_#facc15] inline-block"></span>
+                    </ScrollReveal>
+                    
+                    <ScrollReveal mode="cyber-glitch">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white">
+                          Licencias & Certificaciones
+                        </h2>
+                    </ScrollReveal>
+                </div>
+            </div>
+            
+            <ScrollReveal mode="pop" delay={0.2}>
+                <Certifications />
+            </ScrollReveal>
+        </Section>
+
         {/* --- TRAYECTORIA --- */}
         <Section id="experience">
           <div className="flex items-center gap-3 mb-8 md:mb-12">
@@ -147,7 +175,6 @@ export default function Home() {
                             Tiempo de respuesta estimado: <span className="text-emerald-400 font-mono">&lt;24h</span>.
                         </p>
                         
-                        {/* Email Card Responsive */}
                         <a href="mailto:josemajimenezrodriguez8@gmail.com" className="group relative block w-full">
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-6 bg-zinc-900 border border-zinc-700 hover:border-emerald-500 rounded-xl transition-all group-hover:-translate-y-1 gap-4 sm:gap-0">

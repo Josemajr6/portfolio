@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaTerminal, FaDownload, FaCodeBranch, FaHistory, FaCommentDots } from "react-icons/fa";
+import { FaTerminal, FaDownload, FaCodeBranch, FaHistory, FaCommentDots, FaCertificate } from "react-icons/fa"; // <--- Importamos FaCertificate
 
 const navItems = [
   { name: "~/proyectos", id: "projects", icon: FaCodeBranch },
+  { name: "~/certificados", id: "certifications", icon: FaCertificate }, // <--- NUEVO ITEM
   { name: "~/trayectoria", id: "experience", icon: FaHistory },
 ];
 
