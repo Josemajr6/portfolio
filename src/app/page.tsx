@@ -1,4 +1,8 @@
 "use client";
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+
+// --- COMPONENTES ORIGINALES (Desktop) ---
 import HeroQuantum from "@/components/sections/HeroQuantum";
 import TechArsenal from "@/components/sections/TechArsenal";
 import CircuitTimeline from "@/components/sections/CircuitTimeline";
@@ -9,9 +13,55 @@ import Section from "@/components/Section";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaSatelliteDish, FaHeart, FaArrowRight } from "react-icons/fa";
 
+// --- COMPONENTES NUEVOS (Mobile Experience) ---
+import MobileApp from "@/components/mobile/MobileApp";
+import MobileWelcome from "@/components/mobile/MobileWelcome";
+
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const checkMobile = () => {
+       // Consideramos móvil si es menor a 768px (iPad Mini / Tablets verticales o móviles)
+       setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Chequeo inicial
+    checkMobile();
+    
+    // Listener para cuando redimensionan la ventana
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Evitar problemas de hidratación (flickering inicial)
+  if (!mounted) return null;
+
+  // ----------------------------------------------------
+  // MODO MÓVIL (EXPERIENCIA APP REFINADA)
+  // ----------------------------------------------------
+  if (isMobile) {
+      return (
+        <>
+            <AnimatePresence mode="wait">
+                {showWelcome && (
+                    <MobileWelcome onComplete={() => setShowWelcome(false)} />
+                )}
+            </AnimatePresence>
+            
+            {!showWelcome && <MobileApp />}
+        </>
+      );
+  }
+
+  // ----------------------------------------------------
+  // MODO ESCRITORIO (TU VERSIÓN ORIGINAL RESTAURADA)
+  // ----------------------------------------------------
   return (
-    // --- CORRECCIÓN AQUÍ: Añadido pt-24 para que el header no se coma el contenido ---
+    // Añadido pt-24 para respetar el Header fijo original
     <main className="bg-zinc-950 min-h-screen text-zinc-200 overflow-x-hidden selection:bg-emerald-500/30 flex flex-col pt-24">
       
       <CyberHeader />
@@ -20,7 +70,6 @@ export default function Home() {
       <div className="w-full max-w-7xl mx-auto px-4 md:px-6 relative z-10 flex-grow">
         
         {/* --- INTRODUCCIÓN --- */}
-        {/* Ajustado el padding superior aquí también ligeramente */}
         <Section id="about" className="pt-12 md:pt-24">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="relative">
@@ -94,7 +143,6 @@ export default function Home() {
         </Section>
 
         {/* --- LICENCIAS Y CERTIFICACIONES --- */}
-        {/* Aumentado el padding inferior para separar de la siguiente sección */}
         <Section id="certifications" className="pb-20">
             <div className="flex flex-col items-center mb-12 text-center">
                  <ScrollReveal mode="slide-right">

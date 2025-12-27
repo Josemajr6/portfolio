@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaTerminal, FaDownload, FaCodeBranch, FaHistory, FaCommentDots, FaCertificate } from "react-icons/fa"; // <--- Importamos FaCertificate
+import { FaTerminal, FaDownload, FaCodeBranch, FaHistory, FaCommentDots, FaCertificate } from "react-icons/fa";
 
 const navItems = [
   { name: "~/proyectos", id: "projects", icon: FaCodeBranch },
-  { name: "~/certificados", id: "certifications", icon: FaCertificate }, // <--- NUEVO ITEM
+  { name: "~/certificados", id: "certifications", icon: FaCertificate },
   { name: "~/trayectoria", id: "experience", icon: FaHistory },
 ];
 
@@ -73,6 +73,7 @@ export default function CyberHeader() {
             <span className="hidden sm:inline">~/hablemos</span>
           </button>
 
+          {/* BOTÓN CV RESTAURADO */}
           <a
             href="/cv-JoseManuel.pdf"
             target="_blank"

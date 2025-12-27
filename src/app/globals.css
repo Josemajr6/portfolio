@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* SOLO MODO OSCURO (Cyber-Void) */
-  --background: #09090b; /* zinc-950 */
+  --background: #09090b;
   --foreground: #ffffff;
   --grid-color: rgba(255, 255, 255, 0.05);
 }
@@ -17,23 +16,24 @@
 body {
   color: var(--foreground);
   background-color: var(--background);
-  /* Textura de ruido */
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Rejilla técnica fija */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image: 
-    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-  background-size: 4rem 4rem;
-  mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 70%, transparent 110%);
-  pointer-events: none;
+/* Rejilla técnica fija - SOLO ESCRITORIO */
+@media (min-width: 768px) {
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image: 
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+      background-size: 4rem 4rem;
+      mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 70%, transparent 110%);
+      pointer-events: none;
+    }
 }
 
 ::-webkit-scrollbar {
@@ -42,7 +42,6 @@ body::before {
 }
 
 @layer components {
-  /* Clase para cajas estilo cristal oscuro */
   .cyber-box {
     @apply bg-zinc-900/50 border border-zinc-800 backdrop-blur-md transition-colors duration-300;
   }
@@ -53,12 +52,18 @@ html {
   height: 100%;
 }
 
+@layer utilities {
+    /* Utility para respetar el notch en iPhones */
+    .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Solo ocultamos el cursor en escritorio o si hay puntero fino */
 @media (pointer: fine) {
   body {
-    cursor: none; /* Oculta el cursor por defecto */
+    cursor: none; 
   }
-  
-  /* Asegura que los enlaces y botones tampoco muestren la mano por defecto */
   a, button, [role="button"], input, select, textarea {
     cursor: none !important;
   }
