@@ -11,7 +11,7 @@ import Certifications from "@/components/sections/Certifications";
 import CyberHeader from "@/components/layout/CyberHeader";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaSatelliteDish, FaHeart, FaArrowRight } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaSatelliteDish, FaHeart, FaArrowRight, FaPhoneAlt } from "react-icons/fa";
 
 // --- COMPONENTES NUEVOS (Mobile Experience) ---
 import MobileApp from "@/components/mobile/MobileApp";
@@ -25,23 +25,19 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     const checkMobile = () => {
-       // Consideramos móvil si es menor a 768px (iPad Mini / Tablets verticales o móviles)
-       setIsMobile(window.innerWidth < 768);
+       // INCLUYE IPAD (Tablets hasta 1024px)
+       setIsMobile(window.innerWidth <= 1024);
     };
     
-    // Chequeo inicial
     checkMobile();
-    
-    // Listener para cuando redimensionan la ventana
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Evitar problemas de hidratación (flickering inicial)
   if (!mounted) return null;
 
   // ----------------------------------------------------
-  // MODO MÓVIL (EXPERIENCIA APP REFINADA)
+  // MODO APP (MÓVIL & IPAD)
   // ----------------------------------------------------
   if (isMobile) {
       return (
@@ -58,10 +54,9 @@ export default function Home() {
   }
 
   // ----------------------------------------------------
-  // MODO ESCRITORIO (TU VERSIÓN ORIGINAL RESTAURADA)
+  // MODO ESCRITORIO (Monitor Grande)
   // ----------------------------------------------------
   return (
-    // Añadido pt-24 para respetar el Header fijo original
     <main className="bg-zinc-950 min-h-screen text-zinc-200 overflow-x-hidden selection:bg-emerald-500/30 flex flex-col pt-24">
       
       <CyberHeader />
@@ -217,12 +212,15 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* COLUMNA IZQUIERDA GRANDE */}
                     <div className="lg:col-span-2 space-y-4">
+                        {/* --- TEXTO CORREGIDO --- */}
                         <p className="text-zinc-400 mb-6 font-light text-sm md:text-lg">
-                            ¿Tienes una vacante o una idea millonaria? Despliega tu mensaje. 
+                            ¿Tienes una vacante o un proyecto en mente? Despliega tu mensaje. 
                             Tiempo de respuesta estimado: <span className="text-emerald-400 font-mono">&lt;24h</span>.
                         </p>
                         
+                        {/* 1. EMAIL CARD (FULL WIDTH) */}
                         <a href="mailto:josemajimenezrodriguez8@gmail.com" className="group relative block w-full">
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-6 bg-zinc-900 border border-zinc-700 hover:border-emerald-500 rounded-xl transition-all group-hover:-translate-y-1 gap-4 sm:gap-0">
@@ -242,7 +240,24 @@ export default function Home() {
                             </div>
                         </a>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* 2. GRID SECUNDARIO (TELÉFONO + SOCIALS) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            {/* BOTÓN TELÉFONO (INTEGRADO - Full en móvil, ocupando espacio en Desktop) */}
+                            <a href="tel:+34722625288" className="sm:col-span-2 group relative p-4 bg-emerald-950/20 border border-emerald-500/30 hover:border-emerald-400 rounded-xl flex flex-row items-center justify-between gap-3 transition-all hover:bg-emerald-500/10 hover:shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                       <FaPhoneAlt size={18} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest">Llamada Directa</span>
+                                        <span className="font-bold text-white text-lg font-mono">+34 722 62 52 88</span>
+                                    </div>
+                                </div>
+                                <FaArrowRight className="text-emerald-700 group-hover:text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                            </a>
+
+                            {/* SOCIAL BUTTONS */}
                             <a href="https://linkedin.com" target="_blank" className="group relative p-4 bg-zinc-900 border border-zinc-800 hover:border-[#0077b5] rounded-xl flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 transition-all hover:bg-[#0077b5]/10">
                                 <FaLinkedin size={24} className="text-zinc-500 group-hover:text-[#0077b5] transition-colors" />
                                 <span className="font-bold text-xs md:text-base text-zinc-400 group-hover:text-white">LINKEDIN</span>
@@ -254,6 +269,7 @@ export default function Home() {
                         </div>
                     </div>
 
+                    {/* COLUMNA DERECHA (CV DOWNLOAD) */}
                     <div className="lg:col-span-1">
                         <div className="h-full relative rounded-2xl bg-gradient-to-b from-zinc-900 to-black border border-zinc-800 p-1 flex flex-col group hover:border-emerald-500/50 transition-colors min-h-[180px]">
                             <div className="bg-zinc-950 rounded-t-xl p-6 border-b border-zinc-800 flex flex-col items-center justify-center flex-grow relative overflow-hidden">
