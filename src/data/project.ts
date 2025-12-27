@@ -104,6 +104,18 @@ export const projectsData: Project[] = [
     isFeatured: true
   },
   {
+    slug: "aura-habits",
+    title: "Aura Habits",
+    category: "Swift/iOS",
+    tech: ["Swift", "SwiftUI", "Swift Charts", "WidgetKit", "iOS", "macOS"],
+    description: "Aura Habits es una aplicación de seguimiento de hábitos diseñada para iOS con un enfoque minimalista y una experiencia de usuario fluida.",
+    githubUrl: "https://github.com/josemajr6/aura-habits",
+    mainImage: "/images/projects/aurahabits.png",
+    galleryImages: [],
+    status: "Completed",
+    isFeatured: true
+  },
+  {
     slug: "aura-notes",
     title: "Aura Notes",
     category: "Swift/iOS",
