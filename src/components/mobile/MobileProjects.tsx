@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
-import { projectsData, Project } from "@/data/project";
+// CORRECCIÓN: Importamos 'projectsData' que es el nombre correcto del export
+import { projectsData, Project } from "@/data/project"; 
 import { FaGithub, FaExternalLinkAlt, FaFilter, FaFolderOpen } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
-// Categorías para el filtro
 const filters = [
   { id: "all", label: "Todo" },
   { id: "mobile", label: "Mobile / iOS" },
@@ -15,7 +16,6 @@ const filters = [
 export default function MobileProjects() {
   const [activeFilter, setActiveFilter] = useState("all");
 
-  // Lógica de filtrado robusta
   const filteredProjects = projectsData.filter((p) => {
     if (activeFilter === "all") return true;
     if (activeFilter === "mobile") return p.category.includes("Android") || p.category.includes("Flutter") || p.category.includes("Swift") || p.category.includes("iOS");
@@ -26,7 +26,7 @@ export default function MobileProjects() {
 
   return (
     <div className="w-full">
-      {/* --- BARRA DE FILTROS (STICKY) --- */}
+      {/* --- BARRA DE FILTROS --- */}
       <div className="sticky top-14 z-30 bg-black/90 backdrop-blur-md pb-4 pt-2 -mx-5 px-5 border-b border-zinc-800/50 mb-6 flex items-center gap-3 overflow-x-auto scrollbar-hide">
         <FaFilter className="text-emerald-500 shrink-0" size={12} />
         {filters.map((f) => (
@@ -72,8 +72,10 @@ export default function MobileProjects() {
   );
 }
 
-// Sub-componente de Tarjeta Móvil
 function ProjectCardMobile({ project }: { project: Project }) {
+    // Detectamos si es Aura Notch por su slug
+    const isAuranotch = project.slug === "aura-notch";
+
     return (
         <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group">
             {/* Imagen Header */}
@@ -81,9 +83,15 @@ function ProjectCardMobile({ project }: { project: Project }) {
                 <img 
                     src={project.mainImage} 
                     alt={project.title} 
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    className={`w-full h-full transition-all duration-500 ${
+                        isAuranotch 
+                        ? "object-contain p-6 bg-black/40" // ARREGLO AQUÍ: Se ajusta al cuadro con padding y fondo oscuro
+                        : "object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105"
+                    }`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-90" />
+                
+                {/* Overlay gradiente (menos intenso para Auranotch para que se vea el logo) */}
+                <div className={`absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent ${isAuranotch ? 'opacity-40' : 'opacity-90'}`} />
                 
                 {/* Status Badge */}
                 <div className="absolute top-3 right-3">
@@ -123,7 +131,7 @@ function ProjectCardMobile({ project }: { project: Project }) {
                     {project.description}
                 </p>
 
-                {/* Tech Tags Scrollables */}
+                {/* Tech Tags */}
                 <div className="flex flex-wrap gap-1.5">
                     {project.tech.map((t) => (
                         <span key={t} className="px-2 py-1 bg-black rounded text-[9px] text-zinc-500 font-mono border border-zinc-800">

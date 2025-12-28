@@ -1,11 +1,10 @@
 "use client";
-import { motion, useMotionTemplate, useMotionValue, animate, Variants } from "framer-motion"; // <--- Importamos 'Variants'
+import { motion, useMotionTemplate, useMotionValue, animate, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaFingerprint, FaTerminal, FaUnlock } from "react-icons/fa";
 
 const COLORS = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
-// Añadimos ': Variants' para que TypeScript entienda los tipos
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -25,7 +24,7 @@ const itemVariants: Variants = {
     filter: "blur(0px)", 
     scale: 1,
     transition: { 
-      type: "spring" as const, // <--- AÑADIR "as const" AQUÍ
+      type: "spring" as const,
       stiffness: 100, 
       damping: 15 
     }
@@ -39,7 +38,7 @@ const titleVariants: Variants = {
       y: 0, 
       opacity: 1,
       transition: { 
-          type: "spring" as const, // <--- AÑADIR "as const" AQUÍ TAMBIÉN
+          type: "spring" as const,
           damping: 20, 
           stiffness: 100 
       }
@@ -103,7 +102,7 @@ export default function HeroQuantum() {
             </motion.h1>
         </div>
 
-        {/* 3. Subtítulo */}
+        {/* 3. Subtítulo (Opción 2: Orientada a la acción) */}
         <motion.p 
             variants={itemVariants}
             className="text-xl md:text-3xl text-zinc-400 max-w-3xl font-light leading-relaxed text-balance mb-12 relative overflow-hidden"
@@ -114,7 +113,7 @@ export default function HeroQuantum() {
                 transition={{ duration: 1.5, ease: "circOut", delay: 1 }}
                 className="block"
              >
-                <span className="text-white font-medium">Desarrollador Web Full Stack.</span> Arquitecto de <span className="text-indigo-400 font-medium">Sistemas Backend</span> y creador de <span className="text-emerald-400 font-medium">Experiencias Móviles</span>.
+                <span className="text-white font-medium">Desarrollador Full Stack.</span> Transformando lógica compleja en <span className="text-emerald-400 font-medium">aplicaciones móviles</span> y <span className="text-indigo-400 font-medium">web fluidas</span>.
              </motion.span>
         </motion.p>
 
