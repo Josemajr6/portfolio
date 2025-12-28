@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google"; // Cambiamos Geist por fuentes más "Cyber"
 import "./globals.css";
-import CyberCursor from "@/components/ui/CyberCursor";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import CyberCursor from "@/components/ui/CyberCursor";
+import WelcomeScreen from "@/components/layout/WelcomeScreen";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+
+// Configuración de fuentes para solucionar los errores "Cannot find name"
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,17 +28,25 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    /* Añadimos suppressHydrationWarning para evitar errores 
-       cuando extensiones del navegador (como ColorZilla o Grammarly) 
-       modifican el HTML antes de que React cargue.
-    */
     <html lang="es" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30`}
+        /* Aquí usamos las variables que acabamos de definir arriba.
+           He añadido 'font-sans' por defecto para el texto general.
+        */
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30`}
         suppressHydrationWarning
       >
-        <CyberCursor />
-        {children}
+        <ThemeProvider>
+          {/* La pantalla de bienvenida se encarga de su propia lógica de sesión */}
+          <WelcomeScreen />
+          
+          <CyberCursor />
+          
+          {/* El contenido de la web */}
+          <main className="relative z-0">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
