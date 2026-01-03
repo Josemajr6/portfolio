@@ -5,7 +5,9 @@ import {
   SiDocker, SiGit, SiPostman, SiSwagger, SiTypescript, SiJavascript, 
   SiSwift, SiMysql, SiFirebase, SiGithub, SiWordpress,
   SiEclipseide, SiNpm, SiAndroidstudio, SiXcode,
-  SiReact, SiPython, 
+  SiReact, SiPython,
+  SiMongodb,
+  SiOdoo, 
 } from "react-icons/si";
 import { VscJson, VscCode } from "react-icons/vsc"; 
 import { SiCsharp } from '@meronex/icons/si';
@@ -24,9 +26,11 @@ const fullStackData = [
       { name: "PostgreSQL", icon: SiPostgresql },
       { name: "MySQL", icon: SiMysql },
       { name: "Firebase", icon: SiFirebase },
+      { name: "MongoDB", icon: SiMongodb},
       { name: "Apache", icon: SiApache },
       { name: "API REST", icon: VscJson },
       { name: "PHP", icon: SiPhp },
+      { name: "Odoo", icon: SiOdoo}
     ]
   },
   {

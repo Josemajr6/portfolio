@@ -21,7 +21,7 @@ export default function MobileCertifications() {
 
                 <div className="flex items-start gap-4 relative z-10">
                     {/* Logo */}
-                    <div className="w-12 h-12 shrink-0 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg mt-1">
+                    <div className="w-12 h-12 shrink-0 rounded-xl bg-black p-1 flex items-center justify-center shadow-lg mt-1">
                         <img 
                             src={cert.image} 
                             alt={cert.issuer} 
