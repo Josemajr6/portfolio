@@ -10,13 +10,23 @@ export interface Certification {
 }
 
 export const certificationsData: Certification[] = [
+   {
+    id: "ef-set-english",
+    title: "EF SET English Certificate 51/100 (B2 Upper Intermediate)",
+    issuer: "EF SET",
+    date: "ene. 2026",
+    image: "https://imgur.com/vn6crHB.png",
+    pdfUrl: "https://cert.efset.org/en/FKpme6",
+    color: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/50",
+    linkText: "Ver Credencial"
+  },
   {
     id: "udemy-ts",
     title: "Curso Completo de Typescript. Desde las Bases a la Práctica.",
     issuer: "Udemy",
     date: "dic. 2025",
     // Usamos esta URL alternativa de Wikimedia que suele ser más estable
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Udemy_logo.svg/1200px-Udemy_logo.svg.png",
+    image: "https://multifamilyu.com/wp-content/uploads/udemy-logo-white.png",
     pdfUrl: "/certifications/UC-10ac23a5-2ecc-4a72-9921-629523b4bd5a.pdf",
     color: "group-hover:shadow-[0_0_30px_rgba(164,53,240,0.3)] group-hover:border-purple-500/50",
     linkText: "Ver Certificado"

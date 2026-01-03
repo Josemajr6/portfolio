@@ -6,6 +6,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'upload.wikimedia.org',
       },
+      {
+        protocol: 'https',
+        hostname: 'multifamilyu.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'imgur.com',
+      },
     ],
   },
 };

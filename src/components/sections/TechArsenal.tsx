@@ -7,15 +7,12 @@ import {
   SiDocker, SiGit, SiPostman, SiSwagger, SiTypescript, SiJavascript, 
   SiSwift, SiMysql, SiFirebase, SiGithub, SiWordpress,
   SiEclipseide, SiNpm, SiAndroidstudio, SiXcode,
-  SiReact,
-  SiPython,
-  SiFsharp, 
+  SiReact, SiPython, SiMongodb, SiOdoo
 } from "react-icons/si";
-// Usamos VscCode para VS Code ya que es más canónico
 import { VscCode, VscJson } from "react-icons/vsc"; 
 import { SiCsharp } from '@meronex/icons/si';
 import { FaJava, FaTerminal, FaServer, FaMobileAlt, FaTools, FaCode } from "react-icons/fa";
-import { DiDotnet, DiVisualstudio } from "react-icons/di";
+import { DiVisualstudio } from "react-icons/di";
 
 const categories = [
   { id: "backend", label: "~/backend", icon: FaServer, color: "text-emerald-400" },
@@ -31,32 +28,34 @@ const technologies = {
     { name: "Oracle DB", icon: SiOracle, color: "group-hover:text-[#F80000]", desc: "Gestión de BBDD" },
     { name: "PostgreSQL", icon: SiPostgresql, color: "group-hover:text-[#4169E1]", desc: "Relacional Avanzada" },
     { name: "MySQL", icon: SiMysql, color: "group-hover:text-[#4479A1]", desc: "Base de Datos" },
+    { name: "MongoDB", icon: SiMongodb, color: "group-hover:text-[#47A248]", desc: "NoSQL Database" },
     { name: "Firebase", icon: SiFirebase, color: "group-hover:text-[#FFCA28]", desc: "BaaS / Realtime" },
     { name: "Apache", icon: SiApache, color: "group-hover:text-[#D22128]", desc: "Servidor Web" },
     { name: "API REST", icon: VscJson, color: "group-hover:text-white", desc: "Diseño de APIs" },
+    { name: "Odoo ERP", icon: SiOdoo, color: "group-hover:text-[#714B67]", desc: "ERP & CRM System" },
   ],
   mobile: [
     { name: "Android", icon: SiAndroid, color: "group-hover:text-[#3DDC84]", desc: "Nativo (Java/XML)" },
     { name: "Flutter", icon: SiFlutter, color: "group-hover:text-[#02569B]", desc: "Multiplataforma" },
     { name: "Dart", icon: SiDart, color: "group-hover:text-[#0175C2]", desc: "Lenguaje Core" },
+    { name: "Swift / iOS", icon: SiSwift, color: "group-hover:text-[#FA7343]", desc: "iOS / macOS" },
     { name: "XML Layouts", icon: FaCode, color: "group-hover:text-orange-400", desc: "Diseño UI Nativo" },
   ],
   frontend: [
     { name: "Angular", icon: SiAngular, color: "group-hover:text-[#DD0031]", desc: "Framework SPA" },
-    { name: "React", icon: SiReact, color: "group-hover:text-[#61DAFB]", desc: "Librería UI" }, // Nota: React suele ser SiReact, pero he puesto JS si prefieres genérico
+    { name: "React", icon: SiReact, color: "group-hover:text-[#61DAFB]", desc: "Librería UI" },
     { name: "HTML5", icon: SiHtml5, color: "group-hover:text-[#E34F26]", desc: "Estructura Web" },
     { name: "CSS3", icon: SiCss3, color: "group-hover:text-[#1572B6]", desc: "Estilos Modernos" },
     { name: "WordPress", icon: SiWordpress, color: "group-hover:text-[#21759B]", desc: "CMS / Web" },
   ],
   languages: [
     { name: "Java", icon: FaJava, color: "group-hover:text-[#007396]", desc: "Lenguaje Principal" },
-    { name: "Python", icon: SiPython, color: "group-hover:text-[#3776AB]", desc: "Scripting / Backend" }, // Nota: SiPython
+    { name: "Python", icon: SiPython, color: "group-hover:text-[#3776AB]", desc: "Scripting / Backend" },
     { name: "C#", icon: SiCsharp, color: "group-hover:text-[#A47DDD]", desc: "Desarrollo .NET" },
     { name: "PHP", icon: SiPhp, color: "group-hover:text-[#777BB4]", desc: "Backend Web" },
     { name: "SQL", icon: SiPostgresql, color: "group-hover:text-blue-300", desc: "Consultas BBDD" },
     { name: "JavaScript", icon: SiJavascript, color: "group-hover:text-[#F7DF1E]", desc: "Scripting Web" },
     { name: "TypeScript", icon: SiTypescript, color: "group-hover:text-[#3178C6]", desc: "Superset JS" },
-    { name: "Swift", icon: SiSwift, color: "group-hover:text-[#FA7343]", desc: "iOS / macOS" },
   ],
   tools: [
     { name: "Linux", icon: SiLinux, color: "group-hover:text-[#FCC624]", desc: "Admin. Servidores" },
@@ -65,7 +64,7 @@ const technologies = {
     { name: "GitHub", icon: SiGithub, color: "group-hover:text-white", desc: "Repositorios" },
     { name: "Postman", icon: SiPostman, color: "group-hover:text-[#FF6C37]", desc: "Testing API" },
     { name: "Swagger", icon: SiSwagger, color: "group-hover:text-[#85EA2D]", desc: "Documentación API" },
-    { name: "VS Code", icon: DiVisualstudio, color: "group-hover:text-[#007ACC]", desc: "Editor de Código" },
+    { name: "VS Code", icon: VscCode, color: "group-hover:text-[#007ACC]", desc: "Editor de Código" },
     { name: "Visual Studio", icon: DiVisualstudio, color: "group-hover:text-[#5C2D91]", desc: "IDE Profesional" },
     { name: "Android Studio", icon: SiAndroidstudio, color: "group-hover:text-[#3DDC84]", desc: "IDE Android" },
     { name: "Xcode", icon: SiXcode, color: "group-hover:text-[#147EFB]", desc: "IDE Apple" },
@@ -109,7 +108,9 @@ export default function TechArsenal() {
           {technologies[activeTab as keyof typeof technologies].map((tech, index) => (
             <motion.div
               key={tech.name}
-              initial={{ opacity: 0, scale: 0.9, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.9, y: 10 }} 
+              animate={{ opacity: 1, scale: 1, y: 0 }} 
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, delay: index * 0.05 }}
               className="group relative bg-black/40 border border-zinc-800 hover:border-zinc-600 p-4 rounded-xl flex items-center gap-4 cursor-crosshair overflow-hidden transition-all hover:bg-zinc-900/60"
             >

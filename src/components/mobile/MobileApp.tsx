@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaHome, 
@@ -32,16 +32,51 @@ const MobileTopBar = ({ title }: { title: string }) => (
 
 export default function MobileApp() {
   const [activeTab, setActiveTab] = useState("home");
-  
-  // Nuevo estado para la sub-navegación de BIO
   const [bioTab, setBioTab] = useState<'experience' | 'certs'>('experience');
-
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // NAVEGACIÓN CON HISTORIAL DEL NAVEGADOR
+  useEffect(() => {
+    // Establecer estado inicial en el historial
+    if (window.history.state?.tab === undefined) {
+      window.history.replaceState({ tab: activeTab, bioTab }, '');
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state?.tab) {
+        setActiveTab(event.state.tab);
+        if (event.state.bioTab) {
+          setBioTab(event.state.bioTab);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  // Función para cambiar tab con historial
+  const changeTab = (newTab: string) => {
+    if (newTab !== activeTab) {
+      window.history.pushState({ tab: newTab, bioTab }, '', `#${newTab}`);
+      setActiveTab(newTab);
+    }
+  };
+
+  // Función para cambiar bioTab con historial
+  const changeBioTab = (newBioTab: 'experience' | 'certs') => {
+    if (newBioTab !== bioTab) {
+      window.history.pushState({ tab: activeTab, bioTab: newBioTab }, '', `#about-${newBioTab}`);
+      setBioTab(newBioTab);
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
       
-      // --- HOME ---
       case "home":
         return (
           <div className="pt-20 pb-32 px-5 space-y-10">
@@ -71,7 +106,7 @@ export default function MobileApp() {
                 </p>
                 
                 <div className="flex gap-3">
-                    <button onClick={() => setActiveTab('projects')} className="flex-1 bg-white text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wide shadow-lg active:scale-95 transition-transform">
+                    <button onClick={() => changeTab('projects')} className="flex-1 bg-white text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wide shadow-lg active:scale-95 transition-transform">
                         Ver Proyectos
                     </button>
                     <a href="/cv-JoseManuel.pdf" className="flex-1 bg-zinc-950 text-emerald-400 border border-emerald-500/30 font-bold py-3 rounded-xl text-xs uppercase tracking-wide flex items-center justify-center gap-2 active:scale-95 transition-transform">
@@ -89,7 +124,6 @@ export default function MobileApp() {
           </div>
         );
 
-      // --- PROJECTS ---
       case "projects":
         return (
             <div className="pt-20 pb-32 px-5">
@@ -99,16 +133,13 @@ export default function MobileApp() {
             </div>
         );
 
-      // --- BIO (CON TOGGLE NUEVO) ---
       case "about":
         return (
             <div className="pt-20 pb-32 px-5">
                 
-                {/* --- TOGGLE BUTTONS (ENCIMA DEL TÍTULO) --- */}
                 <div className="flex p-1 bg-zinc-900/80 rounded-xl border border-zinc-800 mb-6 relative">
-                    {/* Fondo animado del toggle (opcional, simplificado aquí con condicionales de clase) */}
                     <button 
-                        onClick={() => setBioTab('experience')}
+                        onClick={() => changeBioTab('experience')}
                         className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 ${
                             bioTab === 'experience' 
                             ? 'bg-zinc-800 text-white shadow-lg' 
@@ -118,7 +149,7 @@ export default function MobileApp() {
                         <FaBriefcase /> Experiencia
                     </button>
                     <button 
-                        onClick={() => setBioTab('certs')}
+                        onClick={() => changeBioTab('certs')}
                         className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 ${
                             bioTab === 'certs' 
                             ? 'bg-zinc-800 text-white shadow-lg' 
@@ -129,7 +160,6 @@ export default function MobileApp() {
                     </button>
                 </div>
 
-                {/* TÍTULO Y CONTENIDO DINÁMICO */}
                 <AnimatePresence mode="wait">
                     {bioTab === 'experience' ? (
                         <motion.div 
@@ -158,7 +188,6 @@ export default function MobileApp() {
             </div>
         );
 
-      // --- CONTACTO ---
       case "contact":
         return (
             <div className="pt-20 pb-32 px-5 min-h-[80vh] flex flex-col">
@@ -248,10 +277,10 @@ export default function MobileApp() {
 
       <nav className="fixed bottom-0 left-0 w-full bg-black/85 backdrop-blur-xl border-t border-white/5 pb-safe z-50">
         <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-2">
-            <NavButton active={activeTab === 'home'} onClick={() => setActiveTab('home')} icon={FaHome} label="Inicio" />
-            <NavButton active={activeTab === 'projects'} onClick={() => setActiveTab('projects')} icon={FaLayerGroup} label="Proyectos" />
-            <NavButton active={activeTab === 'about'} onClick={() => setActiveTab('about')} icon={FaUserAstronaut} label="Bio" />
-            <NavButton active={activeTab === 'contact'} onClick={() => setActiveTab('contact')} icon={FaCommentDots} label="Hablemos" />
+            <NavButton active={activeTab === 'home'} onClick={() => changeTab('home')} icon={FaHome} label="Inicio" />
+            <NavButton active={activeTab === 'projects'} onClick={() => changeTab('projects')} icon={FaLayerGroup} label="Proyectos" />
+            <NavButton active={activeTab === 'about'} onClick={() => changeTab('about')} icon={FaUserAstronaut} label="Bio" />
+            <NavButton active={activeTab === 'contact'} onClick={() => changeTab('contact')} icon={FaCommentDots} label="Hablemos" />
         </div>
       </nav>
     </div>
