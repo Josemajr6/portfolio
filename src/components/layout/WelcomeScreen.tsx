@@ -29,14 +29,22 @@ export default function WelcomeScreen() {
   useEffect(() => {
     // Este código solo se ejecuta en el cliente (navegador).
     const hasEntered = sessionStorage.getItem("hasEntered");
+    // --- NUEVO: DETECCIÓN DE MÓVIL ---
+    const isMobile = window.innerWidth < 768; // Consideramos móvil si es menor a 768px
 
-    if (hasEntered) {
-      // CASO 1: YA HA ENTRADO.
+    if (hasEntered || isMobile) {
+      // CASO 1: YA HA ENTRADO O ESTAMOS EN MÓVIL.
       // No hacemos nada, 'show' se mantiene en false.
-      // Aseguramos que el scroll esté permitido por si acaso.
+      
+      // Si es móvil, guardamos la sesión para que si gira el móvil a horizontal no le salte de repente
+      if (isMobile && !hasEntered) {
+        sessionStorage.setItem("hasEntered", "true");
+      }
+
+      // Aseguramos que el scroll esté permitido.
       document.body.style.overflow = "auto";
     } else {
-      // CASO 2: PRIMERA VEZ EN LA SESIÓN.
+      // CASO 2: ESCRITORIO Y PRIMERA VEZ EN LA SESIÓN.
       // Mostramos la pantalla y bloqueamos el scroll.
       setShow(true);
       document.body.style.overflow = "hidden";
@@ -54,7 +62,6 @@ export default function WelcomeScreen() {
     }
 
     // FINALMENTE: Marcamos que el chequeo inicial ha terminado.
-    // Esto permitirá que el componente decida si renderizarse o no.
     setIsLoadingCheck(false);
 
     // Cleanup function
@@ -77,18 +84,18 @@ export default function WelcomeScreen() {
     }, 1500); // Duración de la animación de salida
   };
 
-  // --- LÓGICA DE RENDERIZADO CONDICIONAL (EL FIX) ---
-  // Si todavía estamos comprobando (isLoadingCheck es true) O si el resultado fue que no hay que mostrarlo (show es false)...
-  // ... NO RENDERIZAMOS NADA. Esto evita el flash del contenido inicial incorrecto.
+  // --- LÓGICA DE RENDERIZADO CONDICIONAL ---
+  // Si isLoadingCheck es true (estamos midiendo pantalla) O show es false (es móvil o ya entró)...
+  // ... NO RENDERIZAMOS NADA.
   if (isLoadingCheck || !show) return null;
 
-  // Si pasamos aquí, es seguro renderizar la pantalla de bienvenida.
+  // Si pasamos aquí, es ESCRITORIO y es la primera vez.
   return (
     <AnimatePresence>
       {!isExiting ? (
         <motion.div
           key="welcome-overlay"
-          // Añadimos un initial opacity 0 para que la aparición sea suave si tarda un milisegundo en cargar
+          // Añadimos un initial opacity 0 para que la aparición sea suave
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

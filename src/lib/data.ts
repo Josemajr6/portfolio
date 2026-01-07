@@ -7,8 +7,8 @@ export const personalData = {
   about: "Técnico Informático y estudiante de DAM. Proactivo, autodidacta y con un enfoque técnico sólido en arquitecturas backend y desarrollo móvil.",
   email: "tu-email@ejemplo.com",
   socials: [
-    { name: "GitHub", url: "https://github.com/tu-usuario", icon: Github },
-    { name: "LinkedIn", url: "https://linkedin.com/in/tu-perfil", icon: Mail },
+    { name: "GitHub", url: "https://github.com/Josemajr6", icon: Github },
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/jos%C3%A9-manuel-jim%C3%A9nez-rodr%C3%ADguez-80a5b4273/", icon: Mail },
   ]
 };
 

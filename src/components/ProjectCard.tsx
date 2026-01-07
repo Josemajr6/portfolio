@@ -6,9 +6,11 @@ import { FaGithub, FaExternalLinkAlt, FaCode, FaCloudSun, FaDesktop, FaGlobeAmer
 import { 
   SiSpring, SiAngular, SiPostgresql, SiFlutter, SiDart, 
   SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger,
-  SiSwift, SiApple, SiThemoviedatabase
+  SiSwift, SiApple, SiThemoviedatabase,
+  SiVapor
 } from "react-icons/si";
 import { Project } from "@/data/project";
+import { SiMongodb } from "@meronex/icons/si";
 
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
@@ -30,6 +32,8 @@ const getTechIcon = (techName: string) => {
   if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
   if (normalize.includes("weather")) return <FaCloudSun className="text-yellow-400" />;
   if (normalize.includes("rest countries")) return <FaGlobeAmericas className="text-green-400" />;
+  if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
+if (normalize.includes("vapor")) return <SiVapor className="text-purple-400" />;
   return <FaCode className="text-zinc-500" />; 
 };
 
