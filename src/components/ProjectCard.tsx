@@ -2,15 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaGithub, FaExternalLinkAlt, FaCode, FaCloudSun, FaDesktop, FaGlobeAmericas } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaCode, FaCloudSun, FaDesktop, FaGlobeAmericas, FaServer, FaDatabase } from "react-icons/fa";
 import { 
   SiSpring, SiAngular, SiPostgresql, SiFlutter, SiDart, 
   SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger,
-  SiSwift, SiApple, SiThemoviedatabase,
-  SiVapor
+  SiSwift, SiApple, SiThemoviedatabase, SiVapor, SiMongodb
 } from "react-icons/si";
+
 import { Project } from "@/data/project";
-import { SiMongodb } from "@meronex/icons/si";
 
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
@@ -18,9 +17,11 @@ const getTechIcon = (techName: string) => {
   if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
   if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
   if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
+  if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
+  if (normalize.includes("vapor")) return <SiVapor className="text-purple-400" />;
   if (normalize.includes("react")) return <SiTypescript className="text-blue-400" />;
   if (normalize.includes("type")) return <SiTypescript className="text-blue-600" />;
-  if (normalize.includes("java")) return <FaCode className="text-orange-500" />;
+  if (normalize.includes("java")) return <FaCode className="text-orange-600" />;
   if (normalize.includes("swagger")) return <SiSwagger className="text-green-600" />;
   if (normalize.includes("docker")) return <SiDocker className="text-blue-500" />;
   if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
@@ -31,26 +32,26 @@ const getTechIcon = (techName: string) => {
   if (normalize.includes("macos")) return <FaDesktop className="text-gray-300" />;
   if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
   if (normalize.includes("weather")) return <FaCloudSun className="text-yellow-400" />;
-  if (normalize.includes("rest countries")) return <FaGlobeAmericas className="text-green-400" />;
-  if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
-if (normalize.includes("vapor")) return <SiVapor className="text-purple-400" />;
+  if (normalize.includes("rest countries") || normalize.includes("restcountries")) return <FaGlobeAmericas className="text-green-400" />;
+  if (normalize.includes("xml")) return <FaCode className="text-blue-300" />;
+  if (normalize.includes("retrofit")) return <FaServer className="text-green-400" />;
+  if (normalize.includes("sqlite")) return <FaDatabase className="text-yellow-500" />;
+  if (normalize.includes("gamekit")) return <FaCode className="text-purple-400" />;
+  if (normalize.includes("visionos")) return <SiApple className="text-indigo-400" />;
   return <FaCode className="text-zinc-500" />; 
 };
 
 export default function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isCompleted = project.status === "Completed";
   
-  // --- CONFIGURACIÓN INDIVIDUAL DE IMÁGENES ---
-  // Lista de proyectos que necesitan 'contain' (verse enteros sin recorte)
-  // Incluimos: Nexus, LePokedex, AuraMovies, ManyWorker, AuraNotch.
+  // Lista de proyectos que necesitan 'contain'
   const projectsWithContain = [
     "nexus-app", 
     "manyworker-api", 
     "aura-notch",
-    "moneyflow" // Añado MoneyFlow por si acaso (suele ser móvil vertical)
+    "moneyflow"
   ];
 
-  // Si está en la lista, usamos CONTAIN. Si no (Weather, Quiz, Notes), usamos COVER.
   const useContainMode = projectsWithContain.includes(project.slug);
 
   return (
@@ -81,17 +82,15 @@ export default function ProjectCard({ project, index }: { project: Project; inde
       {/* Main Image Container */}
       <div className="relative h-72 w-full overflow-hidden border-b border-zinc-800 bg-black group-hover:h-64 transition-all duration-500 ease-in-out">
         
-        {/* Fondo sutil (útil para imágenes con 'contain' que dejan huecos negros) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05),transparent_70%)]" />
         
-        {/* Efecto Scanlines */}
+        {/* Scanlines */}
         <div className="absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" />
         
         <Image
           src={project.mainImage} 
           alt={project.title}
           fill
-          // LÓGICA DE CLASES APLICADA:
           className={`
             transition-all duration-700
             ${useContainMode 
@@ -153,12 +152,12 @@ export default function ProjectCard({ project, index }: { project: Project; inde
                 <FaGithub size={14} /> Source_Code
               </a>
             )}
-             <Link 
-                href={`/projects/${project.slug}`}
-                className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-100 text-zinc-950 border border-zinc-100 hover:bg-white font-bold text-xs font-mono uppercase tracking-wider transition-all"
-              >
-                View_Details &gt;
-              </Link>
+            <Link 
+              href={`/projects/${project.slug}`}
+              className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-100 text-zinc-950 border border-zinc-100 hover:bg-white font-bold text-xs font-mono uppercase tracking-wider transition-all"
+            >
+              View_Details &gt;
+            </Link>
           </div>
         </div>
       </div>

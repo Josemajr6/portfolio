@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
-// CORRECCIÓN: Importamos 'projectsData' que es el nombre correcto del export
 import { projectsData, Project } from "@/data/project"; 
-import { FaGithub, FaExternalLinkAlt, FaFilter, FaFolderOpen } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaFilter, FaFolderOpen, FaArrowLeft, FaStar, FaCheckCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -15,6 +14,7 @@ const filters = [
 
 export default function MobileProjects() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = projectsData.filter((p) => {
     if (activeFilter === "all") return true;
@@ -26,7 +26,114 @@ export default function MobileProjects() {
 
   return (
     <div className="w-full">
-      {/* --- BARRA DE FILTROS --- */}
+      {/* VISTA DE DETALLE */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 bg-black z-50 overflow-y-auto pb-safe"
+          >
+            {/* Header */}
+            <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-zinc-800 p-5 flex items-center gap-4 z-10">
+              <button onClick={() => setSelectedProject(null)} className="text-emerald-500 active:scale-95 transition-transform">
+                <FaArrowLeft size={20} />
+              </button>
+              <h2 className="text-lg font-bold text-white">{selectedProject.title}</h2>
+            </div>
+
+            {/* Content */}
+            <div className="p-5 space-y-6">
+              {/* Image */}
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800">
+                <Image 
+                  src={selectedProject.mainImage}
+                  alt={selectedProject.title}
+                  fill
+                  className="object-contain p-4"
+                />
+              </div>
+
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full text-xs font-bold">
+                  {selectedProject.category}
+                </span>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                  selectedProject.status === 'Completed' 
+                    ? 'bg-green-500/10 text-green-400 border border-green-500/30'
+                    : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
+                }`}>
+                  {selectedProject.status}
+                </span>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-3">
+                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">Descripción</h3>
+                <p className="text-zinc-300 leading-relaxed">
+                  {selectedProject.overview?.description || selectedProject.description}
+                </p>
+              </div>
+
+              {/* Highlights */}
+              {selectedProject.overview?.highlights && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">Características Principales</h3>
+                  <div className="space-y-2">
+                    {selectedProject.overview.highlights.map((h, i) => (
+                      <div key={i} className="flex items-start gap-3 text-sm text-zinc-300">
+                        <FaCheckCircle className="text-emerald-500 mt-1 shrink-0" size={14}/>
+                        <span>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tech Stack */}
+              <div className="space-y-3">
+                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">Tecnologías</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.tech.map((t) => (
+                    <span key={t} className="px-3 py-1 bg-zinc-900 rounded-lg text-xs text-zinc-400 font-mono border border-zinc-800">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                {selectedProject.githubUrl && (
+                  <a 
+                    href={selectedProject.githubUrl} 
+                    target="_blank"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-zinc-900 text-white border border-zinc-800 rounded-xl font-bold text-sm active:scale-95 transition-transform"
+                  >
+                    <FaGithub size={18}/>
+                    GitHub
+                  </a>
+                )}
+                {selectedProject.demoUrl && (
+                  <a 
+                    href={selectedProject.demoUrl} 
+                    target="_blank"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 text-black rounded-xl font-bold text-sm active:scale-95 transition-transform"
+                  >
+                    <FaExternalLinkAlt size={16}/>
+                    Demo
+                  </a>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* FILTROS */}
       <div className="sticky top-14 z-30 bg-black/90 backdrop-blur-md pb-4 pt-2 -mx-5 px-5 border-b border-zinc-800/50 mb-6 flex items-center gap-3 overflow-x-auto scrollbar-hide">
         <FaFilter className="text-emerald-500 shrink-0" size={12} />
         {filters.map((f) => (
@@ -44,7 +151,7 @@ export default function MobileProjects() {
         ))}
       </div>
 
-      {/* --- LISTA DE PROYECTOS --- */}
+      {/* LISTA DE PROYECTOS */}
       <div className="space-y-6 min-h-[50vh]">
         <AnimatePresence mode="wait">
            <motion.div 
@@ -57,7 +164,11 @@ export default function MobileProjects() {
            >
             {filteredProjects.length > 0 ? (
                 filteredProjects.map((project) => (
-                    <ProjectCardMobile key={project.slug} project={project} />
+                    <ProjectCardMobile 
+                      key={project.slug} 
+                      project={project}
+                      onClick={() => setSelectedProject(project)}
+                    />
                 ))
             ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
@@ -72,12 +183,14 @@ export default function MobileProjects() {
   );
 }
 
-function ProjectCardMobile({ project }: { project: Project }) {
-    // Detectamos si es Aura Notch por su slug
+function ProjectCardMobile({ project, onClick }: { project: Project, onClick: () => void }) {
     const isAuranotch = project.slug === "aura-notch";
 
     return (
-        <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group">
+        <div 
+          onClick={onClick}
+          className="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group active:scale-[0.98] transition-transform cursor-pointer"
+        >
             {/* Imagen Header */}
             <div className="relative h-44 w-full bg-zinc-950 overflow-hidden">
                 <img 
@@ -85,12 +198,11 @@ function ProjectCardMobile({ project }: { project: Project }) {
                     alt={project.title} 
                     className={`w-full h-full transition-all duration-500 ${
                         isAuranotch 
-                        ? "object-contain p-6 bg-black/40" // ARREGLO AQUÍ: Se ajusta al cuadro con padding y fondo oscuro
+                        ? "object-contain p-6 bg-black/40" 
                         : "object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105"
                     }`}
                 />
                 
-                {/* Overlay gradiente (menos intenso para Auranotch para que se vea el logo) */}
                 <div className={`absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent ${isAuranotch ? 'opacity-40' : 'opacity-90'}`} />
                 
                 {/* Status Badge */}
@@ -113,33 +225,34 @@ function ProjectCardMobile({ project }: { project: Project }) {
                     </span>
                     <div className="flex gap-3">
                         {project.githubUrl && (
-                            <a href={project.githubUrl} target="_blank" className="text-zinc-400 hover:text-white transition-colors">
-                                <FaGithub size={18}/>
-                            </a>
+                            <FaGithub size={16} className="text-zinc-500"/>
                         )}
                         {project.demoUrl && (
-                             <a href={project.demoUrl} target="_blank" className="text-zinc-400 hover:text-white transition-colors">
-                                <FaExternalLinkAlt size={16}/>
-                            </a>
+                            <FaExternalLinkAlt size={14} className="text-zinc-500"/>
                         )}
                     </div>
                 </div>
 
                 <h3 className="text-xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
                 
-                <p className="text-zinc-400 text-xs leading-relaxed mb-4 line-clamp-3">
+                <p className="text-zinc-400 text-xs leading-relaxed mb-4 line-clamp-2">
                     {project.description}
                 </p>
 
                 {/* Tech Tags */}
                 <div className="flex flex-wrap gap-1.5">
-                    {project.tech.map((t) => (
+                    {project.tech.slice(0, 4).map((t) => (
                         <span key={t} className="px-2 py-1 bg-black rounded text-[9px] text-zinc-500 font-mono border border-zinc-800">
                             {t}
                         </span>
                     ))}
+                    {project.tech.length > 4 && (
+                      <span className="px-2 py-1 text-[9px] text-zinc-600 font-mono">
+                        +{project.tech.length - 4}
+                      </span>
+                    )}
                 </div>
             </div>
         </div>
-    )
+    );
 }
