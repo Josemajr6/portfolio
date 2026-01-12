@@ -1,55 +1,95 @@
 "use client";
-import { useState, useEffect, useRef, memo, useMemo } from "react";
-import { AnimatePresence, motion, useMotionValue, useMotionTemplate, useTransform, useInView } from "framer-motion";
+import { useState, useEffect, memo, useMemo, useRef } from "react";
+import { AnimatePresence, motion, useMotionValue, useMotionTemplate, useTransform } from "framer-motion";
+import dynamic from "next/dynamic";
 
-// --- COMPONENTES CORE (Sin Dynamic Import para evitar problemas) ---
-import HeroQuantum from "@/components/sections/HeroQuantum";
-import TechArsenal from "@/components/sections/TechArsenal";
-import CircuitTimeline from "@/components/sections/CircuitTimeline";
-import FeaturedProjects from "@/components/sections/FeaturedProjects";
-import Certifications from "@/components/sections/Certifications";
+// --- IMPORTACIONES ESTÁTICAS (críticas) ---
 import CyberHeader from "@/components/layout/CyberHeader";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaSatelliteDish, FaHeart, FaArrowRight, FaPhoneAlt, FaTerminal } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaHeart, FaArrowRight, FaPhoneAlt, FaTerminal } from "react-icons/fa";
 
-// --- COMPONENTES MOBILE ---
-import MobileApp from "@/components/mobile/MobileApp";
-import MobileWelcome from "@/components/mobile/MobileWelcome";
-// --- PARTÍCULAS FLOTANTES OPTIMIZADAS ---
+// --- HERO OPTIMIZADO ---
+const HeroQuantum = dynamic(() => import("@/components/sections/HeroQuantum"), {
+  loading: () => <div className="h-screen bg-black" />,
+  ssr: true
+});
+
+// --- IMPORTACIONES DINÁMICAS ---
+const TechArsenal = dynamic(() => import("@/components/sections/TechArsenal"), {
+  loading: () => <LoadingSpinner />,
+  ssr: false
+});
+
+const CircuitTimeline = dynamic(() => import("@/components/sections/CircuitTimeline"), {
+  loading: () => <LoadingSpinner />,
+  ssr: false
+});
+
+const FeaturedProjects = dynamic(() => import("@/components/sections/FeaturedProjects"), {
+  loading: () => <LoadingSpinner />,
+  ssr: false
+});
+
+const Certifications = dynamic(() => import("@/components/sections/Certifications"), {
+  loading: () => <LoadingSpinner />,
+  ssr: false
+});
+
+const MobileApp = dynamic(() => import("@/components/mobile/MobileApp"), {
+  loading: () => <div className="h-screen bg-black" />,
+  ssr: false
+});
+
+const MobileWelcome = dynamic(() => import("@/components/mobile/MobileWelcome"), {
+  loading: () => <div className="h-screen bg-black" />,
+  ssr: false
+});
+
+// Loading Spinner Ligero
+function LoadingSpinner() {
+  return (
+    <div className="flex items-center justify-center py-20">
+      <div className="w-8 h-8 border-2 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
+    </div>
+  );
+}
+
+// --- PARTÍCULAS OPTIMIZADAS (Mínimas para Windows) ---
 const FloatingParticles = memo(() => {
   const particles = useMemo(() => 
-    Array.from({ length: 20 }, (_, i) => ({
+    Array.from({ length: 6 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      duration: Math.random() * 20 + 20,
-      delay: Math.random() * -20
+      size: 2,
+      duration: 30 + i * 2,
+      delay: -i * 3
     }))
   , []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-20">
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute rounded-full bg-emerald-500/20"
+          className="absolute rounded-full bg-emerald-500"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
             width: particle.size,
             height: particle.size,
+            willChange: 'transform, opacity'
           }}
           animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.5, 0.2],
+            y: [-20, 0, -20],
+            opacity: [0.1, 0.3, 0.1],
           }}
           transition={{
             duration: particle.duration,
             repeat: Infinity,
             delay: particle.delay,
-            ease: "easeInOut"
+            ease: "linear"
           }}
         />
       ))}
@@ -58,20 +98,18 @@ const FloatingParticles = memo(() => {
 });
 FloatingParticles.displayName = 'FloatingParticles';
 
-
-
-// --- TARJETA HOLOGRÁFICA ---
+// --- TARJETA HOLOGRÁFICA OPTIMIZADA ---
 const HolographicCard = memo(({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const refEl = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [5, -5]); 
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-5, 5]);
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], [3, -3]); 
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-3, 3]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
+    if (!refEl.current) return;
+    const rect = refEl.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
     mouseX.set(x);
@@ -85,55 +123,40 @@ const HolographicCard = memo(({ children, className = "" }: { children: React.Re
 
   return (
     <motion.div
-      ref={ref}
+      ref={refEl}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      style={{ 
+        rotateX, 
+        rotateY, 
+        transformStyle: "preserve-3d",
+        willChange: 'transform'
+      }}
+      whileHover={{ scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
       className={`relative group/holo rounded-2xl ${className}`}
     >
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-500 group-hover/holo:opacity-100 z-0"
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover/holo:opacity-100 z-0"
         style={{
           background: useMotionTemplate`
             radial-gradient(
-              250px circle at ${mouseX}px ${mouseY}px,
-              rgba(16, 185, 129, 0.5),
-              rgba(6, 182, 212, 0.3),
-              transparent 80%
+              200px circle at ${mouseX}px ${mouseY}px,
+              rgba(16, 185, 129, 0.3),
+              transparent 70%
             )
           `,
         }}
       />
       
       <div 
-        style={{ transform: "translateZ(20px)" }} 
+        style={{ transform: "translateZ(10px)" }} 
         className="relative z-10 h-full rounded-2xl overflow-hidden bg-zinc-900/90 backdrop-blur-xl border border-white/5"
       >
-        <motion.div
-          className="pointer-events-none absolute inset-0 opacity-0 group-hover/holo:opacity-20 transition-opacity duration-500 mix-blend-overlay z-20"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(16, 185, 129, 0.1) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(16, 185, 129, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '20px 20px',
-          }}
-        />
-        
         <div className="relative z-30 h-full">
           {children}
         </div>
       </div>
-      
-      <motion.div
-        className="absolute inset-0 z-40 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 rounded-2xl pointer-events-none"
-        style={{
-          opacity: useTransform(mouseX, [-0.5, 0.5], [0, 0.3]),
-          transform: "translateZ(30px)"
-        }}
-      />
     </motion.div>
   );
 });
@@ -174,13 +197,12 @@ export default function Home() {
   return (
     <div className="relative bg-zinc-950 min-h-screen text-zinc-200 overflow-x-hidden selection:bg-emerald-500/30">
       
-      {/* EFECTOS DE FONDO */}
+      {/* EFECTOS DE FONDO (Optimizados) */}
       <FloatingParticles />
-  
       
-      {/* GRID ESTÁTICO */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.15]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]" />
+      {/* GRID ESTÁTICO (CSS Puro) */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.12]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]" />
       </div>
 
       <CyberHeader />
@@ -194,19 +216,14 @@ export default function Home() {
             
             <div className="relative">
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
               >
                 <div className="absolute -left-4 -top-4 w-12 h-12 md:w-20 md:h-20 border-l-2 border-t-2 border-emerald-500/20" />
                 <span className="text-xs md:text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4 block">
-                  <motion.span
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    // System Status: Ready
-                  </motion.span>
+                  // System Status: Ready
                 </span>
               </motion.div>
 
@@ -223,21 +240,11 @@ export default function Home() {
             <ScrollReveal mode="pop" delay={0.2}>
               <HolographicCard>
                 <div className="p-8">
-                  <motion.div 
-                    className="absolute top-0 right-0 p-4 opacity-50"
-                    animate={{ rotate: [0, 5, 0] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
+                  <div className="absolute top-0 right-0 p-4 opacity-30">
                     <FaTerminal className="text-4xl text-white/10" />
-                  </motion.div>
+                  </div>
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                    <motion.span 
-                      className="text-emerald-500"
-                      animate={{ opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      //
-                    </motion.span> 
+                    <span className="text-emerald-500">//</span> 
                     ABOUT_ME
                   </h3>
                   <div className="prose prose-lg prose-invert text-zinc-300 leading-relaxed text-sm md:text-lg">
@@ -256,11 +263,7 @@ export default function Home() {
         {/* --- ARSENAL TECNOLÓGICO --- */}
         <Section id="stack">
           <div className="flex items-center gap-3 mb-8 md:mb-12">
-            <motion.span 
-              className="h-2 w-2 bg-indigo-500 rounded-full shadow-[0_0_10px_#6366f1] inline-block"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+            <span className="h-2 w-2 bg-indigo-500 rounded-full shadow-[0_0_10px_#6366f1] inline-block" />
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-2xl md:text-3xl font-bold text-white">
                 Arsenal Tecnológico
@@ -268,22 +271,16 @@ export default function Home() {
             </ScrollReveal>
           </div>
           <ScrollReveal mode="pop" delay={0.2}>
-            <div className="w-full">
-              <TechArsenal />
-            </div>
+            <TechArsenal />
           </ScrollReveal>
         </Section>
 
         {/* --- PROYECTOS --- */}
         <Section id="projects">
           <div className="flex flex-col items-center mb-12 md:mb-16 text-center px-2">
-            <motion.span 
-              className="font-mono text-emerald-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 block"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
+            <span className="font-mono text-emerald-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 block">
               // Selected Works
-            </motion.span>
+            </span>
             
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
@@ -300,19 +297,11 @@ export default function Home() {
         {/* --- CERTIFICACIONES --- */}
         <Section id="certifications" className="pb-20">
           <div className="flex flex-col items-center mb-12 text-center">
-            <motion.span 
-              className="font-mono text-yellow-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 block"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
+            <span className="font-mono text-yellow-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 block">
               // VALIDATION_TOKENS
-            </motion.span>
+            </span>
             <div className="flex items-center gap-3">
-              <motion.span 
-                className="h-2 w-2 bg-yellow-400 rounded-full shadow-[0_0_10px_#facc15] inline-block"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
+              <span className="h-2 w-2 bg-yellow-400 rounded-full shadow-[0_0_10px_#facc15] inline-block" />
               
               <ScrollReveal mode="cyber-glitch">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
@@ -330,11 +319,7 @@ export default function Home() {
         {/* --- TRAYECTORIA --- */}
         <Section id="experience">
           <div className="flex items-center gap-3 mb-8 md:mb-12">
-            <motion.span 
-              className="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981] inline-block"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+            <span className="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981] inline-block" />
             
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-2xl md:text-3xl font-bold text-white">
@@ -353,24 +338,14 @@ export default function Home() {
           <ScrollReveal mode="pop" delay={0.1}>
             <div className="relative w-full rounded-3xl overflow-hidden bg-black border border-zinc-800 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
               
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:50px_50px]" />
-              
-              <motion.div 
-                className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50 shadow-[0_0_10px_#10b981]"
-                animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              />
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
 
               <div className="relative z-10 p-6 md:p-16">
                 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
                   <div>
                     <div className="flex items-center gap-2 text-emerald-500 font-mono text-xs mb-2">
-                      <motion.span 
-                        className="w-2 h-2 bg-emerald-500 rounded-full"
-                        animate={{ scale: [1, 1.3, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      />
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full" />
                       SECURE_CHANNEL_OPEN
                     </div>
                     
@@ -398,13 +373,9 @@ export default function Home() {
                       <a href="mailto:josemajimenezrodriguez8@gmail.com" className="block w-full p-6 group">
                         <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 z-30">
                           <div className="flex items-center gap-4">
-                            <motion.div 
-                              className="w-12 h-12 rounded-lg bg-zinc-950 flex items-center justify-center text-zinc-400 group-hover:text-emerald-400 transition-colors border border-zinc-800 group-hover:border-emerald-500/50"
-                              whileHover={{ rotate: [0, -10, 10, 0] }}
-                              transition={{ duration: 0.5 }}
-                            >
+                            <div className="w-12 h-12 rounded-lg bg-zinc-950 flex items-center justify-center text-zinc-400 group-hover:text-emerald-400 transition-colors border border-zinc-800 group-hover:border-emerald-500/50">
                               <FaEnvelope size={24} />
-                            </motion.div>
+                            </div>
                             <div>
                               <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Destinatario</span>
                               <div className="text-sm md:text-xl font-bold text-white font-mono tracking-tight group-hover:text-emerald-400 transition-colors break-all">
@@ -425,13 +396,9 @@ export default function Home() {
                       <HolographicCard className="sm:col-span-2">
                         <a href="tel:+34722625288" className="block w-full p-4 flex flex-row items-center justify-between gap-3 group">
                           <div className="flex items-center gap-3 z-30 relative">
-                            <motion.div 
-                              className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500"
-                              whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
-                              transition={{ duration: 0.3 }}
-                            >
+                            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
                               <FaPhoneAlt size={18} />
-                            </motion.div>
+                            </div>
                             <div className="flex flex-col">
                               <span className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest">Llamada Directa</span>
                               <span className="font-bold text-white text-lg font-mono">+34 722 62 52 88</span>
@@ -442,19 +409,15 @@ export default function Home() {
                       </HolographicCard>
 
                       <HolographicCard>
-                        <a href="https://linkedin.com" target="_blank" className="block w-full h-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 group">
-                          <motion.div whileHover={{ scale: 1.2, rotate: 360 }} transition={{ duration: 0.5 }}>
-                            <FaLinkedin size={24} className="text-zinc-500 group-hover:text-[#0077b5] transition-colors z-30 relative" />
-                          </motion.div>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="block w-full h-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 group">
+                          <FaLinkedin size={24} className="text-zinc-500 group-hover:text-[#0077b5] transition-colors z-30 relative" />
                           <span className="font-bold text-xs md:text-sm text-zinc-400 group-hover:text-white z-30 relative">LINKEDIN</span>
                         </a>
                       </HolographicCard>
                       
                       <HolographicCard>
-                        <a href="https://github.com/Josemajr6/" target="_blank" className="block w-full h-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 group">
-                          <motion.div whileHover={{ scale: 1.2, rotate: 360 }} transition={{ duration: 0.5 }}>
-                            <FaGithub size={24} className="text-zinc-500 group-hover:text-white transition-colors z-30 relative" />
-                          </motion.div>
+                        <a href="https://github.com/Josemajr6/" target="_blank" rel="noopener noreferrer" className="block w-full h-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 group">
+                          <FaGithub size={24} className="text-zinc-500 group-hover:text-white transition-colors z-30 relative" />
                           <span className="font-bold text-xs md:text-sm text-zinc-400 group-hover:text-white z-30 relative">GITHUB</span>
                         </a>
                       </HolographicCard>
@@ -465,28 +428,15 @@ export default function Home() {
                     <HolographicCard className="h-full">
                       <div className="h-full flex flex-col group min-h-[250px]">
                         <div className="flex-grow p-6 flex flex-col items-center justify-center text-center relative z-30">
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                          >
-                            <FaSatelliteDish className="text-emerald-600 text-3xl md:text-4xl mb-4" />
-                          </motion.div>
+                          <div className="text-emerald-600 text-3xl md:text-4xl mb-4">
+                            <FaTerminal />
+                          </div>
                           <div className="font-mono text-zinc-500 text-xs mb-1">PROFILE_STATUS</div>
-                          <motion.div 
-                            className="text-white font-bold text-lg md:text-xl tracking-widest group-hover:text-emerald-400 transition-colors"
-                            animate={{ scale: [1, 1.05, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                          >
+                          <div className="text-white font-bold text-lg md:text-xl tracking-widest group-hover:text-emerald-400 transition-colors">
                             AVAILABLE
-                          </motion.div>
+                          </div>
                         </div>
-                        <a href="/cv-JoseManuel.pdf" download="CV-JoseManuel-Jimenez.pdf" className="relative z-30 bg-emerald-600 hover:bg-emerald-500 text-black p-4 md:p-6 text-center transition-colors cursor-pointer overflow-hidden group">
-                          <motion.div 
-                            className="absolute inset-0 bg-emerald-400"
-                            initial={{ x: '-100%' }}
-                            whileHover={{ x: 0 }}
-                            transition={{ duration: 0.3 }}
-                          />
+                        <a href="/cv-JoseManuel.pdf" download="CV-JoseManuel-Jimenez.pdf" className="relative z-30 bg-emerald-600 hover:bg-emerald-500 text-black p-4 md:p-6 text-center transition-colors cursor-pointer">
                           <div className="flex flex-col items-center gap-2 relative z-10">
                             <span className="font-black font-mono uppercase tracking-[0.2em] text-xs md:text-sm flex items-center gap-2">
                               <FaFileDownload /> DOWNLOAD CV
@@ -504,38 +454,20 @@ export default function Home() {
       </div>
 
       <footer className="relative py-12 md:py-16 border-t border-emerald-900/30 bg-black overflow-hidden mt-10 md:mt-20">
-        <motion.div 
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[600px] h-[150px] bg-emerald-500/10 blur-[80px] pointer-events-none"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 5, repeat: Infinity }}
-        />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[600px] h-[150px] bg-emerald-500/5 blur-[80px] pointer-events-none" />
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
-          <motion.div 
-            className="font-mono text-[10px] text-emerald-600 mb-4 tracking-[0.5em]"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
+          <div className="font-mono text-[10px] text-emerald-600 mb-4 tracking-[0.5em]">
             /// END_OF_TRANSMISSION ///
-          </motion.div>
+          </div>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-base md:text-xl font-bold text-zinc-300">
             <div className="flex items-center gap-2">
               <span>Desarrollado con</span>
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                <FaHeart className="text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" size={20} />
-              </motion.div>
+              <FaHeart className="text-red-600" size={20} />
             </div>
             <div className="flex items-center gap-2">
               <span>por</span>
-              <span className="relative group cursor-default">
-                <motion.span 
-                  className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded blur opacity-20 group-hover:opacity-50 transition duration-500"
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                />
-                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-black tracking-wide drop-shadow-sm">
+              <span className="relative">
+                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-black tracking-wide">
                   José Manuel Jiménez
                 </span>
               </span>

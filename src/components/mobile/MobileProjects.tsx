@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { projectsData, Project } from "@/data/project"; 
-import { FaGithub, FaExternalLinkAlt, FaFilter, FaFolderOpen, FaArrowLeft, FaStar, FaCheckCircle } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaFilter, FaFolderOpen, FaArrowLeft, FaStar, FaCheckCircle, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -24,9 +24,13 @@ export default function MobileProjects() {
     return true;
   });
 
+  const handleCloseDetail = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
+
   return (
     <div className="w-full">
-      {/* VISTA DE DETALLE */}
+      {/* VISTA DE DETALLE OPTIMIZADA */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
@@ -34,34 +38,55 @@ export default function MobileProjects() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-black z-50 overflow-y-auto pb-safe"
+            className="fixed inset-0 bg-black z-50 overflow-y-auto"
+            style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
           >
-            {/* Header */}
-            <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-zinc-800 p-5 flex items-center gap-4 z-10">
-              <button onClick={() => setSelectedProject(null)} className="text-emerald-500 active:scale-95 transition-transform">
-                <FaArrowLeft size={20} />
-              </button>
-              <h2 className="text-lg font-bold text-white">{selectedProject.title}</h2>
+            {/* Header con gradiente */}
+            <div className="sticky top-0 bg-gradient-to-b from-black via-black/95 to-transparent backdrop-blur-xl border-b border-zinc-800 p-5 z-10">
+              <div className="flex items-center justify-between gap-4">
+                <button 
+                  onClick={handleCloseDetail} 
+                  className="text-emerald-500 active:scale-95 transition-transform p-2 -ml-2"
+                  aria-label="Cerrar"
+                >
+                  <FaTimes size={24} />
+                </button>
+                <h2 className="text-lg font-bold text-white flex-1 truncate">{selectedProject.title}</h2>
+                <div className="flex gap-2">
+                  {selectedProject.githubUrl && (
+                    <a 
+                      href={selectedProject.githubUrl} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 bg-zinc-900 rounded-lg active:scale-95 transition-transform"
+                      aria-label="GitHub"
+                    >
+                      <FaGithub size={20} className="text-zinc-400" />
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Content */}
-            <div className="p-5 space-y-6">
+            {/* Content con mejor spacing */}
+            <div className="p-5 pb-24 space-y-6">
               {/* Image */}
-              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800">
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 shadow-2xl">
                 <Image 
                   src={selectedProject.mainImage}
                   alt={selectedProject.title}
                   fill
                   className="object-contain p-4"
+                  priority
                 />
               </div>
 
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full text-xs font-bold">
+                <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full text-xs font-bold">
                   {selectedProject.category}
                 </span>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${
                   selectedProject.status === 'Completed' 
                     ? 'bg-green-500/10 text-green-400 border border-green-500/30'
                     : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
@@ -71,23 +96,35 @@ export default function MobileProjects() {
               </div>
 
               {/* Description */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">Descripción</h3>
-                <p className="text-zinc-300 leading-relaxed">
+              <div className="space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
+                <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-1 h-4 bg-emerald-500 rounded-full" />
+                  Descripción
+                </h3>
+                <p className="text-zinc-300 leading-relaxed text-sm">
                   {selectedProject.overview?.description || selectedProject.description}
                 </p>
               </div>
 
               {/* Highlights */}
-              {selectedProject.overview?.highlights && (
+              {selectedProject.overview?.highlights && selectedProject.overview.highlights.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">Características Principales</h3>
+                  <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-1 h-4 bg-cyan-500 rounded-full" />
+                    Características Principales
+                  </h3>
                   <div className="space-y-2">
                     {selectedProject.overview.highlights.map((h, i) => (
-                      <div key={i} className="flex items-start gap-3 text-sm text-zinc-300">
-                        <FaCheckCircle className="text-emerald-500 mt-1 shrink-0" size={14}/>
+                      <motion.div 
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="flex items-start gap-3 text-sm text-zinc-300 bg-zinc-900/30 border border-zinc-800/50 rounded-lg p-3"
+                      >
+                        <FaCheckCircle className="text-emerald-500 mt-0.5 shrink-0" size={14}/>
                         <span>{h}</span>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -95,38 +132,45 @@ export default function MobileProjects() {
 
               {/* Tech Stack */}
               <div className="space-y-3">
-                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">Tecnologías</h3>
+                <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-1 h-4 bg-indigo-500 rounded-full" />
+                  Tecnologías
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.tech.map((t) => (
-                    <span key={t} className="px-3 py-1 bg-zinc-900 rounded-lg text-xs text-zinc-400 font-mono border border-zinc-800">
+                    <span key={t} className="px-3 py-1.5 bg-zinc-900 rounded-lg text-xs text-zinc-300 font-mono border border-zinc-800">
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                {selectedProject.githubUrl && (
-                  <a 
-                    href={selectedProject.githubUrl} 
-                    target="_blank"
-                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-zinc-900 text-white border border-zinc-800 rounded-xl font-bold text-sm active:scale-95 transition-transform"
-                  >
-                    <FaGithub size={18}/>
-                    GitHub
-                  </a>
-                )}
-                {selectedProject.demoUrl && (
-                  <a 
-                    href={selectedProject.demoUrl} 
-                    target="_blank"
-                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 text-black rounded-xl font-bold text-sm active:scale-95 transition-transform"
-                  >
-                    <FaExternalLinkAlt size={16}/>
-                    Demo
-                  </a>
-                )}
+              {/* Action Buttons Mejorados */}
+              <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black via-black to-transparent border-t border-zinc-800/50 backdrop-blur-xl z-20">
+                <div className="flex gap-3 max-w-md mx-auto">
+                  {selectedProject.githubUrl && (
+                    <a 
+                      href={selectedProject.githubUrl} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-zinc-900 text-white border border-zinc-800 rounded-xl font-bold text-sm active:scale-95 transition-transform shadow-lg"
+                    >
+                      <FaGithub size={18}/>
+                      GitHub
+                    </a>
+                  )}
+                  {selectedProject.demoUrl && (
+                    <a 
+                      href={selectedProject.demoUrl} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-emerald-600 text-black rounded-xl font-bold text-sm active:scale-95 transition-transform shadow-lg shadow-emerald-500/20"
+                    >
+                      <FaExternalLinkAlt size={16}/>
+                      Demo
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -187,9 +231,12 @@ function ProjectCardMobile({ project, onClick }: { project: Project, onClick: ()
     const isAuranotch = project.slug === "aura-notch";
 
     return (
-        <div 
+        <motion.div 
           onClick={onClick}
-          className="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group active:scale-[0.98] transition-transform cursor-pointer"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileTap={{ scale: 0.98 }}
+          className="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group cursor-pointer"
         >
             {/* Imagen Header */}
             <div className="relative h-44 w-full bg-zinc-950 overflow-hidden">
@@ -199,7 +246,7 @@ function ProjectCardMobile({ project, onClick }: { project: Project, onClick: ()
                     className={`w-full h-full transition-all duration-500 ${
                         isAuranotch 
                         ? "object-contain p-6 bg-black/40" 
-                        : "object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105"
+                        : "object-cover opacity-80 group-active:opacity-100 group-active:scale-105"
                     }`}
                 />
                 
@@ -253,6 +300,6 @@ function ProjectCardMobile({ project, onClick }: { project: Project, onClick: ()
                     )}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

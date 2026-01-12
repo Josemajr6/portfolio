@@ -1,7 +1,7 @@
 "use client";
 import { motion, useMotionTemplate, useMotionValue, animate, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FaFingerprint, FaTerminal, FaUnlock } from "react-icons/fa";
+import { FaRocket, FaCode } from "react-icons/fa";
 
 const COLORS = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
@@ -88,8 +88,8 @@ export default function HeroQuantum() {
         
         {/* 1. Badge Terminal */}
         <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-sm font-mono text-indigo-300 mb-8">
-            <FaTerminal size={12} />
-            <span className="animate-pulse">System Online. Initializing core...</span>
+            <FaCode size={12} />
+            <span className="animate-pulse">System Online. Ready to deploy...</span>
         </motion.div>
 
         {/* 2. Título Monumental */}
@@ -102,7 +102,7 @@ export default function HeroQuantum() {
             </motion.h1>
         </div>
 
-        {/* 3. Subtítulo (Opción 2: Orientada a la acción) */}
+        {/* 3. Subtítulo */}
         <motion.p 
             variants={itemVariants}
             className="text-xl md:text-3xl text-zinc-400 max-w-3xl font-light leading-relaxed text-balance mb-12 relative overflow-hidden"
@@ -117,7 +117,7 @@ export default function HeroQuantum() {
              </motion.span>
         </motion.p>
 
-        {/* 4. Botón Biométrico */}
+        {/* 4. Botón de Explorar Proyectos */}
         <motion.div variants={itemVariants}>
             <button
             onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
@@ -130,16 +130,16 @@ export default function HeroQuantum() {
 
             <div className="relative z-10 flex items-center gap-4 text-white">
                 <div className="relative flex items-center justify-center">
-                <FaFingerprint size={24} className={`transition-all duration-500 ${isHovered ? 'opacity-0 scale-50' : 'opacity-100 scale-100 text-zinc-400'}`} />
-                <FaUnlock size={24} className={`absolute top-0 left-0 text-emerald-400 transition-all duration-500 ${isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} />
+                <FaCode size={24} className={`transition-all duration-500 ${isHovered ? 'opacity-0 scale-50' : 'opacity-100 scale-100 text-zinc-400'}`} />
+                <FaRocket size={24} className={`absolute top-0 left-0 text-emerald-400 transition-all duration-500 ${isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} />
                 </div>
                 
                 <div className="flex flex-col items-start leading-none">
                 <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest mb-1 group-hover:text-emerald-500 transition-colors">
-                    {isHovered ? 'ACCESS_GRANTED' : 'SECURE_ACCESS'}
+                    {isHovered ? 'LAUNCH_PROJECTS' : 'EXPLORE_WORK'}
                 </span>
                 <span className="text-lg font-bold tracking-wide group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all">
-                    {isHovered ? 'VER PROYECTOS' : 'INICIAR SESIÓN'}
+                    {isHovered ? 'VER PROYECTOS' : 'EXPLORAR PORTFOLIO'}
                 </span>
                 </div>
             </div>
