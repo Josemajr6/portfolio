@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect, memo, useMemo, useRef } from "react";
-import { AnimatePresence, motion, useMotionValue, useMotionTemplate, useTransform } from "framer-motion";
+import { useState, useEffect, memo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 
 // --- IMPORTACIONES ESTÁTICAS (críticas) ---
@@ -15,7 +15,7 @@ const HeroQuantum = dynamic(() => import("@/components/sections/HeroQuantum"), {
   ssr: true
 });
 
-// --- IMPORTACIONES DINÁMICAS ---
+// --- LAZY LOADING ---
 const TechArsenal = dynamic(() => import("@/components/sections/TechArsenal"), {
   loading: () => <LoadingSpinner />,
   ssr: false
@@ -46,7 +46,6 @@ const MobileWelcome = dynamic(() => import("@/components/mobile/MobileWelcome"),
   ssr: false
 });
 
-// Loading Spinner Ligero
 function LoadingSpinner() {
   return (
     <div className="flex items-center justify-center py-20">
@@ -55,41 +54,19 @@ function LoadingSpinner() {
   );
 }
 
-// --- PARTÍCULAS OPTIMIZADAS (Mínimas para Windows) ---
+// --- PARTÍCULAS MÍNIMAS (Solo 4 para Windows) ---
 const FloatingParticles = memo(() => {
-  const particles = useMemo(() => 
-    Array.from({ length: 6 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: 2,
-      duration: 30 + i * 2,
-      delay: -i * 3
-    }))
-  , []);
-
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-20">
-      {particles.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className="absolute rounded-full bg-emerald-500"
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-15">
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className="absolute w-1 h-1 bg-emerald-500 rounded-full animate-pulse"
           style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            width: particle.size,
-            height: particle.size,
-            willChange: 'transform, opacity'
-          }}
-          animate={{
-            y: [-20, 0, -20],
-            opacity: [0.1, 0.3, 0.1],
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            delay: particle.delay,
-            ease: "linear"
+            left: `${25 * i + 12.5}%`,
+            top: `${Math.random() * 100}%`,
+            animationDelay: `${i * 0.5}s`,
+            animationDuration: '3s'
           }}
         />
       ))}
@@ -98,69 +75,15 @@ const FloatingParticles = memo(() => {
 });
 FloatingParticles.displayName = 'FloatingParticles';
 
-// --- TARJETA HOLOGRÁFICA OPTIMIZADA ---
-const HolographicCard = memo(({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
-  const refEl = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [3, -3]); 
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-3, 3]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!refEl.current) return;
-    const rect = refEl.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
+// --- TARJETA SIMPLE SIN ANIMACIONES COMPLEJAS ---
+const SimpleCard = memo(({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
   return (
-    <motion.div
-      ref={refEl}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ 
-        rotateX, 
-        rotateY, 
-        transformStyle: "preserve-3d",
-        willChange: 'transform'
-      }}
-      whileHover={{ scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className={`relative group/holo rounded-2xl ${className}`}
-    >
-      <motion.div
-        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover/holo:opacity-100 z-0"
-        style={{
-          background: useMotionTemplate`
-            radial-gradient(
-              200px circle at ${mouseX}px ${mouseY}px,
-              rgba(16, 185, 129, 0.3),
-              transparent 70%
-            )
-          `,
-        }}
-      />
-      
-      <div 
-        style={{ transform: "translateZ(10px)" }} 
-        className="relative z-10 h-full rounded-2xl overflow-hidden bg-zinc-900/90 backdrop-blur-xl border border-white/5"
-      >
-        <div className="relative z-30 h-full">
-          {children}
-        </div>
-      </div>
-    </motion.div>
+    <div className={`relative rounded-2xl bg-zinc-900/90 backdrop-blur-xl border border-white/5 hover:border-emerald-500/30 transition-colors ${className}`}>
+      {children}
+    </div>
   );
 });
-HolographicCard.displayName = 'HolographicCard';
+SimpleCard.displayName = 'SimpleCard';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
@@ -171,8 +94,7 @@ export default function Home() {
     setMounted(true);
     
     const checkMobile = () => {
-      const width = window.innerWidth;
-      setIsMobile(width <= 1024);
+      setIsMobile(window.innerWidth <= 1024);
     };
     
     checkMobile();
@@ -193,16 +115,15 @@ export default function Home() {
     );
   }
 
-  // --- MODO ESCRITORIO ---
   return (
     <div className="relative bg-zinc-950 min-h-screen text-zinc-200 overflow-x-hidden selection:bg-emerald-500/30">
       
-      {/* EFECTOS DE FONDO (Optimizados) */}
+      {/* EFECTOS MÍNIMOS */}
       <FloatingParticles />
       
-      {/* GRID ESTÁTICO (CSS Puro) */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.12]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]" />
+      {/* GRID ESTÁTICO (Sin animación) */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-10">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
       </div>
 
       <CyberHeader />
@@ -215,17 +136,10 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
             
             <div className="relative">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="absolute -left-4 -top-4 w-12 h-12 md:w-20 md:h-20 border-l-2 border-t-2 border-emerald-500/20" />
-                <span className="text-xs md:text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4 block">
-                  // System Status: Ready
-                </span>
-              </motion.div>
+              <div className="absolute -left-4 -top-4 w-12 h-12 md:w-20 md:h-20 border-l-2 border-t-2 border-emerald-500/20" />
+              <span className="text-xs md:text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4 block">
+                // System Status: Ready
+              </span>
 
               <ScrollReveal mode="cyber-glitch" className="mb-6 md:mb-8">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight md:leading-none">
@@ -238,10 +152,10 @@ export default function Home() {
             </div>
 
             <ScrollReveal mode="pop" delay={0.2}>
-              <HolographicCard>
+              <SimpleCard>
                 <div className="p-8">
-                  <div className="absolute top-0 right-0 p-4 opacity-30">
-                    <FaTerminal className="text-4xl text-white/10" />
+                  <div className="absolute top-0 right-0 p-4 opacity-20">
+                    <FaTerminal className="text-4xl text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                     <span className="text-emerald-500">//</span> 
@@ -255,7 +169,7 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-              </HolographicCard>
+              </SimpleCard>
             </ScrollReveal>
           </div>
         </Section>
@@ -263,7 +177,7 @@ export default function Home() {
         {/* --- ARSENAL TECNOLÓGICO --- */}
         <Section id="stack">
           <div className="flex items-center gap-3 mb-8 md:mb-12">
-            <span className="h-2 w-2 bg-indigo-500 rounded-full shadow-[0_0_10px_#6366f1] inline-block" />
+            <span className="h-2 w-2 bg-indigo-500 rounded-full inline-block" />
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-2xl md:text-3xl font-bold text-white">
                 Arsenal Tecnológico
@@ -301,7 +215,7 @@ export default function Home() {
               // VALIDATION_TOKENS
             </span>
             <div className="flex items-center gap-3">
-              <span className="h-2 w-2 bg-yellow-400 rounded-full shadow-[0_0_10px_#facc15] inline-block" />
+              <span className="h-2 w-2 bg-yellow-400 rounded-full inline-block" />
               
               <ScrollReveal mode="cyber-glitch">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
@@ -319,7 +233,7 @@ export default function Home() {
         {/* --- TRAYECTORIA --- */}
         <Section id="experience">
           <div className="flex items-center gap-3 mb-8 md:mb-12">
-            <span className="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981] inline-block" />
+            <span className="h-2 w-2 bg-emerald-500 rounded-full inline-block" />
             
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-2xl md:text-3xl font-bold text-white">
@@ -369,9 +283,9 @@ export default function Home() {
                       Tiempo de respuesta estimado: <span className="text-emerald-400 font-mono">&lt;24h</span>.
                     </p>
                     
-                    <HolographicCard className="w-full">
+                    <SimpleCard className="w-full">
                       <a href="mailto:josemajimenezrodriguez8@gmail.com" className="block w-full p-6 group">
-                        <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 z-30">
+                        <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-lg bg-zinc-950 flex items-center justify-center text-zinc-400 group-hover:text-emerald-400 transition-colors border border-zinc-800 group-hover:border-emerald-500/50">
                               <FaEnvelope size={24} />
@@ -389,13 +303,13 @@ export default function Home() {
                           </div>
                         </div>
                       </a>
-                    </HolographicCard>
+                    </SimpleCard>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       
-                      <HolographicCard className="sm:col-span-2">
+                      <SimpleCard className="sm:col-span-2">
                         <a href="tel:+34722625288" className="block w-full p-4 flex flex-row items-center justify-between gap-3 group">
-                          <div className="flex items-center gap-3 z-30 relative">
+                          <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
                               <FaPhoneAlt size={18} />
                             </div>
@@ -404,30 +318,30 @@ export default function Home() {
                               <span className="font-bold text-white text-lg font-mono">+34 722 62 52 88</span>
                             </div>
                           </div>
-                          <FaArrowRight className="text-emerald-700 group-hover:text-emerald-400 group-hover:translate-x-1 transition-transform z-30 relative" />
+                          <FaArrowRight className="text-emerald-700 group-hover:text-emerald-400 transition-colors" />
                         </a>
-                      </HolographicCard>
+                      </SimpleCard>
 
-                      <HolographicCard>
+                      <SimpleCard>
                         <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="block w-full h-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 group">
-                          <FaLinkedin size={24} className="text-zinc-500 group-hover:text-[#0077b5] transition-colors z-30 relative" />
-                          <span className="font-bold text-xs md:text-sm text-zinc-400 group-hover:text-white z-30 relative">LINKEDIN</span>
+                          <FaLinkedin size={24} className="text-zinc-500 group-hover:text-[#0077b5] transition-colors" />
+                          <span className="font-bold text-xs md:text-sm text-zinc-400 group-hover:text-white">LINKEDIN</span>
                         </a>
-                      </HolographicCard>
+                      </SimpleCard>
                       
-                      <HolographicCard>
+                      <SimpleCard>
                         <a href="https://github.com/Josemajr6/" target="_blank" rel="noopener noreferrer" className="block w-full h-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 group">
-                          <FaGithub size={24} className="text-zinc-500 group-hover:text-white transition-colors z-30 relative" />
-                          <span className="font-bold text-xs md:text-sm text-zinc-400 group-hover:text-white z-30 relative">GITHUB</span>
+                          <FaGithub size={24} className="text-zinc-500 group-hover:text-white transition-colors" />
+                          <span className="font-bold text-xs md:text-sm text-zinc-400 group-hover:text-white">GITHUB</span>
                         </a>
-                      </HolographicCard>
+                      </SimpleCard>
                     </div>
                   </div>
 
                   <div className="lg:col-span-1 h-full">
-                    <HolographicCard className="h-full">
+                    <SimpleCard className="h-full">
                       <div className="h-full flex flex-col group min-h-[250px]">
-                        <div className="flex-grow p-6 flex flex-col items-center justify-center text-center relative z-30">
+                        <div className="flex-grow p-6 flex flex-col items-center justify-center text-center">
                           <div className="text-emerald-600 text-3xl md:text-4xl mb-4">
                             <FaTerminal />
                           </div>
@@ -436,15 +350,15 @@ export default function Home() {
                             AVAILABLE
                           </div>
                         </div>
-                        <a href="/cv-JoseManuel.pdf" download="CV-JoseManuel-Jimenez.pdf" className="relative z-30 bg-emerald-600 hover:bg-emerald-500 text-black p-4 md:p-6 text-center transition-colors cursor-pointer">
-                          <div className="flex flex-col items-center gap-2 relative z-10">
+                        <a href="/cv-JoseManuel.pdf" download="CV-JoseManuel-Jimenez.pdf" className="bg-emerald-600 hover:bg-emerald-500 text-black p-4 md:p-6 text-center transition-colors cursor-pointer">
+                          <div className="flex flex-col items-center gap-2">
                             <span className="font-black font-mono uppercase tracking-[0.2em] text-xs md:text-sm flex items-center gap-2">
                               <FaFileDownload /> DOWNLOAD CV
                             </span>
                           </div>
                         </a>
                       </div>
-                    </HolographicCard>
+                    </SimpleCard>
                   </div>
                 </div>
               </div>
@@ -454,7 +368,6 @@ export default function Home() {
       </div>
 
       <footer className="relative py-12 md:py-16 border-t border-emerald-900/30 bg-black overflow-hidden mt-10 md:mt-20">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[600px] h-[150px] bg-emerald-500/5 blur-[80px] pointer-events-none" />
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
           <div className="font-mono text-[10px] text-emerald-600 mb-4 tracking-[0.5em]">
             /// END_OF_TRANSMISSION ///
@@ -466,10 +379,8 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <span>por</span>
-              <span className="relative">
-                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-black tracking-wide">
-                  José Manuel Jiménez
-                </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-black tracking-wide">
+                José Manuel Jiménez
               </span>
             </div>
           </div>

@@ -1,76 +1,95 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function CyberCursor() {
-  const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const positionRef = useRef({ x: 0, y: 0 });
-  const targetRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     // Detectar móvil/touch
     if (window.matchMedia("(pointer: coarse)").matches) {
-      setIsVisible(false);
       return;
     }
     setIsVisible(true);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      targetRef.current = { x: e.clientX, y: e.clientY };
+    // Crear cursor directamente en DOM (más rápido que React)
+    const cursor = document.createElement('div');
+    cursor.id = 'cyber-cursor';
+    cursor.style.cssText = `
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: white;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: exclusion;
+      transform: translate(-50%, -50%);
+      transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease, border 0.15s ease;
+      will-change: transform;
+    `;
+    document.body.appendChild(cursor);
+
+    let posX = 0;
+    let posY = 0;
+    let mouseX = 0;
+    let mouseY = 0;
+
+    // Actualizar posición del mouse (muy ligero)
+    const updateMouse = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isClickable = 
-        !!target.closest("a, button, [role='button']") ||
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        window.getComputedStyle(target).cursor === "pointer";
-      
-      setIsHovered(isClickable);
-    };
-
-    let animationFrameId: number;
-
+    // Animación con RAF (suave pero eficiente)
+    let rafId: number;
     const animate = () => {
-      if (!cursorRef.current) return;
-
-      // Interpolación suave (lerp)
-      positionRef.current.x += (targetRef.current.x - positionRef.current.x) * 0.2;
-      positionRef.current.y += (targetRef.current.y - positionRef.current.y) * 0.2;
-
-      // Aplicar transformación
-      cursorRef.current.style.transform = `translate(${positionRef.current.x}px, ${positionRef.current.y}px)`;
-
-      animationFrameId = requestAnimationFrame(animate);
+      // Interpolación simple y rápida
+      posX += (mouseX - posX) * 0.3;
+      posY += (mouseY - posY) * 0.3;
+      
+      cursor.style.left = `${posX}px`;
+      cursor.style.top = `${posY}px`;
+      
+      rafId = requestAnimationFrame(animate);
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("mouseover", handleMouseOver, { passive: true });
-    animationFrameId = requestAnimationFrame(animate);
+    // Detección de elementos clickeables (optimizada)
+    const updateCursorStyle = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Buscar si el elemento o su padre es clickeable
+      const isClickable = 
+        target.tagName === 'A' || 
+        target.tagName === 'BUTTON' ||
+        !!target.closest('a, button, [role="button"]');
+      
+      if (isClickable) {
+        cursor.style.width = '40px';
+        cursor.style.height = '40px';
+        cursor.style.backgroundColor = 'transparent';
+        cursor.style.border = '1px solid white';
+      } else {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        cursor.style.backgroundColor = 'white';
+        cursor.style.border = 'none';
+      }
+    };
+
+    window.addEventListener('mousemove', updateMouse, { passive: true });
+    window.addEventListener('mouseover', updateCursorStyle, { passive: true });
+    rafId = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseover", handleMouseOver);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('mousemove', updateMouse);
+      window.removeEventListener('mouseover', updateCursorStyle);
+      cancelAnimationFrame(rafId);
+      document.body.removeChild(cursor);
     };
   }, []);
 
   if (!isVisible) return null;
-
-  return (
-    <div
-      ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-exclusion transition-[width,height,background-color,border] duration-200 ease-out"
-      style={{
-        width: isHovered ? '40px' : '10px',
-        height: isHovered ? '40px' : '10px',
-        backgroundColor: isHovered ? 'transparent' : 'white',
-        border: isHovered ? '1px solid white' : 'none',
-        borderRadius: '50%',
-        willChange: 'transform'
-      }}
-    />
-  );
+  
+  // No renderizamos nada, todo se hace con DOM nativo
+  return null;
 }
