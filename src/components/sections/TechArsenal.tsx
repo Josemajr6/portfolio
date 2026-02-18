@@ -37,8 +37,7 @@ const technologies = {
   mobile: [
     { name: "Android", icon: SiAndroid, color: "group-hover:text-[#3DDC84]", desc: "Nativo (Java/XML)" },
     { name: "Flutter", icon: SiFlutter, color: "group-hover:text-[#02569B]", desc: "Multiplataforma" },
-    { name: "Dart", icon: SiDart, color: "group-hover:text-[#0175C2]", desc: "Lenguaje Core" },
-    { name: "Swift / iOS", icon: SiSwift, color: "group-hover:text-[#FA7343]", desc: "iOS / macOS" },
+    { name: "Swift", icon: SiSwift, color: "group-hover:text-[#FA7343]", desc: "iOS / macOS" },
     { name: "XML Layouts", icon: FaCode, color: "group-hover:text-orange-400", desc: "Diseño UI Nativo" },
   ],
   frontend: [
@@ -56,6 +55,7 @@ const technologies = {
     { name: "SQL", icon: SiPostgresql, color: "group-hover:text-blue-300", desc: "Consultas BBDD" },
     { name: "JavaScript", icon: SiJavascript, color: "group-hover:text-[#F7DF1E]", desc: "Scripting Web" },
     { name: "TypeScript", icon: SiTypescript, color: "group-hover:text-[#3178C6]", desc: "Superset JS" },
+        { name: "Dart", icon: SiDart, color: "group-hover:text-[#0175C2]", desc: "Lenguaje Core" },
   ],
   tools: [
     { name: "Linux", icon: SiLinux, color: "group-hover:text-[#FCC624]", desc: "Admin. Servidores" },
@@ -64,7 +64,7 @@ const technologies = {
     { name: "GitHub", icon: SiGithub, color: "group-hover:text-white", desc: "Repositorios" },
     { name: "Postman", icon: SiPostman, color: "group-hover:text-[#FF6C37]", desc: "Testing API" },
     { name: "Swagger", icon: SiSwagger, color: "group-hover:text-[#85EA2D]", desc: "Documentación API" },
-    { name: "VS Code", icon: VscCode, color: "group-hover:text-[#007ACC]", desc: "Editor de Código" },
+    { name: "VS Code", icon: DiVisualstudio, color: "group-hover:text-[#007ACC]", desc: "Editor de Código" },
     { name: "Visual Studio", icon: DiVisualstudio, color: "group-hover:text-[#5C2D91]", desc: "IDE Profesional" },
     { name: "Android Studio", icon: SiAndroidstudio, color: "group-hover:text-[#3DDC84]", desc: "IDE Android" },
     { name: "Xcode", icon: SiXcode, color: "group-hover:text-[#147EFB]", desc: "IDE Apple" },

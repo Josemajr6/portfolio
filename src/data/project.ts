@@ -797,4 +797,133 @@ export const projectsData: Project[] = [
       ],
     },
   },
+  // === GRAN ZONA MARCIANA - ANDROID NATIVE ===
+  {
+    slug: "gran-zona-marciana",
+    title: "Gran Zona Marciana",
+    category: "Android",
+    tech: ["Java", "Android Studio", "SQLite", "Room", "Material Design"],
+    description:
+      "Sistema integral para la gestión de Reality Shows. App nativa con gestión de roles (Admin/Concursante), votaciones en tiempo real y modo offline.",
+    githubUrl: "https://github.com/Josemajr6/GranZonaMarciana", // Ajusta si es tu fork
+    demoUrl: "",
+
+    // FOTOS (Asegúrate de tenerlas en public/images/projects/granzonamarciana/)
+    mainImage: "/images/projects/granzonamarciana/granzonamarciana-banner.webp",
+    galleryImages: [
+      "/images/projects/granzonamarciana/granzonamarciana-home.webp",
+      "/images/projects/granzonamarciana/granzonamarciana-login.webp",
+      "/images/projects/granzonamarciana/granzonamarciana-vote.webp",
+      "/images/projects/granzonamarciana/granzonamarciana-admin.webp",
+    ],
+
+    status: "Completed",
+    isFeatured: true, // Ponlo true si quieres que salga en la home
+
+    overview: {
+      tagline: "Gestiona el Reality Show de Gran Zona Marciana 👽",
+      description:
+        "Aplicación nativa diseñada para centralizar la interacción entre producción, participantes y audiencia. Implementa una arquitectura robusta MVC con persistencia local mediante Room, permitiendo la gestión de múltiples ediciones, galas en directo y un sistema de votaciones seguro.",
+      highlights: [
+        "Arquitectura MVC adaptada con Repository Pattern",
+        "Seguridad avanzada con encriptación BCrypt para credenciales",
+        "Base de datos local relacional robusta (SQLite + Room)",
+        "Sistema de Roles: Administrador, Concursante y Espectador",
+        "Gestión compleja de eventos temporales (Ediciones y Galas)",
+      ],
+    },
+
+    features: [
+      {
+        icon: "🔐",
+        title: "Seguridad y Roles",
+        description:
+          "Sistema de autenticación propio con gestión de sesiones. La interfaz se adapta dinámicamente según si el usuario es Administrador (gestión total), Concursante (perfil y retos) o Espectador (votos).",
+        techs: ["BCrypt", "Session Mgmt", "Role Based UI"],
+      },
+      {
+        icon: "🗳️",
+        title: "Sistema de Votación",
+        description:
+          "Mecanismo de puntuación (1-10) con validaciones lógicas para evitar duplicados. Cálculo automático de medias y rankings de concursantes en tiempo real.",
+        techs: ["Business Logic", "Data Validation", "Live Stats"],
+      },
+      {
+        icon: "📅",
+        title: "Gestión de Eventos",
+        description:
+          "Los administradores pueden crear 'Ediciones' (temporadas) y programar 'Galas' dentro de rangos de fechas específicos, con validación temporal cruzada.",
+        techs: ["Date Logic", "Complex CRUD", "Admin Dashboard"],
+      },
+      {
+        icon: "🗄️",
+        title: "Persistencia Offline",
+        description:
+          "Uso de Room Database (capa sobre SQLite) para garantizar que la aplicación funcione sin conexión, sincronizando datos complejos y relaciones entre entidades.",
+        techs: ["Room", "SQLite", "DAO", "TypeConverters"],
+      },
+      {
+        icon: "🎨",
+        title: "Material Design 3",
+        description:
+          "Interfaz moderna utilizando los últimos componentes de Material Design, con paleta de colores personalizada (Verde/Morado) y layouts responsivos.",
+        techs: ["XML Layouts", "CardView", "ConstraintLayout"],
+      },
+      {
+        icon: "📰",
+        title: "Noticias y Multimedia",
+        description:
+          "Módulo de noticias con carga asíncrona de imágenes externas utilizando Picasso, manteniendo a la comunidad informada sobre las novedades del reality.",
+        techs: ["Picasso", "Async Loading", "RecyclerView"],
+      },
+    ],
+
+    techStack: {
+      mobile: [
+        { name: "Java 11", role: "Lenguaje principal", icon: "java" },
+        { name: "Android SDK", role: "API 26 (Oreo) a 34", icon: "android" },
+        {
+          name: "Room / SQLite",
+          role: "Persistencia local ORM",
+          icon: "sqlite",
+        }, // Usará el icono nuevo
+        { name: "Gradle", role: "Build System", icon: "gradle" }, // Usará el icono nuevo
+      ],
+      frontend: [
+        { name: "XML Layouts", role: "Diseño de interfaz", icon: "xml" }, // Asegúrate que xml exista en techIcons o usa HTML como fallback
+        { name: "Material Design", role: "Sistema de diseño", icon: "layout" },
+        { name: "Picasso", role: "Carga de imágenes", icon: "image" },
+      ],
+      backend: [
+        { name: "BCrypt", role: "Seguridad y Hashing", icon: "lock" },
+        { name: "MVC Pattern", role: "Arquitectura", icon: "structure" },
+      ],
+    },
+
+    installation: {
+      requirements: [
+        "Android Studio Ladybug (2024.2.1+)",
+        "JDK 21",
+        "Dispositivo Android 8.0+",
+      ],
+      steps: [
+        {
+          title: "Clonar Repositorio",
+          commands: [
+            "git clone https://github.com/ecentia/gran-zona-marciana.git",
+          ],
+        },
+        {
+          title: "Abrir en Android Studio",
+          description: "Sincronizar el proyecto con Gradle",
+          commands: ["File > Open > Seleccionar carpeta"],
+        },
+        {
+          title: "Ejecutar",
+          description: "Seleccionar emulador Pixel 6 Pro (API 34)",
+          commands: ["Shift + F10 (Run)"],
+        },
+      ],
+    },
+  },
 ];

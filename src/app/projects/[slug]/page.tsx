@@ -31,17 +31,19 @@ import {
   SiSwift, SiApple, SiThemoviedatabase, SiMongodb, SiVapor
 } from "react-icons/si";
 
-// Helper de iconos CORREGIDO
+// Helper de iconos
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
   
-  // === CORRECCIÓN AQUÍ: USAR TU ICONO DE JAVA ===
+  // Iconos personalizados del archivo TechIcons
   if (normalize.includes("java")) return <TechIcons.Java className="text-orange-600 w-6 h-6" />;
+  if (normalize.includes("postgres")) return <TechIcons.PostgreSQL className="text-blue-400 w-6 h-6" />;
+  if (normalize.includes("sqlite")) return <TechIcons.SQLite className="text-blue-300 w-6 h-6" />;
+  if (normalize.includes("gradle")) return <TechIcons.Gradle className="text-white w-6 h-6" />;
   
+  // Iconos de librerías standard
   if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
   if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
-  // Soporte para Postgres (ambos nombres)
-  if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
   if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
   if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
   if (normalize.includes("vapor")) return <SiVapor className="text-purple-400" />;
@@ -56,20 +58,23 @@ const getTechIcon = (techName: string) => {
   if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
   if (normalize.includes("xml")) return <FaCode className="text-blue-300" />;
   if (normalize.includes("retrofit")) return <FaServer className="text-green-400" />;
-  if (normalize.includes("sqlite")) return <FaDatabase className="text-yellow-500" />;
+  if (normalize.includes("room")) return <FaDatabase className="text-yellow-500" />;
   if (normalize.includes("restcountries")) return <FaCode className="text-indigo-400" />;
   if (normalize.includes("gamekit")) return <FaRocket className="text-purple-400" />;
   
   return <FaCode className="text-zinc-500" />; 
 };
 
+// === CORRECCIÓN EN MOCKUPS: object-contain ===
+
 // COMPONENTE DE MOCKUP DE IPHONE
 const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
   <div className="relative mx-auto" style={{ width: '300px' }}>
     <div className="relative bg-black rounded-[55px] p-4 shadow-2xl border-[12px] border-zinc-900">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150px] h-[30px] bg-black rounded-b-[25px] z-20"></div>
-      <div className="relative bg-white rounded-[40px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <Image src={imageUrl} alt={alt} fill className="object-cover" />
+      {/* CAMBIO: bg-black para que si sobra espacio sea negro, y object-contain */}
+      <div className="relative bg-black rounded-[40px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
+        <Image src={imageUrl} alt={alt} fill className="object-contain" />
       </div>
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[140px] h-[5px] bg-white/30 rounded-full"></div>
     </div>
@@ -83,8 +88,9 @@ const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
 const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
   <div className="relative mx-auto" style={{ width: '300px' }}>
     <div className="relative bg-zinc-800 rounded-[45px] p-3 shadow-2xl">
-      <div className="relative bg-white rounded-[38px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <Image src={imageUrl} alt={alt} fill className="object-cover" />
+      {/* CAMBIO: bg-black y object-contain */}
+      <div className="relative bg-black rounded-[38px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
+        <Image src={imageUrl} alt={alt} fill className="object-contain" />
       </div>
     </div>
     <div className="absolute -left-[2px] top-[110px] w-[3px] h-[40px] bg-zinc-700 rounded-l"></div>
@@ -93,7 +99,7 @@ const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => 
   </div>
 );
 
-// COMPONENTE DE VENTANA WEB / MACOS (Más genérico para Full Stack)
+// COMPONENTE DE VENTANA WEB / MACOS
 const DesktopWindowMockup = ({ imageUrl, alt, caption }: { imageUrl: string; alt: string; caption: string }) => (
   <div className="relative w-full max-w-4xl mx-auto group">
     <div className="bg-zinc-900 rounded-t-xl border border-zinc-800 overflow-hidden shadow-2xl transition-colors group-hover:border-zinc-700">
@@ -134,8 +140,7 @@ export default function ProjectDetail({
   const displayCategory = isMacOS ? "macOS" : project.category;
   const hasDetailedContent = !!(project.overview || project.features || project.techStack || project.installation);
 
-  // === LÓGICA DE GALERÍA UNIFICADA ===
-  // Si existe 'gallery' (objetos), úsalo. Si no, usa 'galleryImages' (strings) y mapéalo.
+  // Lógica de galería unificada
   const displayedGallery = project.gallery && project.gallery.length > 0 
     ? project.gallery 
     : (project.galleryImages || []).map(img => ({
@@ -301,7 +306,7 @@ export default function ProjectDetail({
           </div>
         </motion.div>
 
-        {/* Tabs Content (Overview, Features, etc) */}
+        {/* Tabs Content */}
         {hasDetailedContent && (
           <>
             <div className="flex flex-wrap gap-2 mb-12 border-b border-zinc-800 pb-4">
@@ -415,7 +420,6 @@ export default function ProjectDetail({
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-8 mb-16"
                 >
-                   {/* Requirements and Steps logic same as before */}
                    <div className="grid md:grid-cols-2 gap-4">
                       {project.installation.requirements.map((req, i) => (
                           <div key={i} className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
@@ -453,7 +457,7 @@ export default function ProjectDetail({
           </>
         )}
 
-        {/* GALERÍA ARREGLADA */}
+        {/* Galería (Actualizada con lógica corregida) */}
         {displayedGallery.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
