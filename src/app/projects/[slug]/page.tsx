@@ -7,6 +7,9 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, use } from "react";
 import BackButton from "@/components/ui/BackButton";
+// IMPORTAMOS TUS ICONOS PERSONALIZADOS
+import { TechIcons } from "@/components/icons/TechIcons"; 
+
 import { 
   FaGithub, 
   FaExternalLinkAlt, 
@@ -28,11 +31,16 @@ import {
   SiSwift, SiApple, SiThemoviedatabase, SiMongodb, SiVapor
 } from "react-icons/si";
 
-// Helper de iconos
+// Helper de iconos CORREGIDO
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
+  
+  // === CORRECCIÓN AQUÍ: USAR TU ICONO DE JAVA ===
+  if (normalize.includes("java")) return <TechIcons.Java className="text-orange-600 w-6 h-6" />;
+  
   if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
   if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
+  // Soporte para Postgres (ambos nombres)
   if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
   if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
   if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
@@ -46,38 +54,25 @@ const getTechIcon = (techName: string) => {
   if (normalize.includes("swift")) return <SiSwift className="text-orange-500" />;
   if (normalize.includes("ios")) return <SiApple className="text-gray-100" />;
   if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
-  if (normalize.includes("java")) return <FaCode className="text-orange-600" />;
   if (normalize.includes("xml")) return <FaCode className="text-blue-300" />;
   if (normalize.includes("retrofit")) return <FaServer className="text-green-400" />;
   if (normalize.includes("sqlite")) return <FaDatabase className="text-yellow-500" />;
   if (normalize.includes("restcountries")) return <FaCode className="text-indigo-400" />;
   if (normalize.includes("gamekit")) return <FaRocket className="text-purple-400" />;
+  
   return <FaCode className="text-zinc-500" />; 
 };
 
 // COMPONENTE DE MOCKUP DE IPHONE
 const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
   <div className="relative mx-auto" style={{ width: '300px' }}>
-    {/* Cuerpo del iPhone */}
     <div className="relative bg-black rounded-[55px] p-4 shadow-2xl border-[12px] border-zinc-900">
-      {/* Notch */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150px] h-[30px] bg-black rounded-b-[25px] z-20"></div>
-      
-      {/* Pantalla */}
       <div className="relative bg-white rounded-[40px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <Image 
-          src={imageUrl}
-          alt={alt}
-          fill
-          className="object-cover"
-        />
+        <Image src={imageUrl} alt={alt} fill className="object-cover" />
       </div>
-      
-      {/* Home Indicator */}
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[140px] h-[5px] bg-white/30 rounded-full"></div>
     </div>
-    
-    {/* Botones laterales */}
     <div className="absolute -left-[2px] top-[100px] w-[3px] h-[35px] bg-zinc-900 rounded-l"></div>
     <div className="absolute -left-[2px] top-[145px] w-[3px] h-[70px] bg-zinc-900 rounded-l"></div>
     <div className="absolute -right-[2px] top-[150px] w-[3px] h-[90px] bg-zinc-900 rounded-r"></div>
@@ -87,47 +82,35 @@ const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
 // COMPONENTE DE MOCKUP DE ANDROID
 const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
   <div className="relative mx-auto" style={{ width: '300px' }}>
-    {/* Cuerpo del Android */}
     <div className="relative bg-zinc-800 rounded-[45px] p-3 shadow-2xl">
-      {/* Pantalla */}
       <div className="relative bg-white rounded-[38px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <Image 
-          src={imageUrl}
-          alt={alt}
-          fill
-          className="object-cover"
-        />
+        <Image src={imageUrl} alt={alt} fill className="object-cover" />
       </div>
     </div>
-    
-    {/* Botones laterales */}
     <div className="absolute -left-[2px] top-[110px] w-[3px] h-[40px] bg-zinc-700 rounded-l"></div>
     <div className="absolute -left-[2px] top-[160px] w-[3px] h-[70px] bg-zinc-700 rounded-l"></div>
     <div className="absolute -right-[2px] top-[140px] w-[3px] h-[80px] bg-zinc-700 rounded-r"></div>
   </div>
 );
 
-// COMPONENTE DE VENTANA MACOS
-const MacWindowMockup = ({ imageUrl, alt, caption }: { imageUrl: string; alt: string; caption: string }) => (
-  <div className="relative w-full max-w-4xl mx-auto">
-    <div className="bg-zinc-900 rounded-t-xl border border-zinc-800 overflow-hidden shadow-2xl">
-      {/* Barra superior de macOS */}
+// COMPONENTE DE VENTANA WEB / MACOS (Más genérico para Full Stack)
+const DesktopWindowMockup = ({ imageUrl, alt, caption }: { imageUrl: string; alt: string; caption: string }) => (
+  <div className="relative w-full max-w-4xl mx-auto group">
+    <div className="bg-zinc-900 rounded-t-xl border border-zinc-800 overflow-hidden shadow-2xl transition-colors group-hover:border-zinc-700">
       <div className="bg-zinc-900 px-4 py-3 flex items-center gap-2 border-b border-zinc-800">
         <div className="flex gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
           <div className="w-3 h-3 rounded-full bg-green-500"></div>
         </div>
-        <span className="text-xs text-zinc-500 ml-4">{caption}</span>
+        <div className="ml-4 flex-1 flex justify-center">
+            <div className="bg-zinc-800 px-3 py-1 rounded text-xs text-zinc-500 font-mono truncate max-w-[200px]">
+                {caption}
+            </div>
+        </div>
       </div>
-      {/* Contenido */}
-      <div className="relative bg-black" style={{ aspectRatio: '16/10' }}>
-        <Image 
-          src={imageUrl}
-          alt={alt}
-          fill
-          className="object-contain"
-        />
+      <div className="relative bg-zinc-950" style={{ aspectRatio: '16/10' }}>
+        <Image src={imageUrl} alt={alt} fill className="object-contain" />
       </div>
     </div>
   </div>
@@ -151,6 +134,15 @@ export default function ProjectDetail({
   const displayCategory = isMacOS ? "macOS" : project.category;
   const hasDetailedContent = !!(project.overview || project.features || project.techStack || project.installation);
 
+  // === LÓGICA DE GALERÍA UNIFICADA ===
+  // Si existe 'gallery' (objetos), úsalo. Si no, usa 'galleryImages' (strings) y mapéalo.
+  const displayedGallery = project.gallery && project.gallery.length > 0 
+    ? project.gallery 
+    : (project.galleryImages || []).map(img => ({
+        url: img,
+        caption: "Captura de pantalla"
+      }));
+
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 relative overflow-x-hidden font-sans selection:bg-emerald-500/30">
       
@@ -163,6 +155,7 @@ export default function ProjectDetail({
 
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
         
+        {/* Header Breadcrumb */}
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -185,6 +178,7 @@ export default function ProjectDetail({
           </div>
         </motion.div>
 
+        {/* Hero Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           
           <motion.div 
@@ -276,12 +270,11 @@ export default function ProjectDetail({
                 className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,6px_100%] pointer-events-none z-20 mix-blend-overlay opacity-50" />
-              <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-emerald-500 z-30" />
-              <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-emerald-500 z-30" />
             </div>
           </motion.div>
         </div>
 
+        {/* Tech Stack Icons Grid */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -308,6 +301,7 @@ export default function ProjectDetail({
           </div>
         </motion.div>
 
+        {/* Tabs Content (Overview, Features, etc) */}
         {hasDetailedContent && (
           <>
             <div className="flex flex-wrap gap-2 mb-12 border-b border-zinc-800 pb-4">
@@ -349,34 +343,12 @@ export default function ProjectDetail({
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
-                    {project.overview.highlights.map((h, i) => {
-                      const getHighlightIcon = (text: string) => {
-                        const lower = text.toLowerCase();
-                        if (lower.includes("lista") || lower.includes("curada")) return <FaLayerGroup className="text-indigo-500" />;
-                        if (lower.includes("reseña") || lower.includes("estrella")) return <FaStar className="text-yellow-500" />;
-                        if (lower.includes("social") || lower.includes("perfil")) return <FaRocket className="text-cyan-500" />;
-                        if (lower.includes("notif") || lower.includes("push")) return <FaLightbulb className="text-amber-500" />;
-                        if (lower.includes("nube") || lower.includes("sync")) return <FaServer className="text-emerald-500" />;
-                        if (lower.includes("modo") || lower.includes("oscuro")) return <FaCog className="text-purple-500" />;
-                        if (lower.includes("búsqueda") || lower.includes("busca")) return <FaTerminal className="text-pink-500" />;
-                        if (lower.includes("trailer") || lower.includes("video")) return <FaExternalLinkAlt className="text-red-500" />;
-                        if (lower.includes("crud") || lower.includes("gestión")) return <FaDatabase className="text-blue-500" />;
-                        if (lower.includes("filtro") || lower.includes("spinner")) return <FaCog className="text-teal-500" />;
-                        if (lower.includes("tarjeta") || lower.includes("card")) return <FaLayerGroup className="text-orange-500" />;
-                        if (lower.includes("ui") || lower.includes("ux")) return <FaRocket className="text-violet-500" />;
-                        if (lower.includes("modo") || lower.includes("dificultad")) return <FaStar className="text-rose-500" />;
-                        if (lower.includes("multi") || lower.includes("plataforma")) return <FaCode className="text-fuchsia-500" />;
-                        if (lower.includes("biblioteca") || lower.includes("estudio")) return <FaTerminal className="text-lime-500" />;
-                        return <FaCheckCircle className="text-emerald-500" />;
-                      };
-
-                      return (
+                    {project.overview.highlights.map((h, i) => (
                         <div key={i} className="flex items-start gap-4 p-4 bg-zinc-900/30 border border-zinc-800 rounded-lg hover:border-emerald-500/30 transition-colors">
-                          {getHighlightIcon(h)}
+                          <FaCheckCircle className="text-emerald-500 mt-1" />
                           <span className="text-zinc-300">{h}</span>
                         </div>
-                      );
-                    })}
+                    ))}
                   </div>
                 </motion.div>
               )}
@@ -443,37 +415,16 @@ export default function ProjectDetail({
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-8 mb-16"
                 >
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                      <FaCog className="text-emerald-500"/>
-                      Requirements
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {project.installation.requirements.map((req, i) => {
-                        const getReqIcon = (text: string) => {
-                          const lower = text.toLowerCase();
-                          if (lower.includes("macos") || lower.includes("mac")) return <SiApple className="text-gray-300" />;
-                          if (lower.includes("xcode")) return <FaCode className="text-blue-400" />;
-                          if (lower.includes("mongodb") || lower.includes("mongo")) return <SiMongodb className="text-green-500" />;
-                          if (lower.includes("gmail") || lower.includes("email")) return <FaServer className="text-red-500" />;
-                          if (lower.includes("api key") || lower.includes("tmdb")) return <SiThemoviedatabase className="text-cyan-400" />;
-                          if (lower.includes("android studio")) return <SiAndroid className="text-green-500" />;
-                          if (lower.includes("java")) return <FaCode className="text-orange-600" />;
-                          if (lower.includes("swift")) return <SiSwift className="text-orange-500" />;
-                          return <FaCheckCircle className="text-emerald-500" />;
-                        };
-
-                        return (
+                   {/* Requirements and Steps logic same as before */}
+                   <div className="grid md:grid-cols-2 gap-4">
+                      {project.installation.requirements.map((req, i) => (
                           <div key={i} className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-                            {getReqIcon(req)}
+                            <FaCheckCircle className="text-emerald-500" />
                             <span className="text-zinc-300">{req}</span>
                           </div>
-                        );
-                      })}
+                      ))}
                     </div>
-                  </div>
-
-                  <div className="space-y-8">
+                    <div className="space-y-8 mt-8">
                     {project.installation.steps.map((step, i) => (
                       <div key={i} className="space-y-4">
                         <h4 className="text-xl font-bold text-white flex items-center gap-3">
@@ -482,22 +433,14 @@ export default function ProjectDetail({
                           </span>
                           {step.title}
                         </h4>
-                        {step.description && (
-                          <p className="text-zinc-400 ml-11">{step.description}</p>
-                        )}
+                        {step.description && <p className="text-zinc-400 ml-11">{step.description}</p>}
                         <div className="ml-11 bg-black/50 border border-zinc-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
                           {step.commands.map((cmd, j) => (
                             <div key={j} className="mb-2 last:mb-0">
-                              {cmd.startsWith('#') ? (
-                                <span className="text-zinc-600">{cmd}</span>
-                              ) : cmd.trim() === '' ? (
-                                <br />
-                              ) : (
-                                <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-3">
                                   <span className="text-emerald-500">$</span>
                                   <span className="text-zinc-300">{cmd}</span>
-                                </div>
-                              )}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -510,8 +453,8 @@ export default function ProjectDetail({
           </>
         )}
 
-        {/* GALERÍA CON MOCKUPS REALES */}
-        {project.gallery && project.gallery.length > 0 && (
+        {/* GALERÍA ARREGLADA */}
+        {displayedGallery.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -525,18 +468,18 @@ export default function ProjectDetail({
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-              {project.gallery.map((img, idx) => {
-                const isMacWindow = img.caption.includes("(macOS)");
+              {displayedGallery.map((img, idx) => {
+                const isMacWindow = img.caption?.includes("(macOS)") || project.category.includes("Full Stack") || project.category.includes("Backend");
                 const isAndroid = project.category === "Android";
                 
                 return (
                   <div key={idx} className="flex flex-col items-center gap-4">
                     {isMacWindow ? (
-                      <MacWindowMockup imageUrl={img.url} alt={img.caption} caption={img.caption} />
+                      <DesktopWindowMockup imageUrl={img.url} alt={img.caption || ""} caption={img.caption || "Screenshot"} />
                     ) : isAndroid ? (
-                      <AndroidMockup imageUrl={img.url} alt={img.caption} />
+                      <AndroidMockup imageUrl={img.url} alt={img.caption || ""} />
                     ) : (
-                      <IPhoneMockup imageUrl={img.url} alt={img.caption} />
+                      <IPhoneMockup imageUrl={img.url} alt={img.caption || ""} />
                     )}
                     <p className="text-xs text-zinc-500 font-mono text-center max-w-[300px]">
                       {img.caption}

@@ -12,7 +12,7 @@ import {
 import { VscCode, VscJson } from "react-icons/vsc"; 
 import { SiCsharp } from '@meronex/icons/si';
 import { FaJava, FaTerminal, FaServer, FaMobileAlt, FaTools, FaCode } from "react-icons/fa";
-import { DiVisualstudio } from "react-icons/di";
+import { DiVisualstudio, DiLaravel } from "react-icons/di";
 
 const categories = [
   { id: "backend", label: "~/backend", icon: FaServer, color: "text-emerald-400" },
@@ -32,7 +32,7 @@ const technologies = {
     { name: "Firebase", icon: SiFirebase, color: "group-hover:text-[#FFCA28]", desc: "BaaS / Realtime" },
     { name: "Apache", icon: SiApache, color: "group-hover:text-[#D22128]", desc: "Servidor Web" },
     { name: "API REST", icon: VscJson, color: "group-hover:text-white", desc: "Diseño de APIs" },
-    { name: "Odoo ERP", icon: SiOdoo, color: "group-hover:text-[#714B67]", desc: "ERP & CRM System" },
+    { name: "Laravel", icon: DiLaravel, color: "group-hover:text-[#FF0000]", desc: "Framework Backend" },
   ],
   mobile: [
     { name: "Android", icon: SiAndroid, color: "group-hover:text-[#3DDC84]", desc: "Nativo (Java/XML)" },
