@@ -14,7 +14,7 @@ const containerVariants = {
       delayChildren: 0.2,
     },
   },
-};
+} as const;
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0, filter: "blur(5px)" },
@@ -24,7 +24,7 @@ const itemVariants = {
     filter: "blur(0px)",
     transition: { duration: 0.5, ease: "easeOut" }
   },
-};
+} as const;
 
 const avatarVariants = {
   hidden: { scale: 0.8, opacity: 0, rotate: -10 },
@@ -39,7 +39,7 @@ const avatarVariants = {
       delay: 0.5
     }
   },
-};
+} as const;
 
 export default function HeroQuantum() {
   const [isHovered, setIsHovered] = useState(false);

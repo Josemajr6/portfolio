@@ -35,9 +35,12 @@ export const metadata: Metadata = {
     default: "José Manuel Jiménez | Software Developer & Full Stack",
     template: "%s | José Manuel Jiménez",
   },
-  description: "Portfolio de José Manuel Jiménez (josemajr6). Desarrollador de Software Full Stack y Móvil especializado en Next.js, React, Backend y soluciones digitales innovadoras.",
+  description:
+    "Portfolio de José Manuel Jiménez (josemajr6). Desarrollador de Software Full Stack y Móvil especializado en Next.js, React, Backend y soluciones digitales innovadoras.",
   applicationName: "JosemaJr6 Portfolio",
-  authors: [{ name: "José Manuel Jiménez", url: "https://github.com/josemajr6" }],
+  authors: [
+    { name: "José Manuel Jiménez", url: "https://github.com/josemajr6" },
+  ],
   generator: "Next.js",
   keywords: [
     // Tus keywords solicitadas
@@ -57,20 +60,21 @@ export const metadata: Metadata = {
     "Programador Web",
     "Ingeniero de Software",
     "Portfolio Interactivo",
-    "Cyberpunk UI"
+    "Cyberpunk UI",
   ],
   // Referencia explícita a los iconos para asegurar que salen en Google
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.svg', type: 'image/svg+xml' }, // Opcional si creas un SVG
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" }, // Opcional si creas un SVG
     ],
-    apple: '/apple-touch-icon.png', // Opcional para iPhone
+    apple: "/apple-touch-icon.png", // Opcional para iPhone
   },
   // Configuración para redes sociales (Open Graph)
   openGraph: {
     title: "José Manuel Jiménez | Portfolio de Desarrollo",
-    description: "Descubre mis proyectos en Desarrollo Web y Móvil. Especialista en crear experiencias digitales únicas.",
+    description:
+      "Descubre mis proyectos en Desarrollo Web y Móvil. Especialista en crear experiencias digitales únicas.",
     url: DOMAIN,
     siteName: "JosemaJr6 Portfolio",
     locale: "es_ES",
@@ -118,11 +122,8 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <WelcomeScreen />
           <CyberCursor />
-          <main className="relative z-0">
-            {children}
-          </main>
+          <main className="relative z-0">{children}</main>
         </ThemeProvider>
       </body>
     </html>

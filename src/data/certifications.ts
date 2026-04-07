@@ -10,15 +10,28 @@ export interface Certification {
 }
 
 export const certificationsData: Certification[] = [
-   {
+  {
+    id: "big-school-ia",
+    title: "Desarrollo con IA: de 0 a Producción",
+    issuer: "BIG school",
+    date: "mar. 2026",
+    image: "https://img.cataloxy.es/fl/90/57/126960.svg",
+    pdfUrl: "https://cert.efset.org/en/FKpme6",
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/50",
+    linkText: "Ver Credencial",
+  },
+  {
     id: "ef-set-english",
     title: "EF SET English Certificate 51/100 (B2 Upper Intermediate)",
     issuer: "EF SET",
     date: "ene. 2026",
     image: "https://imgur.com/vn6crHB.png",
-    pdfUrl: "https://cert.efset.org/en/FKpme6",
-    color: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/50",
-    linkText: "Ver Credencial"
+    pdfUrl:
+      "https://certificados.thebigschool.com/wp-content/uploads/certs/MDEV2/Certificado-Jose-Manuel-Jimenez-Rodriguez-jsbvlitt.pdf",
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/50",
+    linkText: "Ver Credencial",
   },
   {
     id: "udemy-ts",
@@ -28,27 +41,33 @@ export const certificationsData: Certification[] = [
     // Usamos esta URL alternativa de Wikimedia que suele ser más estable
     image: "https://multifamilyu.com/wp-content/uploads/udemy-logo-white.png",
     pdfUrl: "/certifications/UC-10ac23a5-2ecc-4a72-9921-629523b4bd5a.pdf",
-    color: "group-hover:shadow-[0_0_30px_rgba(164,53,240,0.3)] group-hover:border-purple-500/50",
-    linkText: "Ver Certificado"
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(164,53,240,0.3)] group-hover:border-purple-500/50",
+    linkText: "Ver Certificado",
   },
   {
     id: "santander-ia",
     title: "Google: Inteligencia Artificial y productividad",
     issuer: "Santander",
     date: "feb. 2025",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Banco_Santander_Logotipo.svg/2560px-Banco_Santander_Logotipo.svg.png",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Banco_Santander_Logotipo.svg/2560px-Banco_Santander_Logotipo.svg.png",
     pdfUrl: "/certifications/santander_ia_productividad.pdf",
-    color: "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
-    linkText: "Ver Certificado"
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
+    linkText: "Ver Certificado",
   },
   {
     id: "cisco-js",
     title: "JavaScript Essentials 1",
     issuer: "Cisco",
     date: "dic. 2024",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png",
-    pdfUrl: "/certifications/JavaScript_Essentials_1_certificate_josemajimenezrodriguez8-gmail-com_0c6a1147-97ba-4f83-b178-85feb3d6b812.pdf",
-    color: "group-hover:shadow-[0_0_30px_rgba(4,159,217,0.3)] group-hover:border-cyan-500/50",
-    linkText: "Mostrar credencial"
-  }
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png",
+    pdfUrl:
+      "/certifications/JavaScript_Essentials_1_certificate_josemajimenezrodriguez8-gmail-com_0c6a1147-97ba-4f83-b178-85feb3d6b812.pdf",
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(4,159,217,0.3)] group-hover:border-cyan-500/50",
+    linkText: "Mostrar credencial",
+  },
 ];
