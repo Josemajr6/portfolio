@@ -162,8 +162,8 @@ export default function ProjectDetail({
         
         {/* Header Breadcrumb */}
         <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           className="border-b border-zinc-800 pb-6 mb-12 flex flex-col md:flex-row justify-between items-end gap-4"
         >
           <div className="space-y-2 font-mono">
@@ -187,9 +187,9 @@ export default function ProjectDetail({
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
             className="space-y-8"
           >
             
@@ -261,9 +261,9 @@ export default function ProjectDetail({
           </motion.div>
 
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
             className="relative group w-full"
           >
             <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-950 shadow-2xl">
@@ -281,10 +281,10 @@ export default function ProjectDetail({
 
         {/* Tech Stack Icons Grid */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           className="mb-16"
         >
           <div className="flex items-center gap-4 mb-8">
@@ -335,9 +335,9 @@ export default function ProjectDetail({
               {activeTab === "overview" && project.overview && (
                 <motion.div
                   key="overview"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   className="space-y-8 mb-16"
                 >
                   <div className="prose prose-invert max-w-none">
@@ -361,9 +361,9 @@ export default function ProjectDetail({
               {activeTab === "features" && project.features && (
                 <motion.div
                   key="features"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   className="grid md:grid-cols-2 gap-8 mb-16"
                 >
                   {project.features.map((feature, i) => (
@@ -386,9 +386,9 @@ export default function ProjectDetail({
               {activeTab === "tech" && project.techStack && (
                 <motion.div
                   key="tech"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   className="space-y-12 mb-16"
                 >
                   {Object.entries(project.techStack).map(([category, items]) => (
@@ -415,9 +415,9 @@ export default function ProjectDetail({
               {activeTab === "install" && project.installation && (
                 <motion.div
                   key="install"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   className="space-y-8 mb-16"
                 >
                    <div className="grid md:grid-cols-2 gap-4">

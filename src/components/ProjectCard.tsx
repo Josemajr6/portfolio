@@ -116,7 +116,11 @@ export default function ProjectCard({ project, index }: { project: Project; inde
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         <div className="relative z-10">
-          <Link href={`/projects/${project.slug}`} className="group/title block w-fit">
+          <Link 
+            href={`/projects/${project.slug}`} 
+            onClick={() => sessionStorage.setItem("portfolioScrollPos", window.scrollY.toString())}
+            className="group/title block w-fit"
+          >
             <h3 className="text-2xl font-bold text-zinc-100 font-mono tracking-tight group-hover/title:text-emerald-400 transition-colors mb-2 flex items-center gap-3">
               {project.title}
               <FaExternalLinkAlt size={14} className="opacity-0 -translate-x-2 group-hover/title:opacity-100 group-hover/title:translate-x-0 transition-all" />
@@ -154,6 +158,7 @@ export default function ProjectCard({ project, index }: { project: Project; inde
             )}
             <Link 
               href={`/projects/${project.slug}`}
+              onClick={() => sessionStorage.setItem("portfolioScrollPos", window.scrollY.toString())}
               className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-100 text-zinc-950 border border-zinc-100 hover:bg-white font-bold text-xs font-mono uppercase tracking-wider transition-all"
             >
               View_Details &gt;

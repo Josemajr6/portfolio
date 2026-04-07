@@ -69,8 +69,8 @@ const MobileWelcome = dynamic(
 
 function LoadingSpinner() {
   return (
-    <div className="flex items-center justify-center py-20">
-      <div className="w-8 h-8 border-2 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
+    <div className="flex items-center justify-center py-40 min-h-[400px]">
+      <div className="w-10 h-10 border-2 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
     </div>
   );
 }
@@ -130,7 +130,24 @@ export default function Home() {
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+
+    // --- RESTAURACIÓN DE SCROLL ---
+    const savedPos = sessionStorage.getItem("portfolioScrollPos");
+    if (savedPos) {
+      // Un pequeño delay extra para asegurar que los componentes carguen
+      setTimeout(() => {
+        window.scrollTo({
+          top: parseInt(savedPos),
+          behavior: "instant"
+        });
+        // Limpiamos para que no afecte a refrescos manuales si se prefiere
+        // sessionStorage.removeItem("portfolioScrollPos");
+      }, 150);
+    }
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
   if (!mounted) return null;
