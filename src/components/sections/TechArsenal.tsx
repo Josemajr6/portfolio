@@ -17,7 +17,6 @@ import {
   SiDocker,
   SiGit,
   SiPostman,
-  SiSwagger,
   SiTypescript,
   SiJavascript,
   SiSwift,
@@ -26,30 +25,30 @@ import {
   SiGithub,
   SiWordpress,
   SiEclipseide,
-  SiNpm,
   SiAndroidstudio,
   SiXcode,
-  SiReact,
   SiPython,
   SiMongodb,
   SiOdoo,
-} from "react-icons/si";
-import { VscCode, VscJson } from "react-icons/vsc";
+} from "react-icons/si"; // Eliminado SiWindows de aquí
+import { VscCode } from "react-icons/vsc";
 import { SiCsharp } from "@meronex/icons/si";
 import {
   FaJava,
-  FaTerminal,
   FaServer,
   FaMobileAlt,
   FaTools,
   FaCode,
+  FaDatabase,
+  FaWindows, // Añadido FaWindows aquí
 } from "react-icons/fa";
-import { DiVisualstudio, DiLaravel } from "react-icons/di";
+import { DiVisualstudio } from "react-icons/di";
 
 const categories = [
+  { id: "frontend", label: "~/frontend", icon: FaCode, color: "text-pink-400" },
   {
     id: "backend",
-    label: "~/backend & DB",
+    label: "~/backend",
     icon: FaServer,
     color: "text-emerald-400",
   },
@@ -59,112 +58,22 @@ const categories = [
     icon: FaMobileAlt,
     color: "text-cyan-400",
   },
-  { id: "frontend", label: "~/frontend", icon: FaCode, color: "text-pink-400" },
   {
-    id: "languages",
-    label: "~/langs",
-    icon: FaTerminal,
+    id: "database",
+    label: "~/database",
+    icon: FaDatabase,
     color: "text-yellow-400",
   },
-  { id: "tools", label: "~/sysadmin", icon: FaTools, color: "text-orange-400" },
+  {
+    id: "tools",
+    label: "~/sysadmin_tools",
+    icon: FaTools,
+    color: "text-orange-400",
+  },
 ];
 
 const technologies = {
-  backend: [
-    {
-      name: "Spring Boot",
-      icon: SiSpring,
-      color: "group-hover:text-[#6DB33F]",
-      desc: "Framework Principal",
-    },
-    {
-      name: "Oracle DB",
-      icon: SiOracle,
-      color: "group-hover:text-[#F80000]",
-      desc: "Gestión de BBDD",
-    },
-    {
-      name: "PostgreSQL",
-      icon: SiPostgresql,
-      color: "group-hover:text-[#4169E1]",
-      desc: "Relacional Avanzada",
-    },
-    {
-      name: "MySQL",
-      icon: SiMysql,
-      color: "group-hover:text-[#4479A1]",
-      desc: "Base de Datos",
-    },
-    {
-      name: "MongoDB",
-      icon: SiMongodb,
-      color: "group-hover:text-[#47A248]",
-      desc: "NoSQL Database",
-    },
-    {
-      name: "Firebase",
-      icon: SiFirebase,
-      color: "group-hover:text-[#FFCA28]",
-      desc: "BaaS / Realtime",
-    },
-    {
-      name: "Apache",
-      icon: SiApache,
-      color: "group-hover:text-[#D22128]",
-      desc: "Servidor Web",
-    },
-    {
-      name: "API REST",
-      icon: VscJson,
-      color: "group-hover:text-white",
-      desc: "Diseño de APIs",
-    },
-    {
-      name: "Laravel",
-      icon: DiLaravel,
-      color: "group-hover:text-[#FF0000]",
-      desc: "Framework Backend",
-    },
-  ],
-  mobile: [
-    {
-      name: "Android",
-      icon: SiAndroid,
-      color: "group-hover:text-[#3DDC84]",
-      desc: "Nativo (Java/XML)",
-    },
-    {
-      name: "Flutter",
-      icon: SiFlutter,
-      color: "group-hover:text-[#02569B]",
-      desc: "Multiplataforma",
-    },
-    {
-      name: "Swift",
-      icon: SiSwift,
-      color: "group-hover:text-[#FA7343]",
-      desc: "iOS / macOS",
-    },
-    {
-      name: "XML Layouts",
-      icon: FaCode,
-      color: "group-hover:text-orange-400",
-      desc: "Diseño UI Nativo",
-    },
-  ],
   frontend: [
-    {
-      name: "Angular",
-      icon: SiAngular,
-      color: "group-hover:text-[#DD0031]",
-      desc: "Framework SPA",
-    },
-    {
-      name: "React",
-      icon: SiReact,
-      color: "group-hover:text-[#61DAFB]",
-      desc: "Librería UI",
-    },
     {
       name: "HTML5",
       icon: SiHtml5,
@@ -176,44 +85,6 @@ const technologies = {
       icon: SiCss3,
       color: "group-hover:text-[#1572B6]",
       desc: "Estilos Modernos",
-    },
-    {
-      name: "WordPress",
-      icon: SiWordpress,
-      color: "group-hover:text-[#21759B]",
-      desc: "CMS / Web",
-    },
-  ],
-  languages: [
-    {
-      name: "Java",
-      icon: FaJava,
-      color: "group-hover:text-[#007396]",
-      desc: "Lenguaje Principal",
-    },
-    {
-      name: "Python",
-      icon: SiPython,
-      color: "group-hover:text-[#3776AB]",
-      desc: "Scripting / Backend",
-    },
-    {
-      name: "C#",
-      icon: SiCsharp,
-      color: "group-hover:text-[#A47DDD]",
-      desc: "Desarrollo .NET",
-    },
-    {
-      name: "PHP",
-      icon: SiPhp,
-      color: "group-hover:text-[#777BB4]",
-      desc: "Backend Web",
-    },
-    {
-      name: "SQL",
-      icon: SiPostgresql,
-      color: "group-hover:text-blue-300",
-      desc: "Consultas BBDD",
     },
     {
       name: "JavaScript",
@@ -228,30 +99,138 @@ const technologies = {
       desc: "Superset JS",
     },
     {
+      name: "Angular",
+      icon: SiAngular,
+      color: "group-hover:text-[#DD0031]",
+      desc: "Framework SPA",
+    },
+    {
+      name: "WordPress",
+      icon: SiWordpress,
+      color: "group-hover:text-[#21759B]",
+      desc: "CMS / Web",
+    },
+  ],
+  backend: [
+    {
+      name: "Java",
+      icon: FaJava,
+      color: "group-hover:text-[#007396]",
+      desc: "Lenguaje Principal",
+    },
+    {
+      name: "Spring Boot",
+      icon: SiSpring,
+      color: "group-hover:text-[#6DB33F]",
+      desc: "Framework Java",
+    },
+    {
+      name: "Python",
+      icon: SiPython,
+      color: "group-hover:text-[#3776AB]",
+      desc: "Scripting / Backend",
+    },
+    {
+      name: "PHP",
+      icon: SiPhp,
+      color: "group-hover:text-[#777BB4]",
+      desc: "Backend Web",
+    },
+    {
+      name: "C# (WPF)",
+      icon: SiCsharp,
+      color: "group-hover:text-[#A47DDD]",
+      desc: "Desarrollo .NET",
+    },
+  ],
+  mobile: [
+    {
+      name: "Swift",
+      icon: SiSwift,
+      color: "group-hover:text-[#FA7343]",
+      desc: "iOS Nativo",
+    },
+    {
+      name: "Flutter",
+      icon: SiFlutter,
+      color: "group-hover:text-[#02569B]",
+      desc: "Multiplataforma",
+    },
+    {
       name: "Dart",
       icon: SiDart,
       color: "group-hover:text-[#0175C2]",
       desc: "Lenguaje Core",
     },
+    {
+      name: "Android",
+      icon: SiAndroid,
+      color: "group-hover:text-[#3DDC84]",
+      desc: "Java Nativo",
+    },
+  ],
+  database: [
+    {
+      name: "PostgreSQL",
+      icon: SiPostgresql,
+      color: "group-hover:text-[#4169E1]",
+      desc: "Relacional Avanzada",
+    },
+    {
+      name: "MySQL",
+      icon: SiMysql,
+      color: "group-hover:text-[#4479A1]",
+      desc: "Base de Datos",
+    },
+    {
+      name: "Oracle DB",
+      icon: SiOracle,
+      color: "group-hover:text-[#F80000]",
+      desc: "BBDD Empresarial",
+    },
+    {
+      name: "MongoDB",
+      icon: SiMongodb,
+      color: "group-hover:text-[#47A248]",
+      desc: "NoSQL Database",
+    },
+    {
+      name: "Firebase",
+      icon: SiFirebase,
+      color: "group-hover:text-[#FFCA28]",
+      desc: "BaaS / Realtime",
+    },
   ],
   tools: [
     {
-      name: "Linux",
+      name: "GNU/Linux",
       icon: SiLinux,
       color: "group-hover:text-[#FCC624]",
-      desc: "Admin. Servidores",
+      desc: "Admin. Sistemas",
+    },
+    {
+      name: "Windows Server",
+      icon: FaWindows, // Actualizado a FaWindows
+      color: "group-hover:text-[#00A4EF]",
+      desc: "Servidores",
     },
     {
       name: "Docker",
       icon: SiDocker,
       color: "group-hover:text-[#2496ED]",
-      desc: "Contenedores",
+      desc: "Contenedores (Básico)",
+    },
+    {
+      name: "Apache",
+      icon: SiApache,
+      color: "group-hover:text-[#D22128]",
+      desc: "Servidor Web",
     },
     {
       name: "Git",
       icon: SiGit,
       color: "group-hover:text-[#F05032]",
-      desc: "Control de Versiones",
+      desc: "Control Versiones",
     },
     {
       name: "GitHub",
@@ -266,16 +245,16 @@ const technologies = {
       desc: "Testing API",
     },
     {
-      name: "Swagger",
-      icon: SiSwagger,
-      color: "group-hover:text-[#85EA2D]",
-      desc: "Documentación API",
+      name: "Odoo",
+      icon: SiOdoo,
+      color: "group-hover:text-[#714B67]",
+      desc: "ERP Empresarial",
     },
     {
       name: "VS Code",
-      icon: DiVisualstudio,
+      icon: VscCode,
       color: "group-hover:text-[#007ACC]",
-      desc: "Editor de Código",
+      desc: "Editor Código",
     },
     {
       name: "Visual Studio",
@@ -301,17 +280,11 @@ const technologies = {
       color: "group-hover:text-[#2C2255]",
       desc: "IDE Java",
     },
-    {
-      name: "NPM",
-      icon: SiNpm,
-      color: "group-hover:text-[#CB3837]",
-      desc: "Gestor Paquetes",
-    },
   ],
 };
 
 export default function TechArsenal() {
-  const [activeTab, setActiveTab] = useState("backend");
+  const [activeTab, setActiveTab] = useState("frontend");
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4">

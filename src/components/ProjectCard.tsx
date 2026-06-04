@@ -15,13 +15,15 @@ const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
   if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
   if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
-  if (normalize.includes("postgres")) return <SiPostgresql className="text-blue-400" />;
+  if (normalize.includes("postgres")) return <img src="/images/tools/postgresql.png" alt="PostgreSQL" className="w-[18px] h-[18px] object-contain inline-block" />;
   if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
   if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
   if (normalize.includes("vapor")) return <SiVapor className="text-purple-400" />;
   if (normalize.includes("react")) return <SiTypescript className="text-blue-400" />;
   if (normalize.includes("type")) return <SiTypescript className="text-blue-600" />;
-  if (normalize.includes("java")) return <FaCode className="text-orange-600" />;
+  if (normalize.includes("java")) return <img src="/images/tools/java.png" alt="Java" className="w-[18px] h-[18px] object-contain inline-block" />;
+  if (normalize.includes("ionic")) return <img src="/images/tools/ionic.svg" alt="Ionic" className="w-[18px] h-[18px] object-contain inline-block" />;
+  if (normalize.includes("stripe")) return <img src="/images/tools/stripe.svg" alt="Stripe" className="w-[18px] h-[18px] object-contain inline-block" />;
   if (normalize.includes("swagger")) return <SiSwagger className="text-green-600" />;
   if (normalize.includes("docker")) return <SiDocker className="text-blue-500" />;
   if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
@@ -138,9 +140,9 @@ export default function ProjectCard({ project, index }: { project: Project; inde
             Used_Technologies:
           </div>
           <div className="flex flex-wrap gap-3 mb-6">
-            {project.tech.map((t) => (
+            {project.tech.filter((t) => t.toLowerCase() !== "jwt").map((t) => (
               <div key={t} className="flex items-center gap-1.5 px-2 py-1 bg-zinc-900 border border-zinc-800 rounded text-zinc-300 hover:border-zinc-600 hover:text-white transition-colors cursor-help" title={t}>
-                <span className="text-lg">{getTechIcon(t)}</span>
+                <span className="text-lg flex items-center justify-center">{getTechIcon(t)}</span>
                 <span className="text-[10px] font-mono">{t}</span>
               </div>
             ))}

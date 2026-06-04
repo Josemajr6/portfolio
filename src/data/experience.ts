@@ -53,10 +53,10 @@ export const experienceData: Experience[] = [
     id: "work-3",
     role: "Desarrollador Full Stack",
     company: "Everybind",
-    period: "02/2026 - Actual",
+    period: "02/2026 - 06/2026",
     description:
-      "Durante mi estancia estoy trabajando con Frameworks como Laravel o Angular para el desarrollo de aplicaciones web y APIs Rest",
+      "Desarrollo de proyectos con Laravel y Angular. Creación de webs y gestión de contenidos mediante WordPress. Implementación de estrategias SEO y optimización web.",
     type: "work",
-    techs: ["PHP", "Laravel", "Apache", "Angular"],
+    techs: ["PHP", "Laravel", "Angular", "WordPress", "SEO"],
   },
 ];

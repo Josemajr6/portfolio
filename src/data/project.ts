@@ -266,19 +266,519 @@ export const projectsData: Project[] = [
     ],
   },
 
-  // === RESTO DE PROYECTOS (Estructura básica) ===
+  // === NEXUS APP - PROYECTO COMPLETO ===
   {
     slug: "nexus-app",
     title: "Nexus App",
     category: "Full Stack",
-    tech: ["Spring Boot", "Angular", "PostgreSQL", "JWT"],
+    tech: [
+      "Spring Boot",
+      "Angular",
+      "PostgreSQL",
+      "JWT",
+      "Ionic",
+      "Stripe",
+      "Docker",
+      "TypeScript",
+    ],
     description:
-      "Plataforma de compra-venta con arquitectura escalable y seguridad avanzada.",
+      "Plataforma digital multiplataforma que unifica marketplace de segunda mano, chollometro comunitario y publicidad B2B en un único ecosistema — Proyecto Final de DAM.",
     githubUrl: "https://github.com/SomosNexusApp/",
     mainImage: "/images/projects/nexus/nexus.webp",
-    galleryImages: ["/images/projects/nexus/nexus-1.webp"],
-    status: "In Progress",
+    galleryImages: [],
+    status: "Completed",
     isFeatured: true,
+
+    overview: {
+      tagline:
+        "La plataforma de ahorro definitiva: marketplace, chollos y publicidad en un solo ecosistema 🛒⚡",
+      description:
+        "Nexus (del latín nexus: conexión, vínculo) es una plataforma digital multiplataforma que centraliza en una sola aplicación todo lo que un usuario necesita para ahorrar: un marketplace de segunda mano, un chollometro comunitario con sistema de votos Spark/Drip y un canal de publicidad B2B para empresas. Desarrollado como Proyecto Final de Ciclo Formativo de Grado Superior en DAM (IES Francisco Rodríguez Marín), el proyecto cuenta con un backend Spring Boot que sirve simultáneamente a la app de usuario (Angular + Ionic), el panel de administración y la web informativa.",
+      highlights: [
+        "Backend con 48 controladores REST + WebSocket STOMP en Spring Boot 3.5 / Java 17",
+        "App de usuario multiplataforma: Angular 21 + Ionic 8 + Capacitor 8 (Android nativo)",
+        "Panel de administración con 19 módulos de gestión completos",
+        "Pagos seguros con Stripe Payment Intents (modelo escrow) y Stripe Checkout",
+        "Autenticación multicapa: JWT, 2FA TOTP/Email OTP, Google OAuth, reCAPTCHA v3",
+        "Chat en tiempo real mediante WebSocket STOMP con soporte multimedia",
+        "Sistema de votación Spark/Drip para rankear chollos de la comunidad",
+        "Cumplimiento RGPD: borrado suave, double opt-in newsletter, tokens de baja únicos",
+        "Asistente IA de soporte con Google Gemini 1.5-flash / Groq LLaMA 3.3-70b",
+        "Despliegue cloud: Render (Docker) + Vercel CDN + Cloudinary + PostgreSQL gestionado",
+      ],
+    },
+
+    features: [
+      {
+        icon: "🛒",
+        title: "Marketplace de Segunda Mano",
+        description:
+          "Publicación y venta de productos, vehículos y ofertas con galería de imágenes en Cloudinary. Tipos de publicación: VENTA, DONACIÓN e INTERCAMBIO. Búsqueda unificada con expansión de sinónimos, filtros avanzados (precio, condición, categoría, distancia GPS) y vigencia automática de 180 días.",
+        techs: [
+          "Spring Boot",
+          "Angular 21",
+          "Cloudinary",
+          "GPS / Geolocalización",
+          "PostgreSQL",
+        ],
+      },
+      {
+        icon: "⚡",
+        title: "Chollometro Comunitario",
+        description:
+          "Sistema de publicación y votación de ofertas/chollos con métricas de popularidad. Los usuarios votan con Spark (positivo) o Drip (negativo). Un scheduler recalcula el sparkScore cada 5 minutos. Secciones especializadas: flash sales, gratuitas y viajes. Badges automáticos: NUEVA, CHOLLAZO, PORCENTAJE, GRATUITA, EXPIRA_HOY.",
+        techs: [
+          "WebSocket STOMP",
+          "Scheduler",
+          "Spring Boot",
+          "Angular Signals",
+        ],
+      },
+      {
+        icon: "💳",
+        title: "Pagos Seguros con Stripe",
+        description:
+          "Compra de productos mediante Stripe Payment Intents con modelo escrow (el dinero queda retenido hasta que el comprador confirma la recepción). Contratos publicitarios mediante Stripe Checkout Sessions. Webhooks con verificación de firma HMAC. Cupones de descuento validados en el checkout.",
+        techs: [
+          "Stripe Payment Intents",
+          "Stripe Checkout",
+          "Webhooks HMAC",
+          "Spring Boot",
+        ],
+      },
+      {
+        icon: "💬",
+        title: "Chat en Tiempo Real",
+        description:
+          "Mensajería privada entre comprador y vendedor con soporte para múltiples tipos de mensaje: TEXTO, IMAGEN, VIDEO, AUDIO, GIF y OFERTA_PRECIO (propuesta de precio con aceptación/rechazo en tiempo real). El WebSocketAuthInterceptor valida el JWT en el handshake STOMP.",
+        techs: [
+          "Spring WebSocket",
+          "STOMP",
+          "SockJS",
+          "@stomp/stompjs 7.3.0",
+        ],
+      },
+      {
+        icon: "🔐",
+        title: "Autenticación Multicapa",
+        description:
+          "JWT con invalidación por versión (jwtVersion), Google OAuth 2.0, 2FA TOTP con QR (ZXing + dev.samstevens.totp) y Email OTP de 6 dígitos. Contraseñas hasheadas con BCrypt. Protección anti-bots con reCAPTCHA v3 (umbral 0.5). Wizard de onboarding para nuevos usuarios.",
+        techs: [
+          "JJWT 0.11.5",
+          "Spring Security",
+          "Google OAuth",
+          "TOTP",
+          "reCAPTCHA v3",
+        ],
+      },
+      {
+        icon: "🏢",
+        title: "Panel de Administración",
+        description:
+          "Aplicación Angular independiente en subdominio separado con acceso exclusivo ROLE_ADMIN. 19 módulos: dashboard, estadísticas en vivo, usuarios, moderación, devoluciones, compras, contratos, cupones, patrocinios, newsletter con automaciones, notificaciones masivas, soporte de chat y audit log inmutable.",
+        techs: [
+          "Angular 21",
+          "TypeScript 5.9",
+          "Vercel",
+          "Spring Security ROLE_ADMIN",
+        ],
+      },
+      {
+        icon: "🤖",
+        title: "Asistente IA de Soporte",
+        description:
+          "Chatbot de soporte integrado con dos proveedores de IA intercambiables: Google Gemini 1.5-flash y Groq LLaMA 3.3-70b. Cuando ningún agente puede resolver la consulta, el sistema escala automáticamente por email al equipo de soporte. El admin puede tomar el chat en vivo desde el panel.",
+        techs: [
+          "Google Gemini 1.5-flash",
+          "Groq LLaMA 3.3-70b",
+          "Spring Boot",
+          "Gmail SMTP",
+        ],
+      },
+      {
+        icon: "📢",
+        title: "Publicidad B2B para Empresas",
+        description:
+          "Las empresas con ROLE_EMPRESA pueden solicitar patrocinios de tipo BANNER o PUBLICACION. El admin aprueba y fija el precio; la empresa paga con Stripe Checkout. El ítem patrocinado aparece con etiqueta 'Patrocinado' hasta la fecha de expiración calculada automáticamente.",
+        techs: [
+          "Stripe Checkout",
+          "Spring Boot",
+          "Angular 21",
+          "Role-Based Access",
+        ],
+      },
+    ],
+
+    techStack: {
+      backend: [
+        {
+          name: "Spring Boot 3.5.13",
+          role: "Framework principal – 48 REST controllers + WebSocket",
+          icon: "spring",
+        },
+        {
+          name: "Java 17",
+          role: "Lenguaje LTS con tipificación fuerte y JVM",
+          icon: "java",
+        },
+        {
+          name: "Spring Security",
+          role: "Autenticación JWT, BCrypt y gestión de roles",
+          icon: "lock",
+        },
+        {
+          name: "Spring WebSocket STOMP",
+          role: "Chat en tiempo real bidireccional",
+          icon: "server",
+        },
+        {
+          name: "Spring Data JPA + Hibernate",
+          role: "ORM y gestión de base de datos relacional",
+          icon: "database",
+        },
+        {
+          name: "Docker",
+          role: "Contenedorización del backend en Render.com",
+          icon: "docker",
+        },
+      ],
+      frontend: [
+        {
+          name: "Angular 21",
+          role: "Standalone Components y Signals reactivos",
+          icon: "angular",
+        },
+        {
+          name: "TypeScript 5.9",
+          role: "Lenguaje tipado para toda la capa cliente",
+          icon: "code",
+        },
+        {
+          name: "Ionic 8",
+          role: "Componentes UI nativos para móvil",
+          icon: "mobile",
+        },
+        {
+          name: "Capacitor 8",
+          role: "Compilación nativa Android/iOS desde Angular",
+          icon: "mobile",
+        },
+      ],
+      apis: [
+        {
+          name: "PostgreSQL",
+          role: "Base de datos relacional en Render DB",
+          icon: "postgresql",
+        },
+        {
+          name: "Stripe",
+          role: "Payment Intents (escrow) + Checkout Sessions + Webhooks",
+          icon: "server",
+        },
+        {
+          name: "Cloudinary",
+          role: "Almacenamiento y CDN de imágenes y vídeos",
+          icon: "server",
+        },
+        {
+          name: "Gmail SMTP",
+          role: "Correo transaccional y newsletter con STARTTLS",
+          icon: "mail",
+        },
+        {
+          name: "Google Gemini",
+          role: "Asistente IA de soporte al usuario",
+          icon: "code",
+        },
+        {
+          name: "reCAPTCHA v3",
+          role: "Protección anti-bots en registro y login",
+          icon: "lock",
+        },
+      ],
+      tools: [
+        {
+          name: "JJWT 0.11.5",
+          role: "Tokens JWT firmados con HMAC-SHA256",
+          icon: "lock",
+        },
+        {
+          name: "SpringDoc OpenAPI",
+          role: "Documentación automática de la API (Swagger UI)",
+          icon: "code",
+        },
+        {
+          name: "Astro",
+          role: "Web informativa y documentación técnica",
+          icon: "code",
+        },
+        {
+          name: "Vercel",
+          role: "CDN global para frontends (app + admin + web)",
+          icon: "server",
+        },
+      ],
+    },
+
+    installation: {
+      requirements: [
+        "Java 17 LTS instalado en el sistema",
+        "Node.js 20+ con Angular CLI 21",
+        "PostgreSQL 14+ (o acceso a Render DB)",
+        "Cuenta Stripe (modo test) con claves API",
+        "Cuenta Cloudinary para almacenamiento de imágenes",
+        "Variables de entorno configuradas en application.properties",
+      ],
+      steps: [
+        {
+          title: "Clonar el Repositorio",
+          commands: [
+            "git clone https://github.com/SomosNexusApp/nexus-backend.git",
+            "git clone https://github.com/SomosNexusApp/nexus-angular-app.git",
+            "git clone https://github.com/SomosNexusApp/nexus-admin-web-app.git",
+          ],
+        },
+        {
+          title: "Configurar el Backend",
+          description:
+            "Edita application.properties con tus credenciales de Stripe, Cloudinary y PostgreSQL",
+          commands: [
+            "cd nexus-backend",
+            "# Configura application.properties:",
+            "# spring.datasource.url=jdbc:postgresql://...",
+            "# stripe.secret.key=sk_test_...",
+            "# cloudinary.url=cloudinary://...",
+            "./mvnw spring-boot:run",
+          ],
+        },
+        {
+          title: "Arrancar la App de Usuario",
+          description: "Angular 21 + Ionic 8 en puerto 4200",
+          commands: [
+            "cd nexus-angular-app",
+            "npm install",
+            "ng serve --port 4200",
+          ],
+        },
+        {
+          title: "Arrancar el Panel de Administración",
+          description: "Angular 21 en puerto 4201 (subdominio separado)",
+          commands: [
+            "cd nexus-admin-web-app",
+            "npm install",
+            "ng serve --port 4201",
+          ],
+        },
+        {
+          title: "Build Android (opcional)",
+          description: "Compilar como app nativa Android con Capacitor",
+          commands: [
+            "cd nexus-angular-app",
+            "ng build --configuration=production",
+            "npx cap sync android",
+            "npx cap open android",
+          ],
+        },
+      ],
+    },
+
+    gallery: [
+      // — App usuario: Pantallas principales —
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-inicio-invitado.png",
+        caption: "Pantalla de inicio para visitantes (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-principal-Lo-ultimo-en-nexus.png",
+        caption: "Feed principal – Lo último en Nexus (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-principal-Chollos-del-dia.png",
+        caption: "Sección Chollos del Día – ranking Spark/Drip (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-principal-top-chollos-flash.png",
+        caption: "Top Chollos Flash con cuenta atrás (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-principal-Explora-por-categoria.png",
+        caption: "Explorar por categoría (PC)",
+      },
+      // — Registro y autenticación —
+      {
+        url: "/images/projects/nexus/img-pruebas/registro-normal.png",
+        caption: "Formulario de registro con medidor de contraseña (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/inicio-sesion-google.png",
+        caption: "Login con Google OAuth 2.0 (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/verificacion-registro.png",
+        caption: "Verificación de email con OTP (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/registro-eleccion-seguridad.png",
+        caption: "Wizard de onboarding – Configuración de seguridad (PC)",
+      },
+      // — Catálogo y detalle —
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-vehiculos.png",
+        caption: "Catálogo de vehículos con filtros avanzados (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/coche-detail.png",
+        caption: "Detalle de vehículo con ficha técnica completa (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/producto-detail.png",
+        caption: "Detalle de producto de segunda mano (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/oferta-producto-detail.png",
+        caption: "Detalle de oferta/chollo con votación Spark/Drip (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-gratis.png",
+        caption: "Sección Gratis – productos en donación (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-viajes.png",
+        caption: "Sección Viajes con ofertas especializadas (PC)",
+      },
+      // — Geolocalización —
+      {
+        url: "/images/projects/nexus/img-pruebas/pantalla-prueba-cerca-de-ti-radar-10km-1coche.png",
+        caption: "Búsqueda 'Cerca de ti' – radar GPS 10 km (PC)",
+      },
+      // — Publicar anuncios —
+      {
+        url: "/images/projects/nexus/img-pruebas/publicar-producto-detalles-basicos.png",
+        caption: "Wizard de publicación – Detalles básicos (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/publicar-subir-producto-Fotos-y-descripcion.png",
+        caption: "Subir fotos y descripción del producto (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/publicar-producto-publicado.png",
+        caption: "Producto publicado con éxito (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/publicar-vehiculo.png",
+        caption: "Wizard de publicación de vehículo (PC)",
+      },
+      // — Chat y mensajería —
+      {
+        url: "/images/projects/nexus/img-pruebas-msg-editoranuncios-reservas/pc/pantalla_mensajes_pc.png",
+        caption: "Chat en tiempo real con el vendedor (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-msg-editoranuncios-reservas/pc/envio_fotos_pc.png",
+        caption: "Envío de imágenes en el chat (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-msg-editoranuncios-reservas/pc/envio_propuesta_precio.png",
+        caption: "Propuesta de precio con aceptación en tiempo real (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-msg-editoranuncios-reservas/pc/popup_reserva_pc.png",
+        caption: "Popup de reserva del producto (PC)",
+      },
+      // — Flujo de compra —
+      {
+        url: "/images/projects/nexus/img-pruebas-compra/pc/vista_producto_pc.png",
+        caption: "Vista de producto antes de comprar (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-compra/pc/metodo_envio_1_pc.png",
+        caption: "Selección de método de envío (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-compra/pc/datos_pago_pc.png",
+        caption: "Formulario de pago Stripe (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-compra/pc/confirmacion_pago_pc.png",
+        caption: "Confirmación de pago exitoso (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-compra/pc/gmail_compra_auriculares_pc.png",
+        caption: "Email automático de confirmación de compra (Gmail)",
+      },
+      // — Perfil de usuario —
+      {
+        url: "/images/projects/nexus/img-pruebas/perfil-resumen.png",
+        caption: "Perfil – Resumen de actividad del usuario (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/perfil-mis-productos-con-productos.png",
+        caption: "Perfil – Mis Productos publicados (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/perfil-mis-compras.png",
+        caption: "Perfil – Historial de compras (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/micuenta-seguridad.png",
+        caption: "Mi Cuenta – Configuración de seguridad y 2FA (PC)",
+      },
+      // — Publicidad empresas —
+      {
+        url: "/images/projects/nexus/img-pruebas/publicidad-paso-1.png",
+        caption: "Solicitud de patrocinio – Paso 1 (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas/pagar-patrocinio-paso-1.png",
+        caption: "Pago de contrato publicitario con Stripe Checkout (PC)",
+      },
+      // — Panel de administración —
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/dashboard.png",
+        caption: "Dashboard del panel de administración (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/estadisticas-live-1.png",
+        caption: "Estadísticas en vivo – usuarios y actividad (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/usuarios-lista.png",
+        caption: "Gestión de usuarios con filtros (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/productos.png",
+        caption: "Moderación de productos publicados (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/reportes-lista.png",
+        caption: "Gestión de reportes y moderación (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/soporte-chat-panel.png",
+        caption: "Panel de soporte con chat en tiempo real (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/newsletter-automatizacion-semanal.png",
+        caption: "Newsletter – automación semanal programada (PC)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-admin/login-2fa-activado.png",
+        caption: "Login del panel admin con 2FA activado (PC)",
+      },
+      // — Vistas móvil —
+      {
+        url: "/images/projects/nexus/img-pruebas-mobile/pantalla-inicio-invitado.png",
+        caption: "Pantalla de inicio en versión móvil (Android)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-mobile/producto-publicado.png",
+        caption: "Producto publicado desde dispositivo móvil (Android)",
+      },
+      {
+        url: "/images/projects/nexus/img-pruebas-mobile/pantalla-categoria-coches.png",
+        caption: "Catálogo de coches en versión móvil (Android)",
+      },
+    ],
   },
   {
     slug: "lepokedex",

@@ -32,71 +32,88 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(DOMAIN),
   title: {
-    default: "José Manuel Jiménez | Software Developer & Full Stack",
+    default: "José Manuel Jiménez | Desarrollador Full Stack · Sevilla",
     template: "%s | José Manuel Jiménez",
   },
   description:
-    "Portfolio de José Manuel Jiménez (josemajr6). Desarrollador de Software Full Stack y Móvil especializado en Next.js, React, Backend y soluciones digitales innovadoras.",
-  applicationName: "JosemaJr6 Portfolio",
+    "Portfolio de José Manuel Jiménez Rodríguez (josemajr6), desarrollador Full Stack de Sevilla especializado en Spring Boot, Angular, Laravel y desarrollo móvil. Proyectos reales y experiencia profesional.",
+  applicationName: "José Manuel Jiménez Portfolio",
   authors: [
-    { name: "José Manuel Jiménez", url: "https://github.com/josemajr6" },
+    { name: "José Manuel Jiménez Rodríguez", url: "https://github.com/josemajr6" },
+    { name: "josemajr6", url: DOMAIN },
   ],
   generator: "Next.js",
+  creator: "José Manuel Jiménez Rodríguez",
+  publisher: "José Manuel Jiménez Rodríguez",
   keywords: [
-    // Tus keywords solicitadas
-    "portfolio jose manuel",
-    "josemajr proyectos",
-    "josemajr6 proyectos",
+    // Nombre completo — señal de identidad principal
+    "Jose Manuel Jimenez",
+    "José Manuel Jiménez",
+    "José Manuel Jiménez Rodríguez",
+    "josemajr6",
+    "josemajr portfolio",
     "josemajr6 portfolio",
+    "josemajr6 proyectos",
     "jose manuel dev",
-    // Keywords técnicas y de nicho (SEO Boost)
-    "Software Developer España",
-    "Desarrollador Full Stack Junior",
+    // Localización
+    "desarrollador Sevilla",
+    "desarrollador Arahal",
+    "programador Sevilla",
+    "full stack Sevilla",
+    "developer Spain Sevilla",
+    // Stack real
+    "desarrollador Spring Boot",
+    "desarrollador Angular",
+    "desarrollador Laravel",
+    "desarrollador Full Stack Junior",
     "Desarrollador DAM",
-    "Experto en Next.js",
-    "React Developer",
-    "Desarrollo de Apps Móviles",
-    "Backend Developer",
-    "Programador Web",
-    "Ingeniero de Software",
-    "Portfolio Interactivo",
-    "Cyberpunk UI",
+    "Desarrollo Aplicaciones Multiplataforma",
+    // Genéricas
+    "portfolio desarrollador web",
+    "programador web España",
+    "Backend Developer Junior",
+    "Desarrollador Junior España",
+    "Angular developer junior",
+    "Spring Boot developer",
   ],
-  // Referencia explícita a los iconos para asegurar que salen en Google
+  // Canonical URL
+  alternates: {
+    canonical: DOMAIN,
+  },
+  // Iconos
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.svg", type: "image/svg+xml" }, // Opcional si creas un SVG
+      { url: "/icon.svg", type: "image/svg+xml" },
     ],
-    apple: "/apple-touch-icon.png", // Opcional para iPhone
+    apple: "/apple-touch-icon.png",
   },
-  // Configuración para redes sociales (Open Graph)
+  // Open Graph
   openGraph: {
-    title: "José Manuel Jiménez | Portfolio de Desarrollo",
+    title: "José Manuel Jiménez | Desarrollador Full Stack · Sevilla",
     description:
-      "Descubre mis proyectos en Desarrollo Web y Móvil. Especialista en crear experiencias digitales únicas.",
+      "Desarrollador Full Stack de Sevilla. Spring Boot, Angular, Laravel y desarrollo móvil. Portfolio con proyectos reales y experiencia profesional.",
     url: DOMAIN,
-    siteName: "JosemaJr6 Portfolio",
+    siteName: "José Manuel Jiménez Portfolio",
     locale: "es_ES",
     type: "website",
     images: [
       {
-        url: "/og-image.png", // ¡Recomendación! Crea una captura de tu web y guárdala como public/og-image.png
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "José Manuel Jiménez Portfolio Preview",
+        alt: "José Manuel Jiménez — Desarrollador Full Stack Sevilla",
       },
     ],
   },
-  // Configuración para Twitter
+  // Twitter
   twitter: {
     card: "summary_large_image",
-    title: "José Manuel Jiménez | Software Developer",
-    description: "Portfolio profesional. Desarrollo web y móvil de alto nivel.",
-    creator: "@josemajr6", // Si tienes Twitter ponlo aquí
-    // images: ["/og-image.png"],
+    title: "José Manuel Jiménez | Desarrollador Full Stack · Sevilla",
+    description: "Portfolio de José Manuel Jiménez Rodríguez. Proyectos reales con Spring Boot, Angular y Laravel.",
+    creator: "@josemajr6",
   },
-  // Instrucciones para robots (GoogleBot, etc.)
+  // Robots
   robots: {
     index: true,
     follow: true,
@@ -115,8 +132,47 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "José Manuel Jiménez Rodríguez",
+    alternateName: ["josemajr6", "Jose Manuel Jimenez", "Josema Jiménez"],
+    url: "https://josemajr6.me",
+    sameAs: [
+      "https://github.com/josemajr6",
+      "https://linkedin.com/in/josemajr6",
+    ],
+    jobTitle: "Desarrollador Full Stack",
+    worksFor: {
+      "@type": "Organization",
+      name: "Everybind",
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Sevilla",
+      addressCountry: "ES",
+    },
+    knowsAbout: [
+      "Spring Boot",
+      "Angular",
+      "Laravel",
+      "PostgreSQL",
+      "Java",
+      "TypeScript",
+      "WordPress",
+      "SEO",
+      "Desarrollo Full Stack",
+    ],
+  };
+
   return (
     <html lang="es" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30`}
         suppressHydrationWarning

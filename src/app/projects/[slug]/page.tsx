@@ -35,9 +35,11 @@ import {
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
   
-  // Iconos personalizados del archivo TechIcons
-  if (normalize.includes("java")) return <TechIcons.Java className="text-orange-600 w-6 h-6" />;
-  if (normalize.includes("postgres")) return <TechIcons.PostgreSQL className="text-blue-400 w-6 h-6" />;
+  // Custom image-based icons from public/images/tools/
+  if (normalize.includes("java")) return <img src="/images/tools/java.png" alt="Java" className="w-8 h-8 object-contain inline-block" />;
+  if (normalize.includes("postgres")) return <img src="/images/tools/postgresql.png" alt="PostgreSQL" className="w-8 h-8 object-contain inline-block" />;
+  if (normalize.includes("ionic")) return <img src="/images/tools/ionic.svg" alt="Ionic" className="w-8 h-8 object-contain inline-block" />;
+  if (normalize.includes("stripe")) return <img src="/images/tools/stripe.svg" alt="Stripe" className="w-8 h-8 object-contain inline-block" />;
   if (normalize.includes("sqlite")) return <TechIcons.SQLite className="text-blue-300 w-6 h-6" />;
   if (normalize.includes("gradle")) return <TechIcons.Gradle className="text-white w-6 h-6" />;
   
