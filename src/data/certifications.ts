@@ -51,7 +51,7 @@ export const certificationsData: Certification[] = [
     issuer: "Santander",
     date: "feb. 2025",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Banco_Santander_Logotipo.svg/2560px-Banco_Santander_Logotipo.svg.png",
+      "https://startupvalencia.org/wp-content/uploads/2024/09/Santander-1.png",
     pdfUrl: "/certifications/santander_ia_productividad.pdf",
     color:
       "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
@@ -63,7 +63,7 @@ export const certificationsData: Certification[] = [
     issuer: "Cisco",
     date: "dic. 2024",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/1200px-Cisco_logo_blue_2016.svg.png",
+      "https://www.cloudcommunications.com/hubfs/Imported_Blog_Media/Cisco-Nov-17-2023-06-32-51-2041-AM.png",
     pdfUrl:
       "/certifications/JavaScript_Essentials_1_certificate_josemajimenezrodriguez8-gmail-com_0c6a1147-97ba-4f83-b178-85feb3d6b812.pdf",
     color:
