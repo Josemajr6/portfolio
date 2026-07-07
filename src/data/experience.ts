@@ -59,4 +59,14 @@ export const experienceData: Experience[] = [
     type: "work",
     techs: ["PHP", "Laravel", "Angular", "WordPress", "SEO"],
   },
+  {
+    id: "work-4",
+    role: "Desarrollador Full Stack",
+    company: "Ecentia Marketing",
+    period: "06/2026 - Actualidad",
+    description:
+      "Desarrollo de proyectos web usando Wordpress (Elementor) y Astro.",
+    type: "work",
+    techs: ["WordPress", "Astro", "Elementor"],
+  },
 ];

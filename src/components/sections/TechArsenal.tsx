@@ -30,6 +30,7 @@ import {
   SiPython,
   SiMongodb,
   SiOdoo,
+  SiLaravel,
 } from "react-icons/si"; // Eliminado SiWindows de aquí
 import { VscCode } from "react-icons/vsc";
 import { SiCsharp } from "@meronex/icons/si";
@@ -125,22 +126,16 @@ const technologies = {
       desc: "Framework Java",
     },
     {
-      name: "Python",
-      icon: SiPython,
-      color: "group-hover:text-[#3776AB]",
-      desc: "Scripting / Backend",
-    },
-    {
       name: "PHP",
       icon: SiPhp,
       color: "group-hover:text-[#777BB4]",
       desc: "Backend Web",
     },
     {
-      name: "C# (WPF)",
-      icon: SiCsharp,
-      color: "group-hover:text-[#A47DDD]",
-      desc: "Desarrollo .NET",
+      name: "Laravel",
+      icon: SiLaravel,
+      color: "group-hover:text-[#FF2D20]",
+      desc: "Framework PHP",
     },
   ],
   mobile: [
