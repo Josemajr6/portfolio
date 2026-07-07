@@ -161,7 +161,7 @@ const technologies = {
       name: "Android",
       icon: SiAndroid,
       color: "group-hover:text-[#3DDC84]",
-      desc: "Java Nativo",
+      desc: "Java & Kotlin",
     },
   ],
   database: [
