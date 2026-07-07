@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 import BackButton from "@/components/ui/BackButton";
 // IMPORTAMOS TUS ICONOS PERSONALIZADOS
 import { TechIcons } from "@/components/icons/TechIcons"; 
@@ -70,8 +70,12 @@ const getTechIcon = (techName: string) => {
 // === CORRECCIÓN EN MOCKUPS: object-contain ===
 
 // COMPONENTE DE MOCKUP DE IPHONE
-const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
-  <div className="relative mx-auto" style={{ width: '300px' }}>
+const IPhoneMockup = ({ imageUrl, alt, onClick }: { imageUrl: string; alt: string; onClick?: () => void }) => (
+  <div 
+    onClick={onClick} 
+    className={`relative mx-auto ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99] transition-all duration-300' : ''}`} 
+    style={{ width: '300px' }}
+  >
     <div className="relative bg-black rounded-[55px] p-4 shadow-2xl border-[12px] border-zinc-900">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150px] h-[30px] bg-black rounded-b-[25px] z-20"></div>
       {/* CAMBIO: bg-black para que si sobra espacio sea negro, y object-contain */}
@@ -87,8 +91,12 @@ const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
 );
 
 // COMPONENTE DE MOCKUP DE ANDROID
-const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
-  <div className="relative mx-auto" style={{ width: '300px' }}>
+const AndroidMockup = ({ imageUrl, alt, onClick }: { imageUrl: string; alt: string; onClick?: () => void }) => (
+  <div 
+    onClick={onClick} 
+    className={`relative mx-auto ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99] transition-all duration-300' : ''}`} 
+    style={{ width: '300px' }}
+  >
     <div className="relative bg-zinc-800 rounded-[45px] p-3 shadow-2xl">
       {/* CAMBIO: bg-black y object-contain */}
       <div className="relative bg-black rounded-[38px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
@@ -102,8 +110,11 @@ const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => 
 );
 
 // COMPONENTE DE VENTANA WEB / MACOS
-const DesktopWindowMockup = ({ imageUrl, alt, caption }: { imageUrl: string; alt: string; caption: string }) => (
-  <div className="relative w-full max-w-4xl mx-auto group">
+const DesktopWindowMockup = ({ imageUrl, alt, caption, onClick }: { imageUrl: string; alt: string; caption: string; onClick?: () => void }) => (
+  <div 
+    onClick={onClick} 
+    className={`relative w-full max-w-4xl mx-auto group ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99] transition-all duration-300' : ''}`}
+  >
     <div className="bg-zinc-900 rounded-t-xl border border-zinc-800 overflow-hidden shadow-2xl transition-colors group-hover:border-zinc-700">
       <div className="bg-zinc-900 px-4 py-3 flex items-center gap-2 border-b border-zinc-800">
         <div className="flex gap-2">
@@ -132,6 +143,17 @@ export default function ProjectDetail({
   const { slug } = use(params);
   const project = projectsData.find((p) => p.slug === slug);
   const [activeTab, setActiveTab] = useState<"overview" | "features" | "tech" | "install">("overview");
+  const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   if (!project) {
     notFound();
@@ -481,11 +503,24 @@ export default function ProjectDetail({
                 return (
                   <div key={idx} className="flex flex-col items-center gap-4">
                     {isMacWindow ? (
-                      <DesktopWindowMockup imageUrl={img.url} alt={img.caption || ""} caption={img.caption || "Screenshot"} />
+                      <DesktopWindowMockup 
+                        imageUrl={img.url} 
+                        alt={img.caption || ""} 
+                        caption={img.caption || "Screenshot"} 
+                        onClick={() => setSelectedImage({ url: img.url, caption: img.caption || "Screenshot" })}
+                      />
                     ) : isAndroid ? (
-                      <AndroidMockup imageUrl={img.url} alt={img.caption || ""} />
+                      <AndroidMockup 
+                        imageUrl={img.url} 
+                        alt={img.caption || ""} 
+                        onClick={() => setSelectedImage({ url: img.url, caption: img.caption || "Screenshot" })}
+                      />
                     ) : (
-                      <IPhoneMockup imageUrl={img.url} alt={img.caption || ""} />
+                      <IPhoneMockup 
+                        imageUrl={img.url} 
+                        alt={img.caption || ""} 
+                        onClick={() => setSelectedImage({ url: img.url, caption: img.caption || "Screenshot" })}
+                      />
                     )}
                     <p className="text-xs text-zinc-500 font-mono text-center max-w-[300px]">
                       {img.caption}
@@ -497,6 +532,53 @@ export default function ProjectDetail({
           </motion.div>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-zoom-out"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 350 }}
+              className="relative max-w-5xl w-full flex flex-col items-center justify-center cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-14 right-0 text-zinc-400 hover:text-white transition-colors duration-300 font-mono flex items-center gap-2 text-xs bg-zinc-900/80 border border-zinc-800 px-3 py-1.5 rounded-lg backdrop-blur"
+              >
+                <span>ESC</span>
+                <span className="w-[1px] h-3 bg-zinc-800" />
+                <span>CLOSE</span>
+              </button>
+
+              {/* Image Box */}
+              <div className="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950/80 flex items-center justify-center max-w-full max-h-[75vh] p-2">
+                <img
+                  src={selectedImage.url}
+                  alt={selectedImage.caption}
+                  className="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl"
+                />
+              </div>
+
+              {/* Caption */}
+              <div className="mt-4 text-center">
+                <span className="font-mono text-xs text-zinc-300 bg-zinc-900/50 border border-zinc-800 px-4 py-2 rounded-xl backdrop-blur">
+                  {selectedImage.caption}
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
