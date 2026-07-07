@@ -11,27 +11,17 @@ export interface Certification {
 
 export const certificationsData: Certification[] = [
   {
-    id: "big-school-ia",
-    title: "Desarrollo con IA: de 0 a Producción",
-    issuer: "BIG school",
-    date: "mar. 2026",
-    image: "https://img.cataloxy.es/fl/90/57/126960.svg",
-    pdfUrl: "https://cert.efset.org/en/FKpme6",
-    color:
-      "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/50",
-    linkText: "Ver Credencial",
-  },
-  {
-    id: "ef-set-english",
-    title: "EF SET English Certificate 51/100 (B2 Upper Intermediate)",
-    issuer: "EF SET",
-    date: "ene. 2026",
-    image: "https://imgur.com/vn6crHB.png",
+    id: "udemy-ts",
+    title: "Curso completo de Flutter y Dart.",
+    issuer: "Udemy",
+    date: "may. 2026",
+    // Usamos esta URL alternativa de Wikimedia que suele ser más estable
+    image: "/images/issuers/udemy.webp",
     pdfUrl:
-      "https://certificados.thebigschool.com/wp-content/uploads/certs/MDEV2/Certificado-Jose-Manuel-Jimenez-Rodriguez-jsbvlitt.pdf",
+      "https://www.udemy.com/certificate/UC-5b5d8734-3f58-4db2-b6b4-f332a337b6dc/",
     color:
-      "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/50",
-    linkText: "Ver Credencial",
+      "group-hover:shadow-[0_0_30px_rgba(164,53,240,0.3)] group-hover:border-purple-500/50",
+    linkText: "Ver Certificado",
   },
   {
     id: "udemy-ts",
@@ -39,8 +29,9 @@ export const certificationsData: Certification[] = [
     issuer: "Udemy",
     date: "dic. 2025",
     // Usamos esta URL alternativa de Wikimedia que suele ser más estable
-    image: "https://multifamilyu.com/wp-content/uploads/udemy-logo-white.png",
-    pdfUrl: "/certifications/UC-10ac23a5-2ecc-4a72-9921-629523b4bd5a.pdf",
+    image: "/images/issuers/udemy.webp",
+    pdfUrl:
+      "https://www.udemy.com/certificate/UC-10ac23a5-2ecc-4a72-9921-629523b4bd5a/",
     color:
       "group-hover:shadow-[0_0_30px_rgba(164,53,240,0.3)] group-hover:border-purple-500/50",
     linkText: "Ver Certificado",
@@ -50,8 +41,7 @@ export const certificationsData: Certification[] = [
     title: "Google: Inteligencia Artificial y productividad",
     issuer: "Santander",
     date: "feb. 2025",
-    image:
-      "https://startupvalencia.org/wp-content/uploads/2024/09/Santander-1.png",
+    image: "/images/issuers/santander.webp",
     pdfUrl: "/certifications/santander_ia_productividad.pdf",
     color:
       "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
@@ -62,8 +52,7 @@ export const certificationsData: Certification[] = [
     title: "JavaScript Essentials 1",
     issuer: "Cisco",
     date: "dic. 2024",
-    image:
-      "https://www.cloudcommunications.com/hubfs/Imported_Blog_Media/Cisco-Nov-17-2023-06-32-51-2041-AM.png",
+    image: "/images/issuers/cisco.webp",
     pdfUrl:
       "/certifications/JavaScript_Essentials_1_certificate_josemajimenezrodriguez8-gmail-com_0c6a1147-97ba-4f83-b178-85feb3d6b812.pdf",
     color:
