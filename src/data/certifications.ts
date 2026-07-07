@@ -37,17 +37,6 @@ export const certificationsData: Certification[] = [
     linkText: "Ver Certificado",
   },
   {
-    id: "santander-ia",
-    title: "Google: Inteligencia Artificial y productividad",
-    issuer: "Santander",
-    date: "feb. 2025",
-    image: "/images/issuers/santander.webp",
-    pdfUrl: "/certifications/santander_ia_productividad.pdf",
-    color:
-      "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
-    linkText: "Ver Certificado",
-  },
-  {
     id: "cisco-js",
     title: "JavaScript Essentials 1",
     issuer: "Cisco",
