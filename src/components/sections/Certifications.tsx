@@ -1,21 +1,25 @@
 "use client";
 import React from "react";
-import { certificationsData } from "@/data/certifications";
+import { certificationsDataES, certificationsDataEN } from "@/data/certifications";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { FaCalendarAlt, FaExternalLinkAlt } from "react-icons/fa";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function Certifications() {
+  const { language, t } = useLanguage();
+  const certificationsData = language === "es" ? certificationsDataES : certificationsDataEN;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full relative z-10 px-2">
       {certificationsData.map((cert, index) => (
-        <HolographicCard key={cert.id} cert={cert} index={index} />
+        <HolographicCard key={cert.id} cert={cert} index={index} t={t} />
       ))}
     </div>
   );
 }
 
-function HolographicCard({ cert, index }: { cert: any, index: number }) {
+function HolographicCard({ cert, index, t }: { cert: any, index: number, t: any }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -92,7 +96,7 @@ function HolographicCard({ cert, index }: { cert: any, index: number }) {
 
             <div className="mt-auto pt-6 flex items-center justify-between">
                 <span className="text-xs font-medium text-emerald-500/80 group-hover:text-emerald-400 flex items-center gap-2">
-                    VER CREDENCIAL
+                    {t.viewCredential}
                     <span className="block h-px w-8 bg-emerald-500/50 group-hover:w-12 transition-all duration-300" />
                 </span>
                 <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-500 group-hover:bg-emerald-500 group-hover:text-black transition-all duration-300">

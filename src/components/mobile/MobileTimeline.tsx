@@ -1,9 +1,13 @@
 "use client";
-import { experienceData } from "@/data/experience";
+import { experienceDataES, experienceDataEN } from "@/data/experience";
 import { FaBriefcase, FaGraduationCap } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function MobileTimeline() {
+  const { language } = useLanguage();
+  const experienceData = language === "es" ? experienceDataES : experienceDataEN;
+
   return (
     <div className="w-full px-2 pb-10">
        {/* Línea conectora central */}

@@ -71,7 +71,7 @@ export interface Project {
   gallery?: GalleryImage[];
 }
 
-export const projectsData: Project[] = [
+export const projectsDataES: Project[] = [
   // === AURA MOVIES - PROYECTO COMPLETO ===
   {
     slug: "aura-movies",
@@ -1427,3 +1427,6 @@ export const projectsData: Project[] = [
     },
   },
 ];
+
+export const projectsData = projectsDataES;
+

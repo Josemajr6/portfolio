@@ -20,6 +20,7 @@ import MobileTimeline from "./MobileTimeline";
 import MobileProjects from "./MobileProjects"; 
 import MobileCertifications from "./MobileCertifications";
 import Image from "next/image"; 
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const MobileTopBar = ({ title }: { title: string }) => (
   <div className="fixed top-0 left-0 w-full h-14 bg-black/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-5 z-40">
@@ -34,6 +35,7 @@ export default function MobileApp() {
   const [activeTab, setActiveTab] = useState("home");
   const [bioTab, setBioTab] = useState<'experience' | 'certs'>('experience');
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { language, t, cvUrl, cvFilename } = useLanguage();
 
   // NAVEGACIÓN CON HISTORIAL DEL NAVEGADOR
   useEffect(() => {
@@ -102,14 +104,17 @@ export default function MobileApp() {
                 </div>
                 
                 <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                    Transformo ideas en código de alto rendimiento. Especializado en ecosistemas móviles y arquitecturas backend robustas.
+                    {language === 'es' 
+                      ? 'Transformo ideas en código de alto rendimiento. Especializado en ecosistemas móviles y arquitecturas backend robustas.' 
+                      : 'I transform ideas into high-performance code. Specialized in mobile ecosystems and robust backend architectures.'
+                    }
                 </p>
                 
                 <div className="flex gap-3">
                     <button onClick={() => changeTab('projects')} className="flex-1 bg-white text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wide shadow-lg active:scale-95 transition-transform">
-                        Ver Proyectos
+                        {language === 'es' ? 'Ver Proyectos' : 'View Projects'}
                     </button>
-                    <a href="/cv-JoseManuel.pdf" className="flex-1 bg-zinc-950 text-emerald-400 border border-emerald-500/30 font-bold py-3 rounded-xl text-xs uppercase tracking-wide flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                    <a href={cvUrl} download={cvFilename} className="flex-1 bg-zinc-950 text-emerald-400 border border-emerald-500/30 font-bold py-3 rounded-xl text-xs uppercase tracking-wide flex items-center justify-center gap-2 active:scale-95 transition-transform">
                         <FaFileDownload /> CV
                     </a>
                 </div>
@@ -117,7 +122,7 @@ export default function MobileApp() {
 
             <div>
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-emerald-500 rounded-full"/> Arsenal Tecnológico
+                    <span className="w-1 h-5 bg-emerald-500 rounded-full"/> {t.techArsenalTitle}
                 </h2>
                 <MobileTechStack />
             </div>
@@ -127,8 +132,8 @@ export default function MobileApp() {
       case "projects":
         return (
             <div className="pt-20 pb-32 px-5">
-                 <h2 className="text-2xl font-black text-white mb-1">Archivo</h2>
-                 <p className="text-zinc-500 text-xs mb-4">Todos los proyectos desplegados.</p>
+                 <h2 className="text-2xl font-black text-white mb-1">{language === 'es' ? 'Archivo' : 'Archive'}</h2>
+                 <p className="text-zinc-500 text-xs mb-4">{language === 'es' ? 'Todos los proyectos desplegados.' : 'All projects deployed.'}</p>
                  <MobileProjects />
             </div>
         );
@@ -146,7 +151,7 @@ export default function MobileApp() {
                             : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                     >
-                        <FaBriefcase /> Experiencia
+                        <FaBriefcase /> {language === 'es' ? 'Experiencia' : 'Experience'}
                     </button>
                     <button 
                         onClick={() => changeBioTab('certs')}
@@ -156,7 +161,7 @@ export default function MobileApp() {
                             : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                     >
-                        <FaCertificate /> Certificados
+                        <FaCertificate /> {language === 'es' ? 'Certificados' : 'Certifications'}
                     </button>
                 </div>
 
@@ -169,7 +174,7 @@ export default function MobileApp() {
                             exit={{ opacity: 0, x: 20 }}
                             transition={{ duration: 0.2 }}
                         >
-                             <h2 className="text-2xl font-black text-white mb-6">Trayectoria</h2>
+                             <h2 className="text-2xl font-black text-white mb-6">{language === 'es' ? 'Trayectoria' : 'Experience'}</h2>
                              <MobileTimeline />
                         </motion.div>
                     ) : (
@@ -180,7 +185,7 @@ export default function MobileApp() {
                             exit={{ opacity: 0, x: -20 }}
                             transition={{ duration: 0.2 }}
                         >
-                             <h2 className="text-2xl font-black text-white mb-6">Certificaciones</h2>
+                             <h2 className="text-2xl font-black text-white mb-6">{language === 'es' ? 'Certificaciones' : 'Certifications'}</h2>
                              <MobileCertifications />
                         </motion.div>
                     )}
@@ -201,8 +206,8 @@ export default function MobileApp() {
                             className="object-contain"
                         />
                     </div>
-                    <h2 className="text-3xl font-black text-white">Hablemos</h2>
-                    <p className="text-zinc-500 text-sm mt-2">¿Tienes un proyecto en mente?</p>
+                    <h2 className="text-3xl font-black text-white">{language === 'es' ? 'Hablemos' : "Let's Talk"}</h2>
+                    <p className="text-zinc-500 text-sm mt-2">{language === 'es' ? '¿Tienes un proyecto en mente?' : 'Have a project in mind?'}</p>
                 </div>
 
                 <div className="space-y-4">
@@ -212,7 +217,7 @@ export default function MobileApp() {
                                 <FaPhoneAlt size={20} />
                             </div>
                             <div className="text-left">
-                                <span className="block text-[10px] font-bold uppercase text-emerald-900 tracking-wider">Teléfono</span>
+                                <span className="block text-[10px] font-bold uppercase text-emerald-900 tracking-wider">{language === 'es' ? 'Teléfono' : 'Phone'}</span>
                                 <span className="block text-xl font-black text-black leading-none mt-0.5">+34 722 62 52 88</span>
                             </div>
                         </div>
@@ -251,10 +256,10 @@ export default function MobileApp() {
   };
 
   const getTitle = () => {
-      if (activeTab === 'home') return 'Inicio';
-      if (activeTab === 'projects') return 'Proyectos';
-      if (activeTab === 'about') return 'Trayectoria';
-      return 'Contacto';
+      if (activeTab === 'home') return language === 'es' ? 'Inicio' : 'Home';
+      if (activeTab === 'projects') return language === 'es' ? 'Proyectos' : 'Projects';
+      if (activeTab === 'about') return language === 'es' ? 'Trayectoria' : 'Experience';
+      return language === 'es' ? 'Contacto' : 'Contact';
   }
 
   return (
@@ -277,10 +282,10 @@ export default function MobileApp() {
 
       <nav className="fixed bottom-0 left-0 w-full bg-black/85 backdrop-blur-xl border-t border-white/5 pb-safe z-50">
         <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-2">
-            <NavButton active={activeTab === 'home'} onClick={() => changeTab('home')} icon={FaHome} label="Inicio" />
-            <NavButton active={activeTab === 'projects'} onClick={() => changeTab('projects')} icon={FaLayerGroup} label="Proyectos" />
+            <NavButton active={activeTab === 'home'} onClick={() => changeTab('home')} icon={FaHome} label={language === 'es' ? 'Inicio' : 'Home'} />
+            <NavButton active={activeTab === 'projects'} onClick={() => changeTab('projects')} icon={FaLayerGroup} label={language === 'es' ? 'Proyectos' : 'Projects'} />
             <NavButton active={activeTab === 'about'} onClick={() => changeTab('about')} icon={FaUserAstronaut} label="Bio" />
-            <NavButton active={activeTab === 'contact'} onClick={() => changeTab('contact')} icon={FaCommentDots} label="Hablemos" />
+            <NavButton active={activeTab === 'contact'} onClick={() => changeTab('contact')} icon={FaCommentDots} label={language === 'es' ? 'Hablemos' : 'Contact'} />
         </div>
       </nav>
     </div>

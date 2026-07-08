@@ -13,6 +13,7 @@ import { VscJson, VscCode } from "react-icons/vsc";
 import { SiCsharp } from '@meronex/icons/si';
 import { FaJava, FaServer, FaMobileAlt, FaTools, FaCode } from "react-icons/fa";
 import { DiVisualstudio } from "react-icons/di";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 // MAPA COMPLETO DE TU ARSENAL (Basado en TechArsenal.tsx)
 const fullStackData = [
@@ -91,14 +92,44 @@ const fullStackData = [
   }
 ];
 
+const categoryTranslations = {
+  es: {
+    "Backend & DB": "Backend & BBDD",
+    "Mobile Development": "Desarrollo Móvil",
+    "Frontend & Web": "Frontend & Web",
+    "Lenguajes Core": "Lenguajes Core",
+    "DevOps & Herramientas": "DevOps & Herramientas"
+  },
+  en: {
+    "Backend & DB": "Backend & Database",
+    "Mobile Development": "Mobile Development",
+    "Frontend & Web": "Frontend & Web",
+    "Lenguajes Core": "Core Languages",
+    "DevOps & Herramientas": "DevOps & Tools"
+  }
+};
+
+const techNameTranslations = {
+  es: {
+    "Android Nativo": "Android Nativo",
+  },
+  en: {
+    "Android Nativo": "Native Android",
+  }
+};
+
 export default function MobileTechStack() {
+  const { language } = useLanguage();
+
   return (
     <div className="w-full space-y-6 pb-4">
       {fullStackData.map((section, idx) => (
         <div key={idx} className="space-y-3">
            <div className="flex items-center gap-2 px-1">
               <section.icon className={`${section.color} text-lg`} />
-              <h3 className="font-bold text-white text-sm uppercase tracking-wider">{section.category}</h3>
+              <h3 className="font-bold text-white text-sm uppercase tracking-wider">
+                {categoryTranslations[language][section.category as keyof typeof categoryTranslations.es] || section.category}
+              </h3>
            </div>
            
            {/* Grid denso de 'Chips' */}
@@ -107,7 +138,9 @@ export default function MobileTechStack() {
                 <div key={tech.name} className="flex items-center gap-2 px-3 py-2.5 bg-zinc-900/80 border border-zinc-800 rounded-lg active:scale-95 transition-transform">
                     {/* Renderizamos el icono si existe, si no un genérico */}
                     {tech.icon ? <tech.icon className="text-zinc-400 shrink-0" size={14} /> : <FaCode className="text-zinc-500" size={14}/>}
-                    <span className="text-[11px] text-zinc-200 font-medium truncate">{tech.name}</span>
+                    <span className="text-[11px] text-zinc-200 font-medium truncate">
+                      {techNameTranslations[language][tech.name as keyof typeof techNameTranslations.es] || tech.name}
+                    </span>
                 </div>
               ))}
            </div>

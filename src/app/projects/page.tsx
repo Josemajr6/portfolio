@@ -1,15 +1,20 @@
 
+"use client";
+
 import ProjectsSection from "@/components/ProjectsSection";
 import Section from "@/components/Section";
-import Link from "next/link"; // <--- Importante
-import { FaDatabase, FaArrowLeft, FaTerminal } from "react-icons/fa"; // <--- Añadimos iconos
-
-export const metadata = {
-  title: "Proyectos | José Manuel",
-  description: "Archivo completo de proyectos y desarrollo de software.",
-};
+import Link from "next/link";
+import { FaDatabase, FaArrowLeft, FaTerminal } from "react-icons/fa";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { useEffect } from "react";
 
 export default function ProjectsPage() {
+  const { t, language } = useLanguage();
+
+  useEffect(() => {
+    document.title = `${t.projectsArchiveTitle} | José Manuel`;
+  }, [t]);
+
   return (
     <main className="bg-zinc-950 min-h-screen text-zinc-200 overflow-hidden selection:bg-emerald-500/30">
       
@@ -43,10 +48,18 @@ export default function ProjectsPage() {
                 <span>DATABASE_ACCESS // GRANTED</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-4">
-                Archivo de <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Proyectos</span>
+              {language === 'es' ? (
+                <>
+                  Archivo de <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Proyectos</span>
+                </>
+              ) : (
+                <>
+                  Projects <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Archive</span>
+                </>
+              )}
             </h1>
             <p className="text-zinc-400 max-w-2xl text-lg font-light">
-                Acceso completo al historial de desarrollo. Utiliza la terminal de comandos inferior para filtrar por tecnología o categoría.
+              {t.projectsArchiveDesc}
             </p>
          </div>
       </section>

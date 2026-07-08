@@ -1,20 +1,26 @@
 "use client";
 import { useState, useCallback } from "react";
-import { projectsData, Project } from "@/data/project"; 
+import { projectsDataES } from "@/data/project"; 
+import { projectsDataEN } from "@/data/project_en"; 
+import { Project } from "@/data/project";
 import { FaGithub, FaExternalLinkAlt, FaFilter, FaFolderOpen, FaArrowLeft, FaStar, FaCheckCircle, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
-const filters = [
-  { id: "all", label: "Todo" },
-  { id: "mobile", label: "Mobile / iOS" },
-  { id: "web", label: "Full Stack" },
-  { id: "backend", label: "Backend / API" },
-];
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function MobileProjects() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { language, t } = useLanguage();
+
+  const projectsData = language === "es" ? projectsDataES : projectsDataEN;
+
+  const filters = [
+    { id: "all", label: language === "es" ? "Todo" : "All" },
+    { id: "mobile", label: "Mobile / iOS" },
+    { id: "web", label: "Full Stack" },
+    { id: "backend", label: "Backend / API" },
+  ];
 
   const filteredProjects = projectsData.filter((p) => {
     if (activeFilter === "all") return true;
@@ -27,6 +33,12 @@ export default function MobileProjects() {
   const handleCloseDetail = useCallback(() => {
     setSelectedProject(null);
   }, []);
+
+  const getStatusText = (status: string) => {
+    if (status === "Completed") return t.statusCompleted;
+    if (status === "In Progress") return t.statusInProgress;
+    return t.statusOnHold;
+  };
 
   return (
     <div className="w-full">
@@ -91,7 +103,7 @@ export default function MobileProjects() {
                     ? 'bg-green-500/10 text-green-400 border border-green-500/30'
                     : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
                 }`}>
-                  {selectedProject.status}
+                  {getStatusText(selectedProject.status)}
                 </span>
               </div>
 
@@ -99,7 +111,7 @@ export default function MobileProjects() {
               <div className="space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
                 <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
                   <span className="w-1 h-4 bg-emerald-500 rounded-full" />
-                  Descripción
+                  {language === "es" ? "Descripción" : "Description"}
                 </h3>
                 <p className="text-zinc-300 leading-relaxed text-sm">
                   {selectedProject.overview?.description || selectedProject.description}
@@ -111,7 +123,7 @@ export default function MobileProjects() {
                 <div className="space-y-3">
                   <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
                     <span className="w-1 h-4 bg-cyan-500 rounded-full" />
-                    Características Principales
+                    {language === "es" ? "Características Principales" : "Key Features"}
                   </h3>
                   <div className="space-y-2">
                     {selectedProject.overview.highlights.map((h, i) => (
@@ -134,7 +146,7 @@ export default function MobileProjects() {
               <div className="space-y-3">
                 <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
                   <span className="w-1 h-4 bg-indigo-500 rounded-full" />
-                  Tecnologías
+                  {language === "es" ? "Tecnologías" : "Technologies"}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.tech.map((t) => (
@@ -211,13 +223,14 @@ export default function MobileProjects() {
                     <ProjectCardMobile 
                       key={project.slug} 
                       project={project}
+                      getStatusText={getStatusText}
                       onClick={() => setSelectedProject(project)}
                     />
                 ))
             ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
                     <FaFolderOpen size={40} className="mb-4 opacity-50"/>
-                    <p>No hay proyectos en esta categoría.</p>
+                    <p>{language === "es" ? "No hay proyectos en esta categoría." : "No projects in this category."}</p>
                 </div>
             )}
            </motion.div>
@@ -227,7 +240,7 @@ export default function MobileProjects() {
   );
 }
 
-function ProjectCardMobile({ project, onClick }: { project: Project, onClick: () => void }) {
+function ProjectCardMobile({ project, getStatusText, onClick }: { project: Project, getStatusText: (s: string) => string, onClick: () => void }) {
     const isAuranotch = project.slug === "aura-notch";
 
     return (
@@ -259,7 +272,7 @@ function ProjectCardMobile({ project, onClick }: { project: Project, onClick: ()
                         ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
                         : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
                      }`}>
-                        {project.status === 'In Progress' ? 'In Progress' : 'Completed'}
+                        {getStatusText(project.status)}
                      </span>
                 </div>
             </div>

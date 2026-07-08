@@ -1,9 +1,13 @@
 "use client";
-import { certificationsData } from "@/data/certifications";
+import { certificationsDataES, certificationsDataEN } from "@/data/certifications";
 import { FaExternalLinkAlt, FaAward } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function MobileCertifications() {
+  const { language, t } = useLanguage();
+  const certificationsData = language === "es" ? certificationsDataES : certificationsDataEN;
+
   return (
     <div className="w-full px-2 pb-10 space-y-4">
       {certificationsData.map((cert, index) => (
@@ -51,7 +55,7 @@ export default function MobileCertifications() {
                             className="inline-flex items-center gap-2 text-xs font-bold text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-lg transition-colors border border-white/10"
                         >
                             <FaAward className={cert.color.includes('purple') ? 'text-purple-400' : cert.color.includes('red') ? 'text-red-400' : 'text-cyan-400'} />
-                            <span>Ver Credencial</span>
+                            <span>{t.viewCredential}</span>
                         </a>
                     </div>
                 </div>

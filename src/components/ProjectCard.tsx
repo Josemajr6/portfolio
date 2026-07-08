@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt, FaCode, FaCloudSun, FaDesktop, FaGlobeAmericas, FaServer, FaDatabase } from "react-icons/fa";
@@ -8,6 +9,7 @@ import {
   SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger,
   SiSwift, SiApple, SiThemoviedatabase, SiVapor, SiMongodb
 } from "react-icons/si";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 import { Project } from "@/data/project";
 
@@ -45,6 +47,7 @@ const getTechIcon = (techName: string) => {
 
 export default function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isCompleted = project.status === "Completed";
+  const { t } = useLanguage();
   
   // Lista de proyectos que necesitan 'contain'
   const projectsWithContain = [
@@ -55,6 +58,12 @@ export default function ProjectCard({ project, index }: { project: Project; inde
   ];
 
   const useContainMode = projectsWithContain.includes(project.slug);
+
+  const getStatusText = () => {
+    if (project.status === "Completed") return t.statusCompleted;
+    if (project.status === "In Progress") return t.statusInProgress;
+    return t.statusOnHold;
+  };
 
   return (
     <motion.article 
@@ -109,7 +118,7 @@ export default function ProjectCard({ project, index }: { project: Project; inde
             ? "border-emerald-500/30 text-emerald-400" 
             : "border-amber-500/30 text-amber-400 animate-pulse"}
         `}>
-          STATUS: {project.status.toUpperCase()}
+          STATUS: {getStatusText()}
         </div>
       </div>
 
@@ -137,7 +146,7 @@ export default function ProjectCard({ project, index }: { project: Project; inde
         {/* Footer */}
         <div className="mt-auto relative z-10">
           <div className="text-[10px] text-zinc-600 font-mono mb-2 uppercase tracking-wider">
-            Used_Technologies:
+            {t.usedTechnologies}
           </div>
           <div className="flex flex-wrap gap-3 mb-6">
             {project.tech.filter((t) => t.toLowerCase() !== "jwt").map((t) => (
@@ -155,7 +164,7 @@ export default function ProjectCard({ project, index }: { project: Project; inde
                 target="_blank" 
                 className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-900 border border-zinc-700 hover:bg-emerald-500/10 hover:border-emerald-500/50 hover:text-emerald-400 text-zinc-300 text-xs font-mono uppercase tracking-wider transition-all"
               >
-                <FaGithub size={14} /> Source_Code
+                <FaGithub size={14} /> {t.sourceCode}
               </a>
             )}
             <Link 
@@ -163,7 +172,7 @@ export default function ProjectCard({ project, index }: { project: Project; inde
               onClick={() => sessionStorage.setItem("portfolioScrollPos", window.scrollY.toString())}
               className="flex-1 flex items-center justify-center gap-2 py-2 bg-zinc-100 text-zinc-950 border border-zinc-100 hover:bg-white font-bold text-xs font-mono uppercase tracking-wider transition-all"
             >
-              View_Details &gt;
+              {t.viewDetails}
             </Link>
           </div>
         </div>

@@ -1,7 +1,9 @@
 "use client";
 
-import { projectsData } from "@/data/project";
+import { projectsDataES } from "@/data/project";
+import { projectsDataEN } from "@/data/project_en";
 import { notFound } from "next/navigation";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -135,13 +137,17 @@ const DesktopWindowMockup = ({ imageUrl, alt, caption, onClick }: { imageUrl: st
   </div>
 );
 
-export default function ProjectDetail({
+export default function ProjectDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
+  const { language, t, mounted } = useLanguage();
+
+  const projectsData = language === "es" ? projectsDataES : projectsDataEN;
   const project = projectsData.find((p) => p.slug === slug);
+
   const [activeTab, setActiveTab] = useState<"overview" | "features" | "tech" | "install">("overview");
   const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
 
@@ -154,6 +160,8 @@ export default function ProjectDetail({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  if (!mounted) return null;
 
   if (!project) {
     notFound();
@@ -169,7 +177,7 @@ export default function ProjectDetail({
     ? project.gallery 
     : (project.galleryImages || []).map(img => ({
         url: img,
-        caption: "Captura de pantalla"
+        caption: language === "es" ? "Captura de pantalla" : "Screenshot"
       }));
 
   return (
@@ -201,7 +209,7 @@ export default function ProjectDetail({
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 text-emerald-500 animate-pulse text-xs uppercase tracking-widest">
                 <FaDatabase />
-                <span>Accessing_Secure_File...</span>
+                <span>{t.accessingSecureFile}</span>
               </div>
             </div>
           </div>
@@ -266,8 +274,8 @@ export default function ProjectDetail({
                   <div className="absolute inset-0 bg-emerald-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   <FaGithub size={22} className="relative z-10" />
                   <div className="flex flex-col text-left leading-none relative z-10">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase group-hover:text-emerald-400">Repository</span>
-                    <span className="font-bold">View Source</span>
+                    <span className="text-[10px] font-mono text-zinc-500 uppercase group-hover:text-emerald-400">{language === 'es' ? 'Repositorio' : 'Repository'}</span>
+                    <span className="font-bold">{language === 'es' ? 'Ver Código' : 'View Source'}</span>
                   </div>
                 </a>
               )}
@@ -276,8 +284,8 @@ export default function ProjectDetail({
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   <FaExternalLinkAlt size={20} className="relative z-10" />
                   <div className="flex flex-col text-left leading-none relative z-10">
-                    <span className="text-[10px] font-mono text-emerald-900 uppercase font-bold">Deploy</span>
-                    <span className="font-bold">Live Demo</span>
+                    <span className="text-[10px] font-mono text-emerald-900 uppercase font-bold">{language === 'es' ? 'Despliegue' : 'Deploy'}</span>
+                    <span className="font-bold">{language === 'es' ? 'Demo en Vivo' : 'Live Demo'}</span>
                   </div>
                 </a>
               )}
@@ -313,7 +321,7 @@ export default function ProjectDetail({
         >
           <div className="flex items-center gap-4 mb-8">
             <FaLayerGroup className="text-emerald-500 text-xl" />
-            <h2 className="text-2xl font-bold text-white uppercase tracking-wider">System Architecture</h2>
+            <h2 className="text-2xl font-bold text-white uppercase tracking-wider">{t.systemArchitecture}</h2>
             <div className="h-[1px] flex-grow bg-zinc-800" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -335,10 +343,10 @@ export default function ProjectDetail({
           <>
             <div className="flex flex-wrap gap-2 mb-12 border-b border-zinc-800 pb-4">
               {[
-                { id: "overview", label: "Overview", icon: FaRocket, show: !!project.overview },
-                { id: "features", label: "Features", icon: FaLightbulb, show: !!project.features },
-                { id: "tech", label: "Tech Stack", icon: FaLayerGroup, show: !!project.techStack },
-                { id: "install", label: "Installation", icon: FaCog, show: !!project.installation }
+                { id: "overview", label: language === 'es' ? "Resumen" : "Overview", icon: FaRocket, show: !!project.overview },
+                { id: "features", label: language === 'es' ? "Características" : "Features", icon: FaLightbulb, show: !!project.features },
+                { id: "tech", label: language === 'es' ? "Tecnologías" : "Tech Stack", icon: FaLayerGroup, show: !!project.techStack },
+                { id: "install", label: language === 'es' ? "Instalación" : "Installation", icon: FaCog, show: !!project.installation }
               ].filter(tab => tab.show).map((tab) => (
                 <button
                   key={tab.id}
@@ -365,7 +373,7 @@ export default function ProjectDetail({
                   className="space-y-8 mb-16"
                 >
                   <div className="prose prose-invert max-w-none">
-                    <h2 className="text-3xl font-bold text-white mb-6">Project Overview</h2>
+                    <h2 className="text-3xl font-bold text-white mb-6">{t.projectOverview}</h2>
                     <p className="text-zinc-400 text-lg leading-relaxed">
                       {project.overview.description}
                     </p>
@@ -420,7 +428,13 @@ export default function ProjectDetail({
                       <div key={category}>
                         <h3 className="text-2xl font-bold text-white mb-6 capitalize flex items-center gap-3">
                           <FaLayerGroup className="text-emerald-500"/>
-                          {category}
+                          {language === 'es' ? (
+                            category === 'frontend' ? 'Frontend' :
+                            category === 'backend' ? 'Backend' :
+                            category === 'apis' ? 'APIs / Servicios' :
+                            category === 'mobile' ? 'Dispositivos Móviles' :
+                            category === 'tools' ? 'Herramientas' : category
+                          ) : category}
                         </h3>
                         <div className="grid md:grid-cols-3 gap-6">
                           {items.map((item: { name: string; role: string }, i: number) => (

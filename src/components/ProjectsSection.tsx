@@ -1,15 +1,20 @@
 "use client";
 import { useState } from "react";
+
 import ProjectCard from "./ProjectCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTerminal } from "react-icons/fa";
-import { projectsData } from "@/data/project";
+import { projectsDataES } from "@/data/project";
+import { projectsDataEN } from "@/data/project_en";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 // Categorías del filtro
 const categories = ["Todos", "Full Stack", "Backend", "Mobile", "Android", "Swift"];
 
 export default function ProjectsSection() {
   const [filter, setFilter] = useState("Todos");
+  const { language, t } = useLanguage();
+  const projectsData = language === "es" ? projectsDataES : projectsDataEN;
 
   // Lógica de filtrado PRECISA
   const filteredProjects = projectsData.filter((p) => {
@@ -47,7 +52,7 @@ export default function ProjectsSection() {
       <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-6 bg-zinc-900/50 p-4 border border-zinc-800 rounded-lg backdrop-blur-sm">
         <div className="flex items-center gap-3 text-emerald-500 font-mono text-sm">
           <FaTerminal />
-          <span className="animate-pulse">root@portfolio:~/projects $ filter --type={filter.toLowerCase()}</span>
+          <span className="animate-pulse">{t.filterCommand}{filter.toLowerCase()}</span>
         </div>
 
         <div className="flex flex-wrap justify-center gap-2">
@@ -61,7 +66,7 @@ export default function ProjectsSection() {
                   : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300"
               }`}
             >
-              [{cat}]
+              [{cat === "Todos" ? t.filterAll : cat}]
             </button>
           ))}
         </div>
@@ -80,7 +85,7 @@ export default function ProjectsSection() {
       {filteredProjects.length === 0 && (
         <div className="text-center py-20 border border-dashed border-zinc-800 rounded-lg">
           <p className="font-mono text-zinc-500">
-            &gt; No projects found in this directory...
+            {t.noProjectsFound}
           </p>
         </div>
       )}

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import {
   SiSpring,
@@ -31,7 +32,7 @@ import {
   SiMongodb,
   SiOdoo,
   SiLaravel,
-} from "react-icons/si"; // Eliminado SiWindows de aquí
+} from "react-icons/si";
 import { VscCode } from "react-icons/vsc";
 import { SiCsharp } from "@meronex/icons/si";
 import {
@@ -41,9 +42,81 @@ import {
   FaTools,
   FaCode,
   FaDatabase,
-  FaWindows, // Añadido FaWindows aquí
+  FaWindows,
 } from "react-icons/fa";
 import { DiVisualstudio } from "react-icons/di";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+
+const techDescriptions = {
+  es: {
+    "HTML5": "Estructura Web",
+    "CSS3": "Estilos Modernos",
+    "JavaScript": "Scripting Web",
+    "TypeScript": "Superset JS",
+    "Angular": "Framework SPA",
+    "WordPress": "CMS / Web",
+    "Java": "Lenguaje Principal",
+    "Spring Boot": "Framework Java",
+    "PHP": "Backend Web",
+    "Laravel": "Framework PHP",
+    "Swift": "iOS Nativo",
+    "Flutter": "Multiplataforma",
+    "Dart": "Lenguaje Core",
+    "Android": "Java & Kotlin",
+    "PostgreSQL": "Relacional Avanzada",
+    "MySQL": "Base de Datos",
+    "Oracle DB": "BBDD Empresarial",
+    "MongoDB": "NoSQL Database",
+    "Firebase": "BaaS / Realtime",
+    "GNU/Linux": "Admin. Sistemas",
+    "Windows Server": "Servidores",
+    "Docker": "Contenedores (Básico)",
+    "Apache": "Servidor Web",
+    "Git": "Control Versiones",
+    "GitHub": "Repositorios",
+    "Postman": "Testing API",
+    "Odoo": "ERP Empresarial",
+    "VS Code": "Editor Código",
+    "Visual Studio": "IDE Profesional",
+    "Android Studio": "IDE Android",
+    "Xcode": "IDE Apple",
+    "Eclipse": "IDE Java",
+  },
+  en: {
+    "HTML5": "Web Structure",
+    "CSS3": "Modern Styling",
+    "JavaScript": "Web Scripting",
+    "TypeScript": "JS Superset",
+    "Angular": "SPA Framework",
+    "WordPress": "CMS / Web",
+    "Java": "Primary Language",
+    "Spring Boot": "Java Framework",
+    "PHP": "Web Backend",
+    "Laravel": "PHP Framework",
+    "Swift": "Native iOS",
+    "Flutter": "Cross-platform",
+    "Dart": "Core Language",
+    "Android": "Java & Kotlin",
+    "PostgreSQL": "Advanced Relational",
+    "MySQL": "Database",
+    "Oracle DB": "Enterprise Database",
+    "MongoDB": "NoSQL Database",
+    "Firebase": "BaaS / Realtime",
+    "GNU/Linux": "Systems Admin",
+    "Windows Server": "Servers",
+    "Docker": "Containers (Basic)",
+    "Apache": "Web Server",
+    "Git": "Version Control",
+    "GitHub": "Repositories",
+    "Postman": "API Testing",
+    "Odoo": "Enterprise ERP",
+    "VS Code": "Code Editor",
+    "Visual Studio": "Professional IDE",
+    "Android Studio": "Android IDE",
+    "Xcode": "Apple IDE",
+    "Eclipse": "Java IDE",
+  }
+};
 
 const categories = [
   { id: "frontend", label: "~/frontend", icon: FaCode, color: "text-pink-400" },
@@ -205,7 +278,7 @@ const technologies = {
     },
     {
       name: "Windows Server",
-      icon: FaWindows, // Actualizado a FaWindows
+      icon: FaWindows,
       color: "group-hover:text-[#00A4EF]",
       desc: "Servidores",
     },
@@ -280,6 +353,7 @@ const technologies = {
 
 export default function TechArsenal() {
   const [activeTab, setActiveTab] = useState("frontend");
+  const { language } = useLanguage();
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4">
@@ -333,7 +407,7 @@ export default function TechArsenal() {
                     {tech.name}
                   </span>
                   <span className="text-xs text-zinc-500 font-mono group-hover:text-emerald-500/80">
-                    {tech.desc}
+                    {techDescriptions[language][tech.name as keyof typeof techDescriptions.es] || tech.desc}
                   </span>
                 </div>
 

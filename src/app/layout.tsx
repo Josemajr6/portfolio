@@ -5,6 +5,8 @@ import "./globals.css";
 import CyberCursor from "@/components/ui/CyberCursor";
 import WelcomeScreen from "@/components/layout/WelcomeScreen";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
+
 
 // Configuración de fuentes
 const inter = Inter({
@@ -177,10 +179,12 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30`}
         suppressHydrationWarning
       >
-        <ThemeProvider>
-          <CyberCursor />
-          <main className="relative z-0">{children}</main>
-        </ThemeProvider>
+        <LanguageProvider>
+          <ThemeProvider>
+            <CyberCursor />
+            <main className="relative z-0">{children}</main>
+          </ThemeProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

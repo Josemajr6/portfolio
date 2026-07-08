@@ -29,6 +29,8 @@ import {
   FaExternalLinkAlt,
 } from "react-icons/fa";
 import { SiDocker, SiStripe, SiIonic } from "react-icons/si";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { useEffect } from "react";
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
@@ -142,6 +144,170 @@ const GALLERY_TABS: { id: GalleryTab; label: string; icon: React.ElementType }[]
   { id: "admin", label: "Admin", icon: FaShieldAlt },
   { id: "mobile", label: "Móvil", icon: FaMobile },
 ];
+
+const tabLabels = {
+  es: {
+    main: "Inicio",
+    auth: "Auth & Registro",
+    catalog: "Catálogo",
+    chat: "Chat & Reservas",
+    buy: "Compra & Pagos",
+    publish: "Publicar",
+    profile: "Perfil",
+    admin: "Admin",
+    mobile: "Móvil",
+  },
+  en: {
+    main: "Home",
+    auth: "Auth & Register",
+    catalog: "Catalog",
+    chat: "Chat & Bookings",
+    buy: "Purchase & Payments",
+    publish: "Publish",
+    profile: "Profile",
+    admin: "Admin Panel",
+    mobile: "Mobile View",
+  }
+};
+
+const translateCaption = (caption: string, lang: string) => {
+  if (lang === 'es') return caption;
+  return caption
+    .replace("Pantalla de inicio para visitantes", "Home screen for visitors")
+    .replace("acceso de solo lectura al catálogo", "read-only catalog access")
+    .replace("Feed principal — Lo último en", "Main feed — Latest on")
+    .replace("artículos recientes", "recent articles")
+    .replace("ranking dinámico por sistema de votos", "dynamic ranking by voting system")
+    .replace("ofertas con cuenta atrás y límite de unidades", "deals with countdown and unit limits")
+    .replace("explorar por categoría — navegación jerárquica", "explore by category — hierarchical navigation")
+    .replace("ofertas de tiempo limitado", "limited time offers")
+    .replace("productos en donación e intercambio", "donation and exchange products")
+    .replace("ofertas especializadas de turismo", "specialized tourism deals")
+    .replace("Menú lateral de categorías con navegación rápida", "Side category menu with quick navigation")
+    .replace("Centro de notificaciones in-app con badging inteligente", "In-app notification center with smart badging")
+    .replace("items guardados por el usuario", "user saved items")
+    .replace("Búsqueda 'Cerca de ti' — radar GPS con radio ajustable", "Near Me search — GPS radar with adjustable radius")
+    .replace("Búsqueda geográfica — radio de 50 km mostrando 2 vehículos cercanos", "Geographical search — 50km radius showing 2 nearby vehicles")
+    .replace("Formulario de registro con medidor de fortaleza de contraseña", "Registration form with password strength meter")
+    .replace("y reCAPTCHA v3 en backend", "and backend reCAPTCHA v3 validation")
+    .replace("Login estándar con usuario/email y contraseña hasheada", "Standard login with username/email and hashed password")
+    .replace("Login con Google OAuth 2.0 — ID token verificado", "Google OAuth 2.0 login — ID token verified")
+    .replace("Verificación de email — OTP de 6 dígitos válido 30 minutos", "Email verification — 6-digit OTP valid for 30 minutes")
+    .replace("Recuperación de contraseña — token UUID de 15 minutos", "Password recovery — UUID token valid for 15 minutes")
+    .replace("Wizard de onboarding — configuración de seguridad", "Onboarding wizard — security settings")
+    .replace("identidad personal y tipo de cuenta", "personal identity and account type")
+    .replace("preferencias de estilo visual", "visual style preferences")
+    .replace("2FA TOTP — código QR para vincular con Google Authenticator", "2FA TOTP — QR code to link with Google Authenticator")
+    .replace("Login del panel admin con 2FA TOTP activado", "Admin login with 2FA TOTP enabled")
+    .replace("Catálogo de vehículos — filtros por tipo, marca, combustible", "Vehicle catalog — filters by type, brand, fuel")
+    .replace("Vista listado de vehículos con paginación y ordenación", "Vehicle list view with pagination and sorting")
+    .replace("Ficha técnica completa de vehículo — marca, modelo, año, km", "Complete vehicle spec sheet — brand, model, year, km")
+    .replace("Detalle de vehículo — galería de imágenes y características extra", "Vehicle detail — image gallery and extra features")
+    .replace("Detalle de producto de segunda mano — galería Cloudinary", "Second hand product detail — Cloudinary gallery")
+    .replace("Detalle de producto — descripción completa y botones de acción", "Product detail — full description and action buttons")
+    .replace("Detalle de oferta/chollo — precio original vs. oferta", "Deal/offer detail — original vs. discount price")
+    .replace("Votación Spark/Drip en tiempo real", "Real-time Spark/Drip voting")
+    .replace("recalculado cada 5 minutos por scheduler", "recalculated every 5 minutes by scheduler")
+    .replace("Menú de perfil desplegable — acceso rápido a cuenta", "Profile dropdown menu — quick account access")
+    .replace("Chat en tiempo real con WebSocket STOMP", "Real-time chat with WebSocket STOMP")
+    .replace("inicia sala de chat con roomId determinista", "starts chat room with deterministic roomId")
+    .replace("Envío de mensaje de texto en tiempo real", "Real-time text message sending")
+    .replace("Recepción del mensaje en la sala compartida", "Message receipt in the shared room")
+    .replace("Envío de imágenes al chat — subidas a Cloudinary", "Sending images to chat — uploaded to Cloudinary")
+    .replace("Recepción de fotos en el chat del comprador", "Photo receipt in buyer's chat")
+    .replace("Propuesta de precio — tipo OFERTA_PRECIO con aceptación/rechazo", "Price proposal — OFFER_PRICE type with accept/reject")
+    .replace("Recepción de propuesta de precio por el vendedor", "Price proposal received by the seller")
+    .replace("Gestión de productos con opción de reservar artículo", "Product management with option to reserve item")
+    .replace("Popup de confirmación de reserva — artículo pasa a", "Reservation confirmation popup — item moves to")
+    .replace("Producto con estado RESERVADO visible en el catálogo", "Product with RESERVED status visible in catalog")
+    .replace("Panel de edición de anuncio — opciones de gestión", "Ad edit panel — management options")
+    .replace("Editor de anuncio — modificar detalles del producto", "Ad editor — edit published product details")
+    .replace("Chat en tiempo real — versión móvil", "Real-time chat — mobile version")
+    .replace("Contactar con el vendedor desde el detalle", "Contact seller from details")
+    .replace("Recepción de mensaje en el chat", "Message receipt in chat")
+    .replace("Vista de producto — botón 'Comprar'", "Product view — 'Buy' button")
+    .replace("Selección de método de entrega — envío a domicilio", "Delivery method selection — home shipping")
+    .replace("Detalles del envío — dirección de entrega", "Shipping details — delivery address")
+    .replace("Datos personales del pedido — dirección completa", "Personal order details — full address")
+    .replace("Formulario de pago Stripe — Payment Intent con modelo escrow", "Stripe payment form — Payment Intent with escrow model")
+    .replace("Confirmación de pago exitoso — webhook received", "Successful payment confirmation — webhook received")
+    .replace("Notificación in-app de nueva compra — comprador y vendedor", "New purchase in-app notification — buyer and seller")
+    .replace("Detalle del pedido — estado PAGADO, código QR", "Order details — PAID status, QR code")
+    .replace("Historial de movimientos del pedido — trazabilidad completa", "Order movements history — full traceability")
+    .replace("Email de confirmación de compra enviado", "Purchase confirmation email sent")
+    .replace("Email con desglose de pago — precio final", "Email with payment breakdown — final price")
+    .replace("version responsive", "responsive version")
+    .replace("versión responsive", "responsive version")
+    .replace("en móvil", "on mobile")
+    .replace("Menú de publicación — elegir entre", "Publish menu — choose between")
+    .replace("Wizard de publicación — Detalles básicos", "Publish wizard — basic details")
+    .replace("Subir fotos y descripción — 1 imagen", "Upload photos and description — 1 image")
+    .replace("Precio y ubicación — geolocalización", "Price and location — geolocation")
+    .replace("Revisión final antes de publicar", "Final review before publishing")
+    .replace("Producto publicado con éxito — vigencia", "Product successfully published — validity")
+    .replace("Wizard de publicación de vehículo", "Vehicle publishing wizard")
+    .replace("Publicar vehículo — ficha técnica", "Publish vehicle — spec sheet")
+    .replace("Publicar vehículo — combustible, cambio", "Publish vehicle — fuel, gear")
+    .replace("Publicar vehículo — fotos y descripción", "Publish vehicle — photos and details")
+    .replace("Publicar oferta/chollo — precio", "Publish deal/offer — price")
+    .replace("Publicar oferta — paso 1: detalles", "Publish deal — step 1: details")
+    .replace("Oferta publicada con badge automático", "Deal published with automatic badge")
+    .replace("Asistente IA de soporte — chatbot con", "AI Support Assistant — chatbot with")
+    .replace("Soporte con agente humano — escalado", "Support with human agent — escalation")
+    .replace("Perfil — Resumen: reputación", "Profile — Summary: reputation")
+    .replace("Perfil — Estadísticas detalladas de actividad", "Profile — Detailed activity stats")
+    .replace("Mis Productos — gestión de anuncios", "My Products — published ads management")
+    .replace("Mis Vehículos — gestión de vehículos publicados", "My Vehicles — published vehicles management")
+    .replace("Mis Ofertas — ofertas publicadas con", "My Deals — published deals with")
+    .replace("Mis Compras — historial completo de compras", "My Purchases — complete purchase history")
+    .replace("Mis Ventas — historial de ventas realizadas", "My Sales — sales history")
+    .replace("Buzón — bandeja de entrada de mensajes", "Inbox — message inbox")
+    .replace("Mis Patrocinios — gestión de contratos", "My Sponsorships — contracts management")
+    .replace("Métodos de pago — gestión de tarjetas", "Payment methods — cards management")
+    .replace("Mi Cuenta — Seguridad: cambio de", "My Account — Security: change of")
+    .replace("Mi Cuenta — Datos del perfil: nombre", "My Account — Profile info: name")
+    .replace("Mi Cuenta — Privacidad: cuenta", "My Account — Privacy: account")
+    .replace("Mi Cuenta — Notificaciones: 6 flags", "My Account — Notifications: 6 flags")
+    .replace("Publicidad — Solicitud de patrocinio", "Advertising — Sponsorship request")
+    .replace("Pago de contrato — Stripe Checkout", "Contract payment — Stripe Checkout")
+    .replace("Dashboard — KPIs en tiempo real", "Dashboard — real-time KPIs")
+    .replace("Estadísticas en vivo — gráficas de", "Live statistics — graphs of")
+    .replace("Estadísticas — métricas de contenido", "Statistics — content metrics")
+    .replace("Gestión de Usuarios — lista paginada", "Users Management — paginated list")
+    .replace("Detalle de Usuario — perfil completo", "User Detail — full profile")
+    .replace("Sanciones — ban permanente", "Sanctions — permanent ban")
+    .replace("Moderación de Productos — listado", "Products Moderation — listing")
+    .replace("Moderación de Ofertas — control del", "Deals Moderation — chollometro control")
+    .replace("Moderación de Vehículos — listado", "Vehicles Moderation — listing")
+    .replace("Reportes — lista de denuncias", "Reports — active complaints list")
+    .replace("Detalle de Reporte — contenido denunciado", "Report Detail — reported content")
+    .replace("Contratos Publicitarios — gestión de", "Advertising Contracts — management of")
+    .replace("Cupones — creación y gestión", "Coupons — creation and management")
+    .replace("Newsletter — automación semanal", "Newsletter — weekly automation")
+    .replace("Newsletter — emisión manual de", "Newsletter — manual campaign emission")
+    .replace("Email de newsletter enviado desde", "Newsletter email sent from")
+    .replace("Panel de Soporte — chat en tiempo real", "Support Panel — real-time chat")
+    .replace("Devoluciones — gestión de solicitudes", "Returns — requests management")
+    .replace("Notificaciones masivas — envío de", "Bulk notifications — sending of")
+    .replace("Configuración Global — ajustes del", "Global Configuration — system settings")
+    .replace("Login del Panel Admin — acceso", "Admin Panel Login — access")
+    .replace("Gestión de Compras — listado de", "Purchases Management — listing of")
+    .replace("Compras filtradas por estado PAGADO", "Purchases filtered by PAID status")
+    .replace("Pantalla de inicio — diseño responsive", "Home screen — responsive design")
+    .replace("Login — formulario optimizado para", "Login — form optimized for")
+    .replace("Registro — paso 1: datos básicos", "Register — step 1: basic data")
+    .replace("Verificación de email — OTP de 6", "Email verification — 6-digit OTP")
+    .replace("Perfil de usuario — vista responsive", "User profile — responsive view")
+    .replace("Mis Cosas — lista de artículos", "My Things — list of user items")
+    .replace("Menú de publicación — adaptado a", "Publish menu — adapted to")
+    .replace("Publicar artículo — acceso a cámara", "Publish item — access to camera")
+    .replace("Publicar vehículo — formulario", "Publish vehicle — form")
+    .replace("Producto publicado con éxito desde", "Product successfully published from")
+    .replace("Catálogo de coches — scroll infinito", "Cars catalog — infinite scroll")
+    .replace("Ajustes de seguridad — gestión de", "Security settings — management of")
+    .replace("Vista Desktop / PC", "Desktop / PC View")
+    .replace("Vista Responsive — Web & Móvil", "Responsive View — Web & Mobile");
+};
 
 const GALLERY_DATA: Record<GalleryTab, { src: string; caption: string; type: "desktop" | "mobile"; url?: string }[]> = {
   main: [
@@ -295,6 +461,428 @@ const GALLERY_DATA: Record<GalleryTab, { src: string; caption: string; type: "de
 
 export default function NexusAppPage() {
   const [activeTab, setActiveTab] = useState<GalleryTab>("main");
+  const { language, t, mounted } = useLanguage();
+
+  useEffect(() => {
+    document.title = "Nexus | José Manuel";
+  }, []);
+
+  const text = {
+    es: {
+      tagFullStack: "Full Stack",
+      tagCompleted: "Completado",
+      description: (
+        <>La plataforma de ahorro definitiva: <strong className="text-white">marketplace de segunda mano</strong>, {" "}<strong className="text-white">chollometro comunitario</strong> con sistema de votos Spark/Drip y <strong className="text-white">publicidad B2B</strong> para empresas, todo en un único ecosistema multiplataforma.</>
+      ),
+      bullets: [
+        "48 controladores REST + WebSocket STOMP",
+        "Angular 21 + Ionic 8 + Capacitor (Android)",
+        "Pagos escrow con Stripe Payment Intents",
+        "2FA TOTP + Google OAuth + reCAPTCHA v3",
+        "Panel admin con 19 módulos de gestión",
+        "IA de soporte con Gemini + Groq LLaMA",
+        "Cumplimiento RGPD con double opt-in",
+        "Deploy: Render + Vercel CDN + Cloudinary",
+      ],
+      techTitle: "Stack Tecnológico",
+      techSubtitle: "Un único backend Spring Boot que sirve a todas las aplicaciones cliente. Ningún cliente habla directamente con PostgreSQL, Cloudinary ni Stripe.",
+      techClientTitle: "Capa de Cliente — Vercel CDN",
+      techClientDetail1: "App usuario · Web + Android · Puerto 4200",
+      techClientDetail2: "Panel de administración · 19 módulos · Puerto 4201",
+      techClientDetail3: "Web informativa y docs técnica · Puerto 4321",
+      techBackendTitle: "Backend — Render.com · Docker · Puerto 8080",
+      techBackendDetail1: "7 tareas auto",
+      techServicesTitle: "Servicios Externos",
+      featuresTitle: "Funcionalidades Clave",
+      featuresSubtitle: "Un ecosistema completo de 8 módulos funcionales que cubren desde el comercio electrónico hasta la moderación y la publicidad.",
+      features: [
+        {
+          title: "Marketplace de Segunda Mano",
+          desc: "Publicación de productos, vehículos y ofertas con galería Cloudinary. Tipos: VENTA, DONACIÓN e INTERCAMBIO. Búsqueda unificada con expansión de sinónimos y vigencia automática de 180 días.",
+          techs: ["Spring Boot", "Angular 21", "Cloudinary", "GPS / Geoloc", "PostgreSQL"],
+        },
+        {
+          title: "Chollometro — Sistema Spark/Drip",
+          desc: "Votación Spark o Drip para rankear ofertas. Un scheduler recalcula el sparkScore cada 5 min. Secciones: Flash, Gratis, Viajes. Badges automáticos: NUEVA, CHOLLAZO, EXPIRA_HOY.",
+          techs: ["WebSocket STOMP", "Spring Scheduler", "Angular Signals", "Badge Engine"],
+        },
+        {
+          title: "Pagos Seguros con Stripe (Escrow)",
+          desc: "Payment Intents con modelo escrow: el dinero se retiene hasta que el comprador confirma la recepción. Contratos publicitarios con Checkout Sessions. Webhooks HMAC. Cupones validados en checkout.",
+          techs: ["Stripe Payment Intents", "Stripe Checkout", "Webhooks HMAC", "Cupones"],
+        },
+        {
+          title: "Chat en Tiempo Real (WebSocket STOMP)",
+          desc: "Mensajería privada comprador-vendedor con roomId determinista. Soporta TEXTO, IMAGEN, VIDEO, AUDIO, GIF y OFERTA_PRECIO (propuesta de precio con aceptación/rechazo en tiempo real).",
+          techs: ["Spring WebSocket", "STOMP", "SockJS", "@stomp/stompjs 7.3"],
+        },
+        {
+          title: "Autenticación Multicapa",
+          desc: "JWT con invalidación por jwtVersion, Google OAuth 2.0, 2FA TOTP con QR (ZXing + samstevens.totp), Email OTP 6 dígitos. BCrypt. reCAPTCHA v3 (umbral 0.5). Wizard de onboarding.",
+          techs: ["JJWT 0.11.5", "Spring Security", "Google OAuth", "TOTP/ZXing", "reCAPTCHA v3"],
+        },
+        {
+          title: "Panel Admin — 19 Módulos",
+          desc: "App Angular independiente en subdominio separado (ROLE_ADMIN). Dashboard, estadísticas en vivo, moderación, devoluciones, contratos, cupones, patrocinios, newsletter con automaciones, audit log inmutable.",
+          techs: ["Angular 21", "TypeScript 5.9", "Vercel", "ROLE_ADMIN", "AuditLog"],
+        },
+        {
+          title: "Asistente IA de Soporte",
+          desc: "Chatbot con dos proveedores intercambiables: Google Gemini 1.5-flash y Groq LLaMA 3.3-70b. Escalado automático a soporte humano por email si la IA no resuelve la consulta.",
+          techs: ["Google Gemini 1.5-flash", "Groq LLaMA 3.3-70b", "Gmail SMTP"],
+        },
+        {
+          title: "Publicidad B2B para Empresas",
+          desc: "ROLE_EMPRESA solicita patrocinios BANNER o PUBLICACION. Admin aprueba y fija precio; empresa paga con Stripe Checkout. El ítem aparece con badge 'Patrocinado' hasta la expiración.",
+          techs: ["Stripe Checkout", "ROLE_EMPRESA", "Angular 21", "Role-Based Access"],
+        }
+      ],
+      galleryTitle: "Galería de Capturas",
+      gallerySubtitle: "Capturas reales de la aplicación en funcionamiento — navega por categorías para explorar cada módulo del ecosistema Nexus.",
+      useCasesTitle: "Casos de Uso Representativos",
+      useCasesSubtitle: "Los flujos más importantes del sistema, implementados al completo en el backend y en las dos aplicaciones Angular.",
+      useCases: [
+        {
+          id: "CU-01",
+          title: "Compra de un producto de segunda mano",
+          actor: "Usuario autenticado (comprador)",
+          color: "border-violet-500/30 bg-violet-500/5",
+          badgeColor: "text-violet-400 bg-violet-500/10 border-violet-500/30",
+          steps: [
+            "Navega el marketplace y accede al detalle del producto",
+            "Pulsa 'Comprar' → selecciona método de entrega (envío o recogida)",
+            "Introduce dirección de entrega → aplica cupón de descuento (opcional)",
+            "El backend crea un Stripe Payment Intent y devuelve el clientSecret",
+            "El usuario completa el pago en el formulario de Stripe.js",
+            "Stripe envía el webhook payment_intent.succeeded → backend crea entidad Compra (PAGADO) y genera código QR de envío",
+            "El vendedor confirma el envío con número de seguimiento",
+            "El comprador confirma la recepción → pago liberado (escrow) → ambas partes pueden valorarse",
+          ],
+        },
+        {
+          id: "CU-02",
+          title: "Publicación y votación de una oferta/chollo",
+          actor: "Usuario o Empresa autenticados",
+          color: "border-yellow-500/30 bg-yellow-500/5",
+          badgeColor: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+          steps: [
+            "El usuario accede a 'Publicar oferta' y completa el formulario",
+            "El sistema calcula automáticamente el badge en @PreUpdate (NUEVA, CHOLLAZO, etc.)",
+            "La oferta se publica y es visible en el chollometro",
+            "Los usuarios votan con Spark (positivo) o Drip (negativo)",
+            "Un scheduler recalcula el sparkScore cada 5 minutos",
+            "Las ofertas más valoradas ascienden en el ranking principal",
+          ],
+        },
+        {
+          id: "CU-03",
+          title: "Contratación de publicidad por una empresa",
+          actor: "Empresa autenticada (ROLE_EMPRESA)",
+          color: "border-orange-500/30 bg-orange-500/5",
+          badgeColor: "text-orange-400 bg-orange-500/10 border-orange-500/30",
+          steps: [
+            "La empresa accede a 'Publicidad / Mis contratos' y solicita un patrocinio",
+            "El administrador recibe la solicitud en estado DRAFT y la aprueba con precio",
+            "El sistema genera una Stripe Checkout Session",
+            "La empresa paga mediante Stripe Checkout (redirección al portal de Stripe)",
+            "El webhook checkout.session.completed confirma el pago",
+            "El contrato pasa a ACTIVE y el ítem recibe el flag patrocinado=true con fecha de expiración",
+          ],
+        },
+        {
+          id: "CU-04",
+          title: "Registro y autenticación con 2FA TOTP",
+          actor: "Visitante",
+          color: "border-emerald-500/30 bg-emerald-500/5",
+          badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+          steps: [
+            "El visitante rellena el formulario con username, email y contraseña + reCAPTCHA",
+            "El backend valida el captcha y crea el Usuario con contraseña BCrypt",
+            "Envía OTP de 6 dígitos al email → el usuario verifica su cuenta",
+            "El usuario accede al wizard de onboarding y activa 2FA TOTP",
+            "El backend genera un secreto TOTP, crea el QR con ZXing en base64",
+            "El usuario escanea el QR con Google Authenticator",
+            "En el próximo login: tras validar credenciales, el backend responde con twoFactorRequired: true",
+            "El usuario introduce el código TOTP → el backend lo valida → emite el JWT con el rol",
+          ],
+        }
+      ],
+      setupTitle: "Cómo Ejecutar el Proyecto",
+      setupSubtitle: "El ecosistema se divide en 4 repositorios independientes que comparten el mismo backend Spring Boot.",
+      setupReqs: [
+        "Java 17 LTS instalado en el sistema",
+        "Node.js 20+ con Angular CLI 21",
+        "PostgreSQL 14+ (o acceso a Render DB)",
+        "Cuenta Stripe (modo test) con claves API",
+        "Cuenta Cloudinary para almacenamiento",
+        "Variables de entorno en application.properties",
+      ],
+      setupSteps: [
+        {
+          n: 1,
+          title: "Clonar los Repositorios",
+          cmds: [
+            "git clone https://github.com/SomosNexusApp/nexus-backend.git",
+            "git clone https://github.com/SomosNexusApp/nexus-angular-app.git",
+            "git clone https://github.com/SomosNexusApp/nexus-admin-web-app.git",
+          ],
+        },
+        {
+          n: 2,
+          title: "Configurar el Backend",
+          desc: "Edita application.properties con tus credenciales de Stripe, Cloudinary y PostgreSQL",
+          cmds: [
+            "cd nexus-backend",
+            "# spring.datasource.url=jdbc:postgresql://localhost:5432/nexus",
+            "# stripe.secret.key=sk_test_...",
+            "# cloudinary.url=cloudinary://api_key:api_secret@cloud_name",
+            "./mvnw spring-boot:run",
+          ],
+        },
+        {
+          n: 3,
+          title: "Arrancar la App de Usuario",
+          desc: "Angular 21 + Ionic 8 en puerto 4200",
+          cmds: ["cd nexus-angular-app", "npm install", "ng serve --port 4200"],
+        },
+        {
+          n: 4,
+          title: "Arrancar el Panel de Administración",
+          desc: "Angular 21 en puerto 4201 (subdominio separado por seguridad)",
+          cmds: ["cd nexus-admin-web-app", "npm install", "ng serve --port 4201"],
+        },
+        {
+          n: 5,
+          title: "Build Android (opcional)",
+          desc: "Compilar como app nativa Android con Ionic + Capacitor 8",
+          cmds: [
+            "cd nexus-angular-app",
+            "ng build --configuration=production",
+            "npx cap sync android",
+            "npx cap open android  # Requiere Android Studio",
+          ],
+        }
+      ],
+      ctaText: "Ecosistema multiplataforma completo: marketplace, chollometro y publicidad B2B. Un único backend que sirve a 3 aplicaciones cliente con seguridad de nivel empresarial.",
+      ctaOrg: "Organización GitHub",
+      ctaAll: "Ver todos los proyectos",
+      viewSource: "Ver Código",
+      servicesDetails: {
+        "PostgreSQL": "Base de datos (Render DB)",
+        "Cloudinary": "Imágenes y vídeos CDN",
+        "Stripe": "Pagos y webhooks HMAC",
+        "Gmail SMTP": "Correo transaccional",
+      }
+    },
+    en: {
+      tagFullStack: "Full Stack",
+      tagCompleted: "Completed",
+      description: (
+        <>The ultimate savings platform: <strong className="text-white">second-hand marketplace</strong>, {" "}<strong className="text-white">community deal-sharing</strong> with Spark/Drip voting system and <strong className="text-white">B2B advertising</strong> for businesses, all in a single cross-platform ecosystem.</>
+      ),
+      bullets: [
+        "48 REST controllers + WebSocket STOMP",
+        "Angular 21 + Ionic 8 + Capacitor (Android)",
+        "Escrow payments with Stripe Payment Intents",
+        "2FA TOTP + Google OAuth + reCAPTCHA v3",
+        "Admin panel with 19 management modules",
+        "Gemini + Groq LLaMA support chatbot",
+        "GDPR compliant with double opt-in",
+        "Deploy: Render + Vercel CDN + Cloudinary",
+      ],
+      techTitle: "Technology Stack",
+      techSubtitle: "A single Spring Boot backend serving all client applications. No client communicates directly with PostgreSQL, Cloudinary, or Stripe.",
+      techClientTitle: "Client Layer — Vercel CDN",
+      techClientDetail1: "User App · Web + Android · Port 4200",
+      techClientDetail2: "Admin Panel · 19 modules · Port 4201",
+      techClientDetail3: "Marketing site & technical docs · Port 4321",
+      techBackendTitle: "Backend — Render.com · Docker · Port 8080",
+      techBackendDetail1: "7 auto tasks",
+      techServicesTitle: "External Services",
+      featuresTitle: "Key Features",
+      featuresSubtitle: "A complete ecosystem of 8 functional modules covering everything from e-commerce to moderation and advertising.",
+      features: [
+        {
+          title: "Second-Hand Marketplace",
+          desc: "Publish products, vehicles, and deals with Cloudinary gallery. Types: SALE, DONATION, and EXCHANGE. Unified search with synonym expansion and automatic 180-day validity.",
+          techs: ["Spring Boot", "Angular 21", "Cloudinary", "GPS / Geoloc", "PostgreSQL"],
+        },
+        {
+          title: "Chollometro — Spark/Drip System",
+          desc: "Spark (upvote) or Drip (downvote) voting to rank deals. A scheduler recalculates the sparkScore every 5 min. Sections: Flash, Free, Travel. Auto badges: NEW, GREAT_DEAL, EXPIRES_TODAY.",
+          techs: ["WebSocket STOMP", "Spring Scheduler", "Angular Signals", "Badge Engine"],
+        },
+        {
+          title: "Secure Payments with Stripe (Escrow)",
+          desc: "Payment Intents with escrow model: money is held until the buyer confirms receipt. Advertising contracts with Checkout Sessions. HMAC Webhooks. Coupons validated during checkout.",
+          techs: ["Stripe Payment Intents", "Stripe Checkout", "Webhooks HMAC", "Coupons"],
+        },
+        {
+          title: "Real-Time Chat (WebSocket STOMP)",
+          desc: "Private buyer-seller messaging with deterministic roomId. Supports TEXT, IMAGE, VIDEO, AUDIO, GIF, and PRICE_OFFER (price proposal with real-time accept/reject).",
+          techs: ["Spring WebSocket", "STOMP", "SockJS", "@stomp/stompjs 7.3"],
+        },
+        {
+          title: "Multi-Layer Authentication",
+          desc: "JWT with invalidation via jwtVersion, Google OAuth 2.0, 2FA TOTP with QR (ZXing + samstevens.totp), 6-digit Email OTP. BCrypt. reCAPTCHA v3 (0.5 threshold). Onboarding wizard.",
+          techs: ["JJWT 0.11.5", "Spring Security", "Google OAuth", "TOTP/ZXing", "reCAPTCHA v3"],
+        },
+        {
+          title: "Admin Panel — 19 Modules",
+          desc: "Independent Angular app on separate subdomain (ROLE_ADMIN). Dashboard, live statistics, moderation, returns, contracts, coupons, sponsorships, newsletter with automation, immutable audit log.",
+          techs: ["Angular 21", "TypeScript 5.9", "Vercel", "ROLE_ADMIN", "AuditLog"],
+        },
+        {
+          title: "AI Support Assistant",
+          desc: "Chatbot with two interchangeable providers: Google Gemini 1.5-flash and Groq LLaMA 3.3-70b. Automatic escalation to human support by email if the AI cannot resolve the query.",
+          techs: ["Google Gemini 1.5-flash", "Groq LLaMA 3.3-70b", "Gmail SMTP"],
+        },
+        {
+          title: "B2B Advertising for Businesses",
+          desc: "ROLE_EMPRESA requests BANNER or POST sponsorships. Admin approves and sets price; business pays with Stripe Checkout. Item appears with 'Sponsored' badge until expiration.",
+          techs: ["Stripe Checkout", "ROLE_EMPRESA", "Angular 21", "Role-Based Access"],
+        }
+      ],
+      galleryTitle: "Screenshots Gallery",
+      gallerySubtitle: "Real screenshots of the application in operation — browse categories to explore each module of the Nexus ecosystem.",
+      useCasesTitle: "Representative Use Cases",
+      useCasesSubtitle: "The most important flows of the system, fully implemented in the backend and in the two Angular applications.",
+      useCases: [
+        {
+          id: "CU-01",
+          title: "Purchase of a second-hand product",
+          actor: "Authenticated user (buyer)",
+          color: "border-violet-500/30 bg-violet-500/5",
+          badgeColor: "text-violet-400 bg-violet-500/10 border-violet-500/30",
+          steps: [
+            "Browse the marketplace and access the product details",
+            "Click 'Buy' → select delivery method (shipping or local pickup)",
+            "Enter delivery address → apply discount coupon (optional)",
+            "Backend creates a Stripe Payment Intent and returns clientSecret",
+            "User completes payment in the Stripe.js form",
+            "Stripe sends payment_intent.succeeded webhook → backend creates Purchase entity (PAID) and generates shipping QR code",
+            "Seller confirms shipment with tracking number",
+            "Buyer confirms receipt → payment released (escrow) → both parties can rate each other",
+          ],
+        },
+        {
+          id: "CU-02",
+          title: "Publishing and voting on a deal/offer",
+          actor: "Authenticated User or Business",
+          color: "border-yellow-500/30 bg-yellow-500/5",
+          badgeColor: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+          steps: [
+            "User accesses 'Publish deal' and completes the form",
+            "System automatically calculates the badge in @PreUpdate (NEW, HOT_DEAL, etc.)",
+            "Deal is published and visible on the chollometro",
+            "Users vote with Spark (positive) or Drip (negative)",
+            "A scheduler recalculates the sparkScore every 5 minutes",
+            "Top-rated deals rise in the main ranking",
+          ],
+        },
+        {
+          id: "CU-03",
+          title: "Advertising contracting by a business",
+          actor: "Authenticated business (ROLE_EMPRESA)",
+          color: "border-orange-500/30 bg-orange-500/5",
+          badgeColor: "text-orange-400 bg-orange-500/10 border-orange-500/30",
+          steps: [
+            "Business accesses 'Advertising / My contracts' and requests a sponsorship",
+            "Admin receives the request in DRAFT status and approves it with a price",
+            "System generates a Stripe Checkout Session",
+            "Business pays via Stripe Checkout (redirected to Stripe portal)",
+            "The checkout.session.completed webhook confirms the payment",
+            "Contract shifts to ACTIVE and the item gets the sponsored=true flag with expiration date",
+          ],
+        },
+        {
+          id: "CU-04",
+          title: "Registration and authentication with 2FA TOTP",
+          actor: "Visitor",
+          color: "border-emerald-500/30 bg-emerald-500/5",
+          badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+          steps: [
+            "Visitor fills in the form with username, email, password + reCAPTCHA",
+            "Backend validates the captcha and creates the User with BCrypt password",
+            "Sends 6-digit OTP to email → user verifies account",
+            "User accesses onboarding wizard and enables 2FA TOTP",
+            "Backend generates TOTP secret, creates QR with ZXing in base64",
+            "User scans QR with Google Authenticator",
+            "Next login: after validating credentials, backend responds with twoFactorRequired: true",
+            "User enters TOTP code → backend validates it → issues JWT with the role",
+          ],
+        }
+      ],
+      setupTitle: "How to Run the Project",
+      setupSubtitle: "The ecosystem is divided into 4 independent repositories that share the same Spring Boot backend.",
+      setupReqs: [
+        "Java 17 LTS installed on system",
+        "Node.js 20+ with Angular CLI 21",
+        "PostgreSQL 14+ (or access to Render DB)",
+        "Stripe account (test mode) with API keys",
+        "Cloudinary account for storage",
+        "Environment variables in application.properties",
+      ],
+      setupSteps: [
+        {
+          n: 1,
+          title: "Clone the Repositories",
+          cmds: [
+            "git clone https://github.com/SomosNexusApp/nexus-backend.git",
+            "git clone https://github.com/SomosNexusApp/nexus-angular-app.git",
+            "git clone https://github.com/SomosNexusApp/nexus-admin-web-app.git",
+          ],
+        },
+        {
+          n: 2,
+          title: "Configure the Backend",
+          desc: "Edit application.properties with your Stripe, Cloudinary and PostgreSQL credentials",
+          cmds: [
+            "cd nexus-backend",
+            "# spring.datasource.url=jdbc:postgresql://localhost:5432/nexus",
+            "# stripe.secret.key=sk_test_...",
+            "# cloudinary.url=cloudinary://api_key:api_secret@cloud_name",
+            "./mvnw spring-boot:run",
+          ],
+        },
+        {
+          n: 3,
+          title: "Start the User App",
+          desc: "Angular 21 + Ionic 8 on port 4200",
+          cmds: ["cd nexus-angular-app", "npm install", "ng serve --port 4200"],
+        },
+        {
+          n: 4,
+          title: "Start the Administration Panel",
+          desc: "Angular 21 on port 4201 (separate subdomain for security)",
+          cmds: ["cd nexus-admin-web-app", "npm install", "ng serve --port 4201"],
+        },
+        {
+          n: 5,
+          title: "Build Android (optional)",
+          desc: "Compile as a native Android app with Ionic + Capacitor 8",
+          cmds: [
+            "cd nexus-angular-app",
+            "ng build --configuration=production",
+            "npx cap sync android",
+            "npx cap open android  # Requires Android Studio",
+          ],
+        }
+      ],
+      ctaText: "Complete cross-platform ecosystem: marketplace, chollometro and B2B advertising. A single backend serving 3 client apps with enterprise-grade security.",
+      ctaOrg: "GitHub Organization",
+      ctaAll: "View all projects",
+      viewSource: "View Source",
+      servicesDetails: {
+        "PostgreSQL": "Database (Render DB)",
+        "Cloudinary": "Images & video CDN",
+        "Stripe": "Payments and HMAC webhooks",
+        "Gmail SMTP": "Transactional email",
+      }
+    }
+  };
+
+  if (!mounted) return null;
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 relative overflow-x-hidden font-sans selection:bg-violet-500/30">
@@ -326,17 +914,17 @@ export default function NexusAppPage() {
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 text-emerald-500 animate-pulse text-xs uppercase tracking-widest">
                 <FaDatabase size={10} />
-                <span>Accessing_Secure_File...</span>
+                <span>{t.accessingSecureFile}</span>
               </div>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="px-3 py-1.5 rounded-sm border border-violet-500/40 bg-violet-500/10 text-violet-300 text-xs font-mono uppercase tracking-widest flex items-center gap-2">
-              <FaTerminal size={10} /> Full Stack
+              <FaTerminal size={10} /> {text[language].tagFullStack}
             </span>
             <span className="px-3 py-1.5 rounded-sm border border-green-500/40 bg-green-500/10 text-green-300 text-xs font-mono uppercase tracking-widest flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              Completed
+              {text[language].tagCompleted}
             </span>
           </div>
         </motion.div>
@@ -359,23 +947,12 @@ export default function NexusAppPage() {
               <div className="relative bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl backdrop-blur-sm group hover:border-violet-500/30 transition-colors duration-500">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-violet-500 to-transparent opacity-60" />
                 <p className="text-lg text-zinc-300 leading-relaxed font-light">
-                  La plataforma de ahorro definitiva: <strong className="text-white">marketplace de segunda mano</strong>, 
-                  {" "}<strong className="text-white">chollometro comunitario</strong> con sistema de votos Spark/Drip 
-                  y <strong className="text-white">publicidad B2B</strong> para empresas, todo en un único ecosistema multiplataforma.
+                  {text[language].description}
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {[
-                  "48 REST controllers + WebSocket STOMP",
-                  "Angular 21 + Ionic 8 + Capacitor (Android)",
-                  "Pagos escrow con Stripe Payment Intents",
-                  "2FA TOTP + Google OAuth + reCAPTCHA v3",
-                  "Panel admin con 19 módulos de gestión",
-                  "IA de soporte con Gemini + Groq LLaMA",
-                  "Cumplimiento RGPD con double opt-in",
-                  "Deploy: Render + Vercel CDN + Cloudinary",
-                ].map((h, i) => (
+                {text[language].bullets.map((h, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-zinc-400">
                     <FaStar className="text-violet-500 mt-0.5 shrink-0" size={10} />
                     <span>{h}</span>
@@ -393,8 +970,8 @@ export default function NexusAppPage() {
                   <div className="absolute inset-0 bg-violet-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   <FaGithub size={20} className="relative z-10" />
                   <div className="flex flex-col text-left leading-none relative z-10">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase group-hover:text-violet-400">Repository</span>
-                    <span className="font-bold">View Source</span>
+                    <span className="text-[10px] font-mono text-zinc-500 uppercase group-hover:text-violet-400">{language === 'es' ? 'Repositorio' : 'Repository'}</span>
+                    <span className="font-bold">{text[language].viewSource}</span>
                   </div>
                 </a>
               </div>
@@ -442,8 +1019,8 @@ export default function NexusAppPage() {
           <SectionHead
             icon={FaLayerGroup}
             label="System Architecture"
-            title="Stack Tecnológico"
-            subtitle="Un único backend Spring Boot que sirve a todas las aplicaciones cliente. Ningún cliente habla directamente con PostgreSQL, Cloudinary ni Stripe."
+            title={text[language].techTitle}
+            subtitle={text[language].techSubtitle}
           />
 
           {/* Architecture diagram */}
@@ -451,13 +1028,13 @@ export default function NexusAppPage() {
             {/* Client layer */}
             <div className="p-5 border-b border-zinc-800">
               <p className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-4">
-                Capa de Cliente — Vercel CDN
+                {text[language].techClientTitle}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {[
-                  { title: "nexus-angular-app", sub: "Angular 21 + Ionic 8", detail: "App usuario · Web + Android · Puerto 4200", color: "border-violet-500/30 bg-violet-500/5" },
-                  { title: "nexus-admin-web-app", sub: "Angular 21", detail: "Panel de administración · 19 módulos · Puerto 4201", color: "border-emerald-500/30 bg-emerald-500/5" },
-                  { title: "nexus-web-about", sub: "Astro (estático)", detail: "Web informativa y docs técnica · Puerto 4321", color: "border-blue-500/30 bg-blue-500/5" },
+                  { title: "nexus-angular-app", sub: "Angular 21 + Ionic 8", detail: text[language].techClientDetail1, color: "border-violet-500/30 bg-violet-500/5" },
+                  { title: "nexus-admin-web-app", sub: "Angular 21", detail: text[language].techClientDetail2, color: "border-emerald-500/30 bg-emerald-500/5" },
+                  { title: "nexus-web-about", sub: "Astro (estático)", detail: text[language].techClientDetail3, color: "border-blue-500/30 bg-blue-500/5" },
                 ].map((app) => (
                   <div key={app.title} className={`rounded-lg border ${app.color} p-4`}>
                     <p className="font-bold text-white text-sm mb-1 font-mono">{app.title}</p>
@@ -476,7 +1053,7 @@ export default function NexusAppPage() {
             {/* Backend layer */}
             <div className="p-5 border-b border-zinc-800">
               <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-4">
-                Backend — Render.com · Docker · Puerto 8080
+                {text[language].techBackendTitle}
               </p>
               <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
                 <p className="font-bold text-white text-sm mb-3 font-mono">nexus-backend — Spring Boot 3.5.13 (Java 17)</p>
@@ -485,7 +1062,7 @@ export default function NexusAppPage() {
                     { v: "48 REST + 1 WS", l: "Controllers" },
                     { v: "44", l: "Services" },
                     { v: "JWT + 2FA + reCAPTCHA", l: "Security" },
-                    { v: "7 tareas auto", l: "Schedulers" },
+                    { v: text[language].techBackendDetail1, l: "Schedulers" },
                   ].map((s) => (
                     <div key={s.l} className="bg-zinc-950/50 rounded p-2 text-center">
                       <p className="text-xs font-bold text-emerald-300">{s.v}</p>
@@ -502,14 +1079,14 @@ export default function NexusAppPage() {
             {/* External services */}
             <div className="p-5">
               <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">
-                Servicios Externos
+                {text[language].techServicesTitle}
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                  { name: "PostgreSQL", detail: "Base de datos (Render DB)", color: "text-blue-400" },
-                  { name: "Cloudinary", detail: "Imágenes y vídeos CDN", color: "text-yellow-400" },
-                  { name: "Stripe", detail: "Pagos y webhooks HMAC", color: "text-indigo-400" },
-                  { name: "Gmail SMTP", detail: "Correo transaccional", color: "text-red-400" },
+                  { name: "PostgreSQL", detail: text[language].servicesDetails["PostgreSQL"], color: "text-blue-400" },
+                  { name: "Cloudinary", detail: text[language].servicesDetails["Cloudinary"], color: "text-yellow-400" },
+                  { name: "Stripe", detail: text[language].servicesDetails["Stripe"], color: "text-indigo-400" },
+                  { name: "Gmail SMTP", detail: text[language].servicesDetails["Gmail SMTP"], color: "text-red-400" },
                 ].map((s) => (
                   <div key={s.name} className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3 text-center">
                     <p className={`font-bold text-sm ${s.color}`}>{s.name}</p>
@@ -561,69 +1138,12 @@ export default function NexusAppPage() {
           <SectionHead
             icon={FaLightbulb}
             label="Modules"
-            title="Funcionalidades Clave"
-            subtitle="Un ecosistema completo de 8 módulos funcionales que cubren desde el comercio electrónico hasta la moderación y la publicidad."
+            title={text[language].featuresTitle}
+            subtitle={text[language].featuresSubtitle}
           />
 
           <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                icon: FaStore,
-                iconColor: "bg-violet-500/10 text-violet-400",
-                title: "Marketplace de Segunda Mano",
-                desc: "Publicación de productos, vehículos y ofertas con galería Cloudinary. Tipos: VENTA, DONACIÓN e INTERCAMBIO. Búsqueda unificada con expansión de sinónimos y vigencia automática de 180 días.",
-                techs: ["Spring Boot", "Angular 21", "Cloudinary", "GPS / Geoloc", "PostgreSQL"],
-              },
-              {
-                icon: FaBolt,
-                iconColor: "bg-yellow-500/10 text-yellow-400",
-                title: "Chollometro — Sistema Spark/Drip",
-                desc: "Votación Spark o Drip para rankear ofertas. Un scheduler recalcula el sparkScore cada 5 min. Secciones: Flash, Gratis, Viajes. Badges automáticos: NUEVA, CHOLLAZO, EXPIRA_HOY.",
-                techs: ["WebSocket STOMP", "Spring Scheduler", "Angular Signals", "Badge Engine"],
-              },
-              {
-                icon: FaShoppingCart,
-                iconColor: "bg-indigo-500/10 text-indigo-400",
-                title: "Pagos Seguros con Stripe (Escrow)",
-                desc: "Payment Intents con modelo escrow: el dinero se retiene hasta que el comprador confirma la recepción. Contratos publicitarios con Checkout Sessions. Webhooks HMAC. Cupones validados en checkout.",
-                techs: ["Stripe Payment Intents", "Stripe Checkout", "Webhooks HMAC", "Cupones"],
-              },
-              {
-                icon: FaComments,
-                iconColor: "bg-emerald-500/10 text-emerald-400",
-                title: "Chat en Tiempo Real (WebSocket STOMP)",
-                desc: "Mensajería privada comprador-vendedor con roomId determinista. Soporta TEXTO, IMAGEN, VIDEO, AUDIO, GIF y OFERTA_PRECIO (propuesta de precio con aceptación/rechazo en tiempo real).",
-                techs: ["Spring WebSocket", "STOMP", "SockJS", "@stomp/stompjs 7.3"],
-              },
-              {
-                icon: FaLock,
-                iconColor: "bg-red-500/10 text-red-400",
-                title: "Autenticación Multicapa",
-                desc: "JWT con invalidación por jwtVersion, Google OAuth 2.0, 2FA TOTP con QR (ZXing + samstevens.totp), Email OTP 6 dígitos. BCrypt. reCAPTCHA v3 (umbral 0.5). Wizard de onboarding.",
-                techs: ["JJWT 0.11.5", "Spring Security", "Google OAuth", "TOTP/ZXing", "reCAPTCHA v3"],
-              },
-              {
-                icon: FaShieldAlt,
-                iconColor: "bg-blue-500/10 text-blue-400",
-                title: "Panel Admin — 19 Módulos",
-                desc: "App Angular independiente en subdominio separado (ROLE_ADMIN). Dashboard, estadísticas en vivo, moderación, devoluciones, contratos, cupones, patrocinios, newsletter con automaciones, audit log inmutable.",
-                techs: ["Angular 21", "TypeScript 5.9", "Vercel", "ROLE_ADMIN", "AuditLog"],
-              },
-              {
-                icon: FaRocket,
-                iconColor: "bg-pink-500/10 text-pink-400",
-                title: "Asistente IA de Soporte",
-                desc: "Chatbot con dos proveedores intercambiables: Google Gemini 1.5-flash y Groq LLaMA 3.3-70b. Escalado automático a soporte humano por email si la IA no resuelve la consulta.",
-                techs: ["Google Gemini 1.5-flash", "Groq LLaMA 3.3-70b", "Gmail SMTP"],
-              },
-              {
-                icon: FaServer,
-                iconColor: "bg-orange-500/10 text-orange-400",
-                title: "Publicidad B2B para Empresas",
-                desc: "ROLE_EMPRESA solicita patrocinios BANNER o PUBLICACION. Admin aprueba y fija precio; empresa paga con Stripe Checkout. El ítem aparece con badge 'Patrocinado' hasta la expiración.",
-                techs: ["Stripe Checkout", "ROLE_EMPRESA", "Angular 21", "Role-Based Access"],
-              },
-            ].map((f, i) => (
+            {text[language].features.map((f, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
@@ -633,13 +1153,21 @@ export default function NexusAppPage() {
                 className="group relative bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl hover:border-violet-500/30 transition-all duration-300"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/3 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${f.iconColor}`}>
-                  <f.icon size={22} />
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${text[language].features[i].title.includes('Marketplace') || text[language].features[i].title.includes('Second-Hand') ? 'bg-violet-500/10 text-violet-400' : text[language].features[i].title.includes('Chollometro') || text[language].features[i].title.includes('Spark/Drip') ? 'bg-yellow-500/10 text-yellow-400' : text[language].features[i].title.includes('Stripe') ? 'bg-indigo-500/10 text-indigo-400' : text[language].features[i].title.includes('Chat') ? 'bg-emerald-500/10 text-emerald-400' : text[language].features[i].title.includes('Autenticación') || text[language].features[i].title.includes('Authentication') ? 'bg-red-500/10 text-red-400' : text[language].features[i].title.includes('Panel Admin') || text[language].features[i].title.includes('Admin Panel') ? 'bg-blue-500/10 text-blue-400' : text[language].features[i].title.includes('Asistente') || text[language].features[i].title.includes('AI Support') ? 'bg-pink-500/10 text-pink-400' : 'bg-orange-500/10 text-orange-400'}`}>
+                  {/* Let's map icons from the loop key index */}
+                  {i === 0 ? <FaStore size={22} /> :
+                   i === 1 ? <FaBolt size={22} /> :
+                   i === 2 ? <FaShoppingCart size={22} /> :
+                   i === 3 ? <FaComments size={22} /> :
+                   i === 4 ? <FaLock size={22} /> :
+                   i === 5 ? <FaShieldAlt size={22} /> :
+                   i === 6 ? <FaRocket size={22} /> :
+                   <FaServer size={22} />}
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-4">{f.desc}</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {f.techs.map((t) => (
+                  {text[language].features[i].techs.map((t) => (
                     <span key={t} className="text-[10px] font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">
                       {t}
                     </span>
@@ -660,8 +1188,8 @@ export default function NexusAppPage() {
           <SectionHead
             icon={FaServer}
             label="Screenshots"
-            title="Galería de Capturas"
-            subtitle="Capturas reales de la aplicación en funcionamiento — navega por categorías para explorar cada módulo del ecosistema Nexus."
+            title={text[language].galleryTitle}
+            subtitle={text[language].gallerySubtitle}
           />
 
           {/* Tab navigation */}
@@ -677,7 +1205,7 @@ export default function NexusAppPage() {
                 }`}
               >
                 <tab.icon size={11} />
-                {tab.label}
+                {tabLabels[language][tab.id]}
                 <span className={`ml-0.5 text-[9px] px-1 py-0.5 rounded ${activeTab === tab.id ? "bg-violet-500/20 text-violet-400" : "bg-zinc-800 text-zinc-600"}`}>
                   {GALLERY_DATA[tab.id].length}
                 </span>
@@ -703,7 +1231,7 @@ export default function NexusAppPage() {
                     <div>
                       {mobileItems.length > 0 && (
                         <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                          <FaServer size={10} /> Vista Desktop / PC
+                          <FaServer size={10} /> {language === 'es' ? 'Vista Desktop / PC' : 'Desktop / PC View'}
                         </p>
                       )}
                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -711,7 +1239,7 @@ export default function NexusAppPage() {
                           <DesktopMockup
                             key={idx}
                             src={img.src}
-                            caption={img.caption}
+                            caption={translateCaption(img.caption, language)}
                             url={img.url}
                           />
                         ))}
@@ -723,7 +1251,7 @@ export default function NexusAppPage() {
                     <div>
                       {desktopItems.length > 0 && (
                         <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                          <FaMobile size={10} /> Vista Responsive — Web &amp; Móvil
+                          <FaMobile size={10} /> {language === 'es' ? 'Vista Responsive — Web & Móvil' : 'Responsive View — Web & Mobile'}
                         </p>
                       )}
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 justify-items-center">
@@ -731,7 +1259,7 @@ export default function NexusAppPage() {
                           <MobileMockup
                             key={idx}
                             src={img.src}
-                            caption={img.caption}
+                            caption={translateCaption(img.caption, language)}
                           />
                         ))}
                       </div>
@@ -753,77 +1281,12 @@ export default function NexusAppPage() {
           <SectionHead
             icon={FaRocket}
             label="Use Cases"
-            title="Casos de Uso Representativos"
-            subtitle="Los flujos más importantes del sistema, implementados al completo en el backend y en las dos aplicaciones Angular."
+            title={text[language].useCasesTitle}
+            subtitle={text[language].useCasesSubtitle}
           />
 
           <div className="space-y-6">
-            {[
-              {
-                id: "CU-01",
-                title: "Compra de un producto de segunda mano",
-                actor: "Usuario autenticado (comprador)",
-                color: "border-violet-500/30 bg-violet-500/5",
-                badgeColor: "text-violet-400 bg-violet-500/10 border-violet-500/30",
-                steps: [
-                  "Navega el marketplace y accede al detalle del producto",
-                  "Pulsa 'Comprar' → selecciona método de entrega (envío o recogida)",
-                  "Introduce dirección de entrega → aplica cupón de descuento (opcional)",
-                  "El backend crea un Stripe Payment Intent y devuelve el clientSecret",
-                  "El usuario completa el pago en el formulario de Stripe.js",
-                  "Stripe envía el webhook payment_intent.succeeded → backend crea entidad Compra (PAGADO) y genera código QR de envío",
-                  "El vendedor confirma el envío con número de seguimiento",
-                  "El comprador confirma la recepción → pago liberado (escrow) → ambas partes pueden valorarse",
-                ],
-              },
-              {
-                id: "CU-02",
-                title: "Publicación y votación de una oferta/chollo",
-                actor: "Usuario o Empresa autenticados",
-                color: "border-yellow-500/30 bg-yellow-500/5",
-                badgeColor: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-                steps: [
-                  "El usuario accede a 'Publicar oferta' y completa el formulario",
-                  "El sistema calcula automáticamente el badge en @PreUpdate (NUEVA, CHOLLAZO, etc.)",
-                  "La oferta se publica y es visible en el chollometro",
-                  "Los usuarios votan con Spark (positivo) o Drip (negativo)",
-                  "Un scheduler recalcula el sparkScore cada 5 minutos",
-                  "Las ofertas más valoradas ascienden en el ranking principal",
-                ],
-              },
-              {
-                id: "CU-03",
-                title: "Contratación de publicidad por una empresa",
-                actor: "Empresa autenticada (ROLE_EMPRESA)",
-                color: "border-orange-500/30 bg-orange-500/5",
-                badgeColor: "text-orange-400 bg-orange-500/10 border-orange-500/30",
-                steps: [
-                  "La empresa accede a 'Publicidad / Mis contratos' y solicita un patrocinio",
-                  "El administrador recibe la solicitud en estado DRAFT y la aprueba con precio",
-                  "El sistema genera una Stripe Checkout Session",
-                  "La empresa paga mediante Stripe Checkout (redirección al portal de Stripe)",
-                  "El webhook checkout.session.completed confirma el pago",
-                  "El contrato pasa a ACTIVE y el ítem recibe el flag patrocinado=true con fecha de expiración",
-                ],
-              },
-              {
-                id: "CU-04",
-                title: "Registro y autenticación con 2FA TOTP",
-                actor: "Visitante",
-                color: "border-emerald-500/30 bg-emerald-500/5",
-                badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
-                steps: [
-                  "El visitante rellena el formulario con username, email y contraseña + reCAPTCHA",
-                  "El backend valida el captcha y crea el Usuario con contraseña BCrypt",
-                  "Envía OTP de 6 dígitos al email → el usuario verifica su cuenta",
-                  "El usuario accede al wizard de onboarding y activa 2FA TOTP",
-                  "El backend genera un secreto TOTP, crea el QR con ZXing en base64",
-                  "El usuario escanea el QR con Google Authenticator",
-                  "En el próximo login: tras validar credenciales, el backend responde con twoFactorRequired: true",
-                  "El usuario introduce el código TOTP → el backend lo valida → emite el JWT con el rol",
-                ],
-              },
-            ].map((uc) => (
+            {text[language].useCases.map((uc) => (
               <motion.div
                 key={uc.id}
                 initial={{ opacity: 0, x: -10 }}
@@ -865,19 +1328,12 @@ export default function NexusAppPage() {
           <SectionHead
             icon={FaCog}
             label="Setup"
-            title="Cómo Ejecutar el Proyecto"
-            subtitle="El ecosistema se divide en 4 repositorios independientes que comparten el mismo backend Spring Boot."
+            title={text[language].setupTitle}
+            subtitle={text[language].setupSubtitle}
           />
 
           <div className="grid md:grid-cols-2 gap-4 mb-8">
-            {[
-              "Java 17 LTS instalado en el sistema",
-              "Node.js 20+ con Angular CLI 21",
-              "PostgreSQL 14+ (o acceso a Render DB)",
-              "Cuenta Stripe (modo test) con claves API",
-              "Cuenta Cloudinary para almacenamiento",
-              "Variables de entorno en application.properties",
-            ].map((req, i) => (
+            {text[language].setupReqs.map((req, i) => (
               <div key={i} className="flex items-center gap-3 p-3.5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
                 <FaCheckCircle className="text-violet-500 shrink-0" size={14} />
                 <span className="text-sm text-zinc-300">{req}</span>
@@ -886,52 +1342,7 @@ export default function NexusAppPage() {
           </div>
 
           <div className="space-y-6">
-            {[
-              {
-                n: 1,
-                title: "Clonar los Repositorios",
-                cmds: [
-                  "git clone https://github.com/SomosNexusApp/nexus-backend.git",
-                  "git clone https://github.com/SomosNexusApp/nexus-angular-app.git",
-                  "git clone https://github.com/SomosNexusApp/nexus-admin-web-app.git",
-                ],
-              },
-              {
-                n: 2,
-                title: "Configurar el Backend",
-                desc: "Edita application.properties con tus credenciales de Stripe, Cloudinary y PostgreSQL",
-                cmds: [
-                  "cd nexus-backend",
-                  "# spring.datasource.url=jdbc:postgresql://localhost:5432/nexus",
-                  "# stripe.secret.key=sk_test_...",
-                  "# cloudinary.url=cloudinary://api_key:api_secret@cloud_name",
-                  "./mvnw spring-boot:run",
-                ],
-              },
-              {
-                n: 3,
-                title: "Arrancar la App de Usuario",
-                desc: "Angular 21 + Ionic 8 en puerto 4200",
-                cmds: ["cd nexus-angular-app", "npm install", "ng serve --port 4200"],
-              },
-              {
-                n: 4,
-                title: "Arrancar el Panel de Administración",
-                desc: "Angular 21 en puerto 4201 (subdominio separado por seguridad)",
-                cmds: ["cd nexus-admin-web-app", "npm install", "ng serve --port 4201"],
-              },
-              {
-                n: 5,
-                title: "Build Android (opcional)",
-                desc: "Compilar como app nativa Android con Ionic + Capacitor 8",
-                cmds: [
-                  "cd nexus-angular-app",
-                  "ng build --configuration=production",
-                  "npx cap sync android",
-                  "npx cap open android  # Requiere Android Studio",
-                ],
-              },
-            ].map((step) => (
+            {text[language].setupSteps.map((step) => (
               <div key={step.n} className="space-y-3">
                 <h4 className="text-base font-bold text-white flex items-center gap-3">
                   <span className="flex items-center justify-center w-7 h-7 rounded-full bg-violet-500/15 text-violet-400 font-mono text-sm border border-violet-500/30">
@@ -972,8 +1383,7 @@ export default function NexusAppPage() {
               Nexus<span className="text-violet-500">.</span>
             </h2>
             <p className="text-zinc-400 max-w-xl mx-auto mb-8 leading-relaxed">
-              Ecosistema multiplataforma completo: marketplace, chollometro y publicidad B2B. 
-              Un único backend que sirve a 3 aplicaciones cliente con seguridad de nivel empresarial.
+              {text[language].ctaText}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
@@ -983,14 +1393,14 @@ export default function NexusAppPage() {
                 className="flex items-center gap-3 px-8 py-4 bg-zinc-950 border border-zinc-700 text-white rounded-lg hover:border-violet-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)] transition-all"
               >
                 <FaGithub size={20} />
-                <span className="font-bold">Organización GitHub</span>
+                <span className="font-bold">{text[language].ctaOrg}</span>
                 <FaExternalLinkAlt size={12} className="text-zinc-500" />
               </a>
               <Link
                 href="/projects"
                 className="flex items-center gap-3 px-8 py-4 bg-violet-600/20 border border-violet-500/40 text-violet-300 rounded-lg hover:bg-violet-600/30 transition-all font-bold"
               >
-                Ver todos los proyectos
+                {text[language].ctaAll}
               </Link>
             </div>
           </div>

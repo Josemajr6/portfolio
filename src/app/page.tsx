@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import CyberHeader from "@/components/layout/CyberHeader";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import {
   FaGithub,
   FaLinkedin,
@@ -120,6 +121,7 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const { t, language, cvUrl, cvFilename } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -185,14 +187,14 @@ export default function Home() {
             <div className="relative">
               <div className="absolute -left-4 -top-4 w-12 h-12 md:w-20 md:h-20 border-l-2 border-t-2 border-emerald-500/20" />
               <span className="text-xs md:text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4 block">
-                // System Status: Ready
+                {t.systemReady}
               </span>
 
               <ScrollReveal mode="cyber-glitch" className="mb-6 md:mb-8">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight md:leading-none">
-                  Desarrollo <br />
+                  {t.introTitle1} <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-                    Inteligente.
+                    {t.introTitle2}
                   </span>
                 </h2>
               </ScrollReveal>
@@ -206,35 +208,63 @@ export default function Home() {
                   </div>
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                     <span className="text-emerald-500">//</span>
-                    ABOUT_ME
+                    {t.aboutMeTitle}
                   </h3>
                   <div className="prose prose-lg prose-invert text-zinc-300 leading-relaxed text-sm md:text-lg">
-                    <p className="font-light">
-                      Junior{" "}
-                      <strong className="font-bold text-white">
-                        Full Stack Developer
-                      </strong>{" "}
-                      especializado en el desarrollo de aplicaciones web y
-                      móviles. Construyo soluciones{" "}
-                      <strong className="font-bold text-white">
-                        end-to-end
-                      </strong>
-                      , desde la lógica backend hasta interfaces frontend
-                      modernas.
-                    </p>
-
-                    <p className="font-light mt-2">
-                      Enfocado en escribir{" "}
-                      <strong className="font-bold text-white">
-                        código limpio y escalable
-                      </strong>
-                      , orientado a{" "}
-                      <strong className="font-bold text-white">
-                        entornos de producción
-                      </strong>
-                      , mientras sigo ampliando mi stack y desarrollando
-                      proyectos reales.
-                    </p>
+                    {language === 'es' ? (
+                      <>
+                        <p className="font-light">
+                          Junior{" "}
+                          <strong className="font-bold text-white">
+                            Full Stack Developer
+                          </strong>{" "}
+                          especializado en el desarrollo de aplicaciones web y
+                          móviles. Construyo soluciones{" "}
+                          <strong className="font-bold text-white">
+                            end-to-end
+                          </strong>
+                          , desde la lógica backend hasta interfaces frontend
+                          modernas.
+                        </p>
+                        <p className="font-light mt-2">
+                          Enfocado en escribir{" "}
+                          <strong className="font-bold text-white">
+                            código limpio y escalable
+                          </strong>
+                          , orientado a{" "}
+                          <strong className="font-bold text-white">
+                            entornos de producción
+                          </strong>
+                          , mientras sigo ampliando mi stack y desarrollando
+                          proyectos reales.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="font-light">
+                          Junior{" "}
+                          <strong className="font-bold text-white">
+                            Full Stack Developer
+                          </strong>{" "}
+                          specializing in web and mobile application development. I build{" "}
+                          <strong className="font-bold text-white">
+                            end-to-end
+                          </strong>{" "}
+                          solutions, from backend logic to modern frontend interfaces.
+                        </p>
+                        <p className="font-light mt-2">
+                          Focused on writing{" "}
+                          <strong className="font-bold text-white">
+                            clean and scalable code
+                          </strong>
+                          , oriented towards{" "}
+                          <strong className="font-bold text-white">
+                            production environments
+                          </strong>
+                          , while continuing to expand my stack and develop real-world projects.
+                        </p>
+                      </>
+                    )}
                   </div>
                 </div>
               </SimpleCard>
@@ -248,7 +278,7 @@ export default function Home() {
             <span className="h-2 w-2 bg-indigo-500 rounded-full inline-block" />
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-2xl md:text-3xl font-bold text-white">
-                Arsenal Tecnológico
+                {t.techArsenalTitle}
               </h2>
             </ScrollReveal>
           </div>
@@ -261,14 +291,14 @@ export default function Home() {
         <Section id="projects">
           <div className="flex flex-col items-center mb-12 md:mb-16 text-center px-2">
             <span className="font-mono text-emerald-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 block">
-              // Selected Works
+              {t.selectedWorks}
             </span>
 
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
-                Misiones{" "}
+                {language === 'es' ? 'Misiones' : 'Featured'}{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-                  Destacadas
+                  {language === 'es' ? 'Destacadas' : 'Missions'}
                 </span>
               </h2>
             </ScrollReveal>
@@ -283,14 +313,14 @@ export default function Home() {
         <Section id="certifications" className="pb-20">
           <div className="flex flex-col items-center mb-12 text-center">
             <span className="font-mono text-yellow-500 text-[10px] md:text-xs tracking-[0.2em] uppercase mb-4 block">
-              // VALIDATION_TOKENS
+              {t.validationTokens}
             </span>
             <div className="flex items-center gap-3">
               <span className="h-2 w-2 bg-yellow-400 rounded-full inline-block" />
 
               <ScrollReveal mode="cyber-glitch">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
-                  Licencias & Certificaciones
+                  {t.certificationsTitle}
                 </h2>
               </ScrollReveal>
             </div>
@@ -308,7 +338,7 @@ export default function Home() {
 
             <ScrollReveal mode="cyber-glitch">
               <h2 className="text-2xl md:text-3xl font-bold text-white">
-                Log de Ejecución
+                {t.executionLog}
               </h2>
             </ScrollReveal>
           </div>
@@ -329,12 +359,12 @@ export default function Home() {
                   <div>
                     <div className="flex items-center gap-2 text-emerald-500 font-mono text-xs mb-2">
                       <span className="w-2 h-2 bg-emerald-500 rounded-full" />
-                      SECURE_CHANNEL_OPEN
+                      {t.secureChannelOpen}
                     </div>
 
                     <ScrollReveal mode="cyber-glitch">
                       <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter leading-none">
-                        INICIAR{" "}
+                        {language === 'es' ? 'INICIAR' : 'START'}{" "}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
                           UPLINK
                         </span>
@@ -354,10 +384,9 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2 space-y-6">
                     <p className="text-zinc-400 mb-6 font-light text-sm md:text-lg">
-                      ¿Tienes una vacante o un proyecto en mente? Despliega tu
-                      mensaje. Tiempo de respuesta estimado:{" "}
+                      {t.contactText}
                       <span className="text-emerald-400 font-mono">
-                        &lt;24h
+                        {t.contactHours}
                       </span>
                       .
                     </p>
@@ -374,7 +403,7 @@ export default function Home() {
                             </div>
                             <div>
                               <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
-                                Destinatario
+                                {t.recipient}
                               </span>
                               <div className="text-sm md:text-xl font-bold text-white font-mono tracking-tight group-hover:text-emerald-400 transition-colors break-all">
                                 josemajimenezrodriguez8@gmail.com
@@ -401,7 +430,7 @@ export default function Home() {
                             </div>
                             <div className="flex flex-col">
                               <span className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest">
-                                Llamada Directa
+                                {t.directCall}
                               </span>
                               <span className="font-bold text-white text-lg font-mono">
                                 +34 722 62 52 88
@@ -456,20 +485,20 @@ export default function Home() {
                             <FaTerminal />
                           </div>
                           <div className="font-mono text-zinc-500 text-xs mb-1">
-                            PROFILE_STATUS
+                            {t.profileStatus}
                           </div>
                           <div className="text-white font-bold text-lg md:text-xl tracking-widest group-hover:text-emerald-400 transition-colors">
-                            AVAILABLE
+                            {t.available}
                           </div>
                         </div>
                         <a
-                          href="/cv-JoseManuel.pdf"
-                          download="CV-JoseManuel-Jimenez.pdf"
+                          href={cvUrl}
+                          download={cvFilename}
                           className="bg-emerald-600 hover:bg-emerald-500 text-black p-4 md:p-6 text-center transition-colors cursor-pointer"
                         >
                           <div className="flex flex-col items-center gap-2">
                             <span className="font-black font-mono uppercase tracking-[0.2em] text-xs md:text-sm flex items-center gap-2">
-                              <FaFileDownload /> DOWNLOAD CV
+                              <FaFileDownload /> {t.downloadCV}
                             </span>
                           </div>
                         </a>
@@ -486,15 +515,15 @@ export default function Home() {
       <footer className="relative py-12 md:py-16 border-t border-emerald-900/30 bg-black overflow-hidden mt-10 md:mt-20">
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
           <div className="font-mono text-[10px] text-emerald-600 mb-4 tracking-[0.5em]">
-            /// END_OF_TRANSMISSION ///
+            {t.endOfTransmission}
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-base md:text-xl font-bold text-zinc-300">
             <div className="flex items-center gap-2">
-              <span>Desarrollado con</span>
+              <span>{t.developedWith}</span>
               <FaHeart className="text-red-600" size={20} />
             </div>
             <div className="flex items-center gap-2">
-              <span>por</span>
+              <span>{t.by}</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-black tracking-wide">
                 José Manuel Jiménez
               </span>
