@@ -1,8 +1,12 @@
 "use client";
-import { experienceData } from "@/data/experience";
+import { experienceDataES, experienceDataEN } from "@/data/experience";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function Timeline() {
+  const { language } = useLanguage();
+  const experienceData = language === "es" ? experienceDataES : experienceDataEN;
+
   return (
     <div className="relative max-w-3xl mx-auto px-4 py-12">
       

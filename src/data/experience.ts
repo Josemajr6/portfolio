@@ -65,9 +65,9 @@ export const experienceDataES: Experience[] = [
     company: "Ecentia Marketing",
     period: "06/2026 - Actualidad",
     description:
-      "Desarrollo de proyectos web usando Wordpress (Elementor) y Astro.",
+      "Desarrollo de proyectos web usando Shopify y Astro.",
     type: "work",
-    techs: ["WordPress", "Astro", "Elementor"],
+    techs: ["Shopify", "Astro"],
   },
 ];
 
@@ -128,9 +128,9 @@ export const experienceDataEN: Experience[] = [
     company: "Ecentia Marketing",
     period: "06/2026 - Present",
     description:
-      "Web project development using WordPress (Elementor) and Astro.",
+      "Web project development using Shopify and Astro.",
     type: "work",
-    techs: ["WordPress", "Astro", "Elementor"],
+    techs: ["Shopify", "Astro"],
   },
 ];
 

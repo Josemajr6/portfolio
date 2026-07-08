@@ -1,13 +1,18 @@
 "use client";
-import { projectsData } from "@/data/project"; // O "@/data/projects" revisa tu nombre de archivo
+import { projectsDataES } from "@/data/project";
+import { projectsDataEN } from "@/data/project_en";
 import ProjectCard from "../ProjectCard";
 import Link from "next/link";
 import { FaArrowRight, FaTerminal } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function FeaturedProjects() {
+  const { language } = useLanguage();
+  const projectsData = language === "es" ? projectsDataES : projectsDataEN;
   // Solo mostramos los primeros 4 proyectos destacados
   const featured = projectsData.filter(p => p.isFeatured).slice(0, 4);
+
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4">

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { FaRocket, FaCode, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useState } from "react";
 
+import { useLanguage } from "@/components/providers/LanguageProvider";
+
 // Variantes optimizadas (GPU accelerated)
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -43,6 +45,7 @@ const avatarVariants = {
 
 export default function HeroQuantum() {
   const [isHovered, setIsHovered] = useState(false);
+  const { language } = useLanguage();
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-zinc-950 flex flex-col justify-center border-b border-white/5 pt-20 md:pt-0">
@@ -101,7 +104,15 @@ export default function HeroQuantum() {
 
             {/* Descripción */}
             <motion.p variants={itemVariants} className="text-zinc-400 text-lg md:text-xl max-w-xl leading-relaxed mb-8">
-              Transformo ideas complejas en experiencias digitales fluidas. Especializado en <span className="text-zinc-200 font-medium">arquitectura escalable</span> e <span className="text-zinc-200 font-medium">interfaces inmersivas</span> para web y móvil.
+              {language === 'es' ? (
+                <>
+                  Transformo ideas complejas en experiencias digitales fluidas. Especializado en <span className="text-zinc-200 font-medium">arquitectura escalable</span> e <span className="text-zinc-200 font-medium">interfaces inmersivas</span> para web y móvil.
+                </>
+              ) : (
+                <>
+                  I transform complex ideas into fluid digital experiences. Specializing in <span className="text-zinc-200 font-medium">scalable architecture</span> and <span className="text-zinc-200 font-medium">immersive interfaces</span> for web and mobile.
+                </>
+              )}
             </motion.p>
 
             {/* Botones y Social */}
@@ -114,7 +125,7 @@ export default function HeroQuantum() {
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <FaRocket className={`transition-transform duration-300 ${isHovered ? 'rotate-45' : 'rotate-0'}`} />
-                  <span>Ver Proyectos</span>
+                  <span>{language === 'es' ? 'Ver Proyectos' : 'View Projects'}</span>
                 </span>
                 {/* Brillo al hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-200 to-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" />

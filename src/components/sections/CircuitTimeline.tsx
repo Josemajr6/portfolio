@@ -1,10 +1,14 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { experienceData, Experience } from "@/data/experience";
+import { experienceDataES, experienceDataEN, Experience } from "@/data/experience";
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from "framer-motion";
 import { FaBriefcase, FaGraduationCap, FaCalendarAlt, FaHashtag, FaBolt } from "react-icons/fa";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function CircuitTimeline() {
+  const { language } = useLanguage();
+  const experienceData = language === "es" ? experienceDataES : experienceDataEN;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
