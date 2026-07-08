@@ -60,14 +60,6 @@ const MobileApp = dynamic(() => import("@/components/mobile/MobileApp"), {
   ssr: false,
 });
 
-const MobileWelcome = dynamic(
-  () => import("@/components/mobile/MobileWelcome"),
-  {
-    loading: () => <div className="h-screen bg-black" />,
-    ssr: false,
-  },
-);
-
 function LoadingSpinner() {
   return (
     <div className="flex items-center justify-center py-40 min-h-[400px]">
@@ -119,7 +111,6 @@ SimpleCard.displayName = "SimpleCard";
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(true);
   const [mounted, setMounted] = useState(false);
   const { t, language, cvUrl, cvFilename } = useLanguage();
 
@@ -155,16 +146,7 @@ export default function Home() {
   if (!mounted) return null;
 
   if (isMobile) {
-    return (
-      <>
-        <AnimatePresence mode="wait">
-          {showWelcome && (
-            <MobileWelcome onComplete={() => setShowWelcome(false)} />
-          )}
-        </AnimatePresence>
-        {!showWelcome && <MobileApp />}
-      </>
-    );
+    return <MobileApp />;
   }
 
   return (
