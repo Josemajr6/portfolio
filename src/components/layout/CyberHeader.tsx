@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaTerminal, FaDownload, FaCodeBranch, FaHistory, FaCommentDots, FaCertificate } from "react-icons/fa";
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import LanguageSelector from "./LanguageSelector";
 
 export default function CyberHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -87,6 +88,9 @@ export default function CyberHeader() {
             </span>
             <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0" />
           </a>
+
+          {/* SELECTOR DE IDIOMA */}
+          <LanguageSelector id="header" />
         </nav>
       </div>
     </motion.header>

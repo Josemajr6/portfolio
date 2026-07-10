@@ -164,12 +164,32 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const browserLang = navigator.language || (navigator as any).userLanguage || "es";
-      const detectedLang: Language = browserLang.toLowerCase().startsWith("es") ? "es" : "en";
-      setLanguage(detectedLang);
+      const savedLang = localStorage.getItem("preferred_language") as Language;
+      let detectedLang: Language = "es";
+      if (savedLang === "es" || savedLang === "en") {
+        detectedLang = savedLang;
+      } else {
+        const browserLang = navigator.language || (navigator as { userLanguage?: string }).userLanguage || "es";
+        detectedLang = browserLang.toLowerCase().startsWith("es") ? "es" : "en";
+      }
+
+      if (detectedLang !== "es") {
+        setTimeout(() => {
+          setLanguage(detectedLang);
+        }, 0);
+      }
     }
-    setMounted(true);
+    setTimeout(() => {
+      setMounted(true);
+    }, 0);
   }, []);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("preferred_language", lang);
+    }
+  };
 
   const cvUrl = language === "es" ? "/CV-JoseManuelJimenez-ES.pdf" : "/CV-JoseManuelJimenez-EN.pdf";
   const cvFilename = language === "es" ? "CV-JoseManuelJimenez-ES.pdf" : "CV-JoseManuelJimenez-EN.pdf";
@@ -179,7 +199,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       value={{
         language,
         t: translations[language],
-        setLanguage,
+        setLanguage: handleSetLanguage,
         mounted,
         cvUrl,
         cvFilename,

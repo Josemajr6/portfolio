@@ -21,12 +21,14 @@ import MobileProjects from "./MobileProjects";
 import MobileCertifications from "./MobileCertifications";
 import Image from "next/image"; 
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import LanguageSelector from "@/components/layout/LanguageSelector";
 
 const MobileTopBar = ({ title }: { title: string }) => (
   <div className="fixed top-0 left-0 w-full h-14 bg-black/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-5 z-40">
     <span className="text-sm font-bold text-white tracking-wider font-mono uppercase">// {title}</span>
-    <div className="flex items-center gap-2">
-        <span className="text-[10px] text-emerald-500 animate-pulse">● ONLINE</span>
+    <div className="flex items-center gap-4">
+        <LanguageSelector id="mobile" />
+        <span className="text-[10px] text-emerald-500 animate-pulse hidden sm:inline-block">● ONLINE</span>
     </div>
   </div>
 );
@@ -264,7 +266,7 @@ export default function MobileApp() {
 
   return (
     <div className="min-h-screen bg-black text-zinc-200 pb-safe font-sans relative selection:bg-emerald-500/30">
-      {activeTab !== 'contact' && <MobileTopBar title={getTitle()} />}
+      <MobileTopBar title={getTitle()} />
       
       <main className="min-h-screen" ref={scrollRef}>
         <AnimatePresence mode="wait">
