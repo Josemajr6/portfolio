@@ -2,138 +2,149 @@ export interface Experience {
   id: string;
   role: string;
   company: string;
+  location?: string;
   period: string;
-  description: string;
+  description: string[];
   type: "work" | "education";
+  grade?: string;
+  inProgress?: boolean;
   techs?: string[];
 }
 
+// Ordenado del más reciente al más antiguo (igual que en el CV)
 export const experienceDataES: Experience[] = [
   {
-    id: "edu-1",
-    role: "CFGM Sistemas Microinformáticos y Redes",
-    company: "IES La Campiña",
-    period: "2022 - 2024",
-    description:
-      "Formación técnica base. Fundamentos sólidos de hardware, montaje de equipos, despliegue de redes locales y administración de sistemas operativos propietarios y libres.",
-    type: "education",
-    techs: ["Hardware", "Redes", "Windows Server", "Linux"],
-  },
-  {
-    id: "work-1",
-    role: "Técnico Informático",
-    company: "TECNIARAHAL QUITO SL",
-    period: "04/2024 - 06/2024",
-    description:
-      "Mantenimiento, reparación y configuración de equipos informáticos. Instalación de software y sistemas Windows/GNU-Linux. Resolución de incidencias técnicas y soporte directo a clientes.",
-    type: "work",
-    techs: ["Soporte", "Reparación", "Atención Cliente", "Sistemas"],
-  },
-  {
-    id: "edu-2",
-    role: "CFGS Desarrollo de Aplicaciones Multiplataforma",
-    company: "IES Francisco Rodríguez Marín",
-    period: "2024 - Actualidad",
-    description:
-      "Especialización avanzada en desarrollo de software. Arquitectura backend, diseño de bases de datos complejas y programación móvil nativa e híbrida.",
-    type: "education",
-    techs: ["Java", "Spring Boot", "Android", "Angular", "SQL"],
-  },
-  {
-    id: "work-2",
-    role: "Desarrollador web",
-    company: "Ayuntamiento de Arahal",
-    period: "01/2025 - 03/2025",
-    description:
-      "Instalación y configuración de servidores web en entorno GNU/Linux. Adaptación de aplicaciones web en PHP, gestión de servicios Apache y administración de bases de datos Oracle.",
-    type: "work",
-    techs: ["PHP", "Oracle", "Apache", "Linux"],
-  },
-  {
-    id: "work-3",
+    id: "work-everybind",
     role: "Desarrollador Full Stack",
-    company: "Everybind",
+    company: "EveryBind",
     period: "02/2026 - 06/2026",
-    description:
-      "Desarrollo de proyectos con Laravel y Angular. Creación de webs y gestión de contenidos mediante WordPress. Implementación de estrategias SEO y optimización web.",
+    description: [
+      "Desarrollo y mantenimiento de aplicaciones web con Laravel y Angular.",
+      "Creación y administración de sitios WordPress, optimización SEO y rendimiento.",
+    ],
     type: "work",
     techs: ["PHP", "Laravel", "Angular", "WordPress", "SEO"],
   },
   {
-    id: "work-4",
-    role: "Desarrollador Full Stack",
-    company: "Ecentia Marketing",
-    period: "06/2026 - Actualidad",
-    description:
-      "Desarrollo de proyectos web usando Shopify y Astro.",
+    id: "work-arahal",
+    role: "Desarrollador Web",
+    company: "Ayuntamiento de Arahal",
+    period: "01/2025 - 03/2025",
+    description: [
+      "Instalación y configuración de servidores web Apache en GNU/Linux.",
+      "Adaptación de aplicaciones web en PHP conectadas a bases de datos Oracle.",
+    ],
     type: "work",
-    techs: ["Shopify", "Astro"],
+    techs: ["PHP", "Oracle", "Apache", "Linux"],
+  },
+  {
+    id: "work-tecniarahal",
+    role: "Técnico Informático",
+    company: "Tecniarahal Quito S.L.",
+    period: "04/2024 - 06/2024",
+    description: [
+      "Mantenimiento de equipos, instalación de sistemas y redes, y soporte técnico a clientes.",
+    ],
+    type: "work",
+    techs: ["Soporte", "Sistemas", "Redes"],
+  },
+  {
+    id: "edu-daw",
+    role: "CFGS Desarrollo de Aplicaciones Web",
+    company: "Digitech FP (online)",
+    period: "2026 - 2027",
+    description: [],
+    type: "education",
+    inProgress: true,
+  },
+  {
+    id: "edu-dam",
+    role: "CFGS Desarrollo de Aplicaciones Multiplataforma",
+    company: "IES Francisco Rodríguez Marín",
+    location: "Osuna",
+    period: "2024 - 2026",
+    description: [],
+    type: "education",
+    grade: "9,00",
+  },
+  {
+    id: "edu-smr",
+    role: "CFGM Sistemas Microinformáticos y Redes",
+    company: "IES La Campiña",
+    location: "Arahal",
+    period: "2022 - 2024",
+    description: [],
+    type: "education",
+    grade: "8,90",
   },
 ];
 
 export const experienceDataEN: Experience[] = [
   {
-    id: "edu-1",
-    role: "CFGM Microcomputer Systems and Networks",
-    company: "IES La Campiña",
-    period: "2022 - 2024",
-    description:
-      "Basic technical training. Solid fundamentals of hardware, computer assembly, local network deployment, and administration of proprietary and free operating systems.",
-    type: "education",
-    techs: ["Hardware", "Networks", "Windows Server", "Linux"],
-  },
-  {
-    id: "work-1",
-    role: "IT Technician",
-    company: "TECNIARAHAL QUITO SL",
-    period: "04/2024 - 06/2024",
-    description:
-      "Maintenance, repair, and configuration of computer equipment. Installation of software and Windows/GNU-Linux systems. Technical incident resolution and direct customer support.",
-    type: "work",
-    techs: ["Support", "Repair", "Customer Support", "Systems"],
-  },
-  {
-    id: "edu-2",
-    role: "CFGS Multiplatform Application Development",
-    company: "IES Francisco Rodríguez Marín",
-    period: "2024 - Present",
-    description:
-      "Advanced specialization in software development. Backend architecture, complex database design, and native and hybrid mobile programming.",
-    type: "education",
-    techs: ["Java", "Spring Boot", "Android", "Angular", "SQL"],
-  },
-  {
-    id: "work-2",
-    role: "Web Developer",
-    company: "Arahal Town Hall",
-    period: "01/2025 - 03/2025",
-    description:
-      "Installation and configuration of web servers in GNU/Linux environments. Adaptation of PHP web applications, Apache service management, and Oracle database administration.",
-    type: "work",
-    techs: ["PHP", "Oracle", "Apache", "Linux"],
-  },
-  {
-    id: "work-3",
+    id: "work-everybind",
     role: "Full Stack Developer",
-    company: "Everybind",
+    company: "EveryBind",
     period: "02/2026 - 06/2026",
-    description:
-      "Project development using Laravel and Angular. Website creation and content management through WordPress. Implementation of SEO strategies and web optimization.",
+    description: [
+      "Developed and maintained web applications with Laravel and Angular.",
+      "Built and managed WordPress sites, improving SEO and performance.",
+    ],
     type: "work",
     techs: ["PHP", "Laravel", "Angular", "WordPress", "SEO"],
   },
   {
-    id: "work-4",
-    role: "Full Stack Developer",
-    company: "Ecentia Marketing",
-    period: "06/2026 - Present",
-    description:
-      "Web project development using Shopify and Astro.",
+    id: "work-arahal",
+    role: "Web Developer",
+    company: "Arahal City Council",
+    period: "01/2025 - 03/2025",
+    description: [
+      "Installed and configured Apache web servers on GNU/Linux.",
+      "Adapted PHP web applications connected to Oracle databases.",
+    ],
     type: "work",
-    techs: ["Shopify", "Astro"],
+    techs: ["PHP", "Oracle", "Apache", "Linux"],
+  },
+  {
+    id: "work-tecniarahal",
+    role: "IT Technician",
+    company: "Tecniarahal Quito S.L.",
+    period: "04/2024 - 06/2024",
+    description: [
+      "Computer maintenance, system and network setup, and customer IT support.",
+    ],
+    type: "work",
+    techs: ["Support", "Systems", "Networking"],
+  },
+  {
+    id: "edu-daw",
+    role: "Higher VET Diploma in Web Application Development",
+    company: "Digitech FP (online)",
+    period: "2026 - 2027",
+    description: [],
+    type: "education",
+    inProgress: true,
+  },
+  {
+    id: "edu-dam",
+    role: "Higher VET Diploma in Multiplatform Application Development",
+    company: "IES Francisco Rodríguez Marín",
+    location: "Osuna",
+    period: "2024 - 2026",
+    description: [],
+    type: "education",
+    grade: "9.00/10",
+  },
+  {
+    id: "edu-smr",
+    role: "VET Diploma in Microcomputer Systems and Networks",
+    company: "IES La Campiña",
+    location: "Arahal",
+    period: "2022 - 2024",
+    description: [],
+    type: "education",
+    grade: "8.90/10",
   },
 ];
 
 // Default fallback export
 export const experienceData = experienceDataES;
-

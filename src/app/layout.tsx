@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next"; // Importamos Viewport también
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
-import CyberCursor from "@/components/ui/CyberCursor";
-import WelcomeScreen from "@/components/layout/WelcomeScreen";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 
@@ -21,13 +19,19 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+  display: "swap",
+});
+
 // --- SEO PROFESIONAL ---
 // Define aquí tu URL real cuando la tengas (ej: https://josemajr6.dev)
 // Si no la tienes aún, usa la de Vercel, pero cámbiala antes de producción.
 const DOMAIN = "https://josemajr6.me";
 
 export const viewport: Viewport = {
-  themeColor: "#09090b", // Coincide con bg-zinc-950
+  themeColor: "#13213f", // Coincide con --navy
   colorScheme: "dark",
 };
 
@@ -145,10 +149,10 @@ export default function RootLayout({
       "https://linkedin.com/in/josemajr6",
     ],
     jobTitle: "Desarrollador Full Stack",
-    worksFor: {
-      "@type": "Organization",
-      name: "Everybind",
-    },
+    alumniOf: [
+      { "@type": "EducationalOrganization", name: "IES Francisco Rodríguez Marín" },
+      { "@type": "EducationalOrganization", name: "IES La Campiña" },
+    ],
     address: {
       "@type": "PostalAddress",
       addressLocality: "Sevilla",
@@ -176,14 +180,11 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${bricolage.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <LanguageProvider>
-          <ThemeProvider>
-            <CyberCursor />
-            <main className="relative z-0">{children}</main>
-          </ThemeProvider>
+          <ThemeProvider>{children}</ThemeProvider>
         </LanguageProvider>
       </body>
     </html>

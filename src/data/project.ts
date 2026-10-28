@@ -1410,7 +1410,7 @@ export const projectsDataES: Project[] = [
         {
           title: "Clonar Repositorio",
           commands: [
-            "git clone https://github.com/ecentia/gran-zona-marciana.git",
+            "git clone https://github.com/Josemajr6/GranZonaMarciana.git",
           ],
         },
         {

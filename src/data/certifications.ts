@@ -12,7 +12,7 @@ export interface Certification {
 export const certificationsDataES: Certification[] = [
   {
     id: "udemy-flutter",
-    title: "Curso completo de Flutter y Dart.",
+    title: "Curso completo de Flutter y Dart",
     issuer: "Udemy",
     date: "may. 2026",
     image: "/images/issuers/udemy.webp",
@@ -35,9 +35,20 @@ export const certificationsDataES: Certification[] = [
     linkText: "Ver Certificado",
   },
   {
+    id: "santander-ia",
+    title: "Google: Inteligencia Artificial y productividad",
+    issuer: "Santander Open Academy",
+    date: "feb. 2025",
+    image: "/images/issuers/santander.webp",
+    pdfUrl: "/certifications/santander_ia_productividad.pdf",
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
+    linkText: "Ver Certificado",
+  },
+  {
     id: "cisco-js",
     title: "JavaScript Essentials 1",
-    issuer: "Cisco",
+    issuer: "Cisco Networking Academy",
     date: "dic. 2024",
     image: "/images/issuers/cisco.webp",
     pdfUrl:
@@ -51,7 +62,7 @@ export const certificationsDataES: Certification[] = [
 export const certificationsDataEN: Certification[] = [
   {
     id: "udemy-flutter",
-    title: "Complete Course of Flutter and Dart.",
+    title: "Complete Flutter and Dart Course",
     issuer: "Udemy",
     date: "May 2026",
     image: "/images/issuers/udemy.webp",
@@ -63,7 +74,7 @@ export const certificationsDataEN: Certification[] = [
   },
   {
     id: "udemy-ts",
-    title: "Complete Course of TypeScript. From Bases to Practice.",
+    title: "Complete TypeScript Course: From Basics to Practice",
     issuer: "Udemy",
     date: "Dec 2025",
     image: "/images/issuers/udemy.webp",
@@ -74,9 +85,20 @@ export const certificationsDataEN: Certification[] = [
     linkText: "View Certificate",
   },
   {
+    id: "santander-ia",
+    title: "Google: Artificial Intelligence and Productivity",
+    issuer: "Santander Open Academy",
+    date: "Feb 2025",
+    image: "/images/issuers/santander.webp",
+    pdfUrl: "/certifications/santander_ia_productividad.pdf",
+    color:
+      "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
+    linkText: "View Certificate",
+  },
+  {
     id: "cisco-js",
     title: "JavaScript Essentials 1",
-    issuer: "Cisco",
+    issuer: "Cisco Networking Academy",
     date: "Dec 2024",
     image: "/images/issuers/cisco.webp",
     pdfUrl:

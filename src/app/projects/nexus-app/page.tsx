@@ -2,63 +2,47 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BackButton from "@/components/ui/BackButton";
-
+import SkipLink from "@/components/layout/SkipLink";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
+import Reveal from "@/components/ui/Reveal";
+import { projectColor } from "@/data/projectColors";
 
 import {
   FaGithub,
-  FaDatabase,
-  FaLayerGroup,
-  FaServer,
-  FaTerminal,
-  FaCheckCircle,
-  FaStar,
   FaRocket,
-  FaLightbulb,
   FaLock,
   FaShoppingCart,
   FaComments,
   FaMobile,
   FaShieldAlt,
-  FaCog,
   FaUsersCog,
   FaStore,
   FaBolt,
-  FaExternalLinkAlt,
 } from "react-icons/fa";
 import { SiDocker, SiStripe, SiIonic } from "react-icons/si";
 import { useLanguage } from "@/components/providers/LanguageProvider";
-import { useEffect } from "react";
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
 const DesktopMockup = ({
   src,
   caption,
-  url,
 }: {
   src: string;
   caption: string;
   url?: string;
 }) => (
-  <div className="flex flex-col gap-3 group">
-    <div className="relative rounded-xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950 transition-all duration-300 group-hover:border-emerald-500/40 group-hover:shadow-emerald-500/10">
-      {/* Browser chrome */}
-      <div className="bg-zinc-900 border-b border-zinc-800 px-4 py-2.5 flex items-center gap-2.5">
-        <div className="flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="bg-zinc-800 text-zinc-500 text-[10px] font-mono px-3 py-0.5 rounded-sm truncate max-w-[200px]">
-            {url ?? "nexus-app.vercel.app"}
-          </div>
-        </div>
+  <figure className="flex flex-col gap-3">
+    <div className="relative rounded-2xl overflow-hidden bg-cream shadow-2xl transition-transform duration-300 hover:-translate-y-1">
+      <div className="flex items-center gap-1.5 px-4 py-2.5">
+        <span className="w-2.5 h-2.5 rounded-full bg-[#ff6b5f]" />
+        <span className="w-2.5 h-2.5 rounded-full bg-[#f5c451]" />
+        <span className="w-2.5 h-2.5 rounded-full bg-[#5cc66a]" />
       </div>
-      <div className="relative" style={{ aspectRatio: "16/10" }}>
+      <div className="relative bg-[#0b1428]" style={{ aspectRatio: "16/10" }}>
         <Image
           src={src}
           alt={caption}
@@ -68,66 +52,50 @@ const DesktopMockup = ({
         />
       </div>
     </div>
-    <p className="text-xs text-zinc-500 font-mono text-center leading-relaxed px-2">
-      {caption}
-    </p>
-  </div>
+    <figcaption className="text-sm text-muted leading-relaxed px-1">{caption}</figcaption>
+  </figure>
 );
 
 const MobileMockup = ({ src, caption }: { src: string; caption: string }) => (
-  <div className="flex flex-col items-center gap-3 group">
+  <figure className="flex flex-col items-center gap-3">
     <div
-      className="relative mx-auto bg-zinc-900 rounded-[40px] p-2.5 shadow-2xl border-[2px] border-zinc-700 transition-all duration-300 group-hover:border-emerald-500/50"
-      style={{ width: 200 }}
+      className="relative mx-auto bg-[#0b1428] rounded-[36px] p-2 shadow-2xl transition-transform duration-300 hover:-translate-y-1"
+      style={{ width: 190 }}
     >
-      {/* Dynamic Island */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-zinc-900 rounded-b-2xl z-20" />
-      <div className="relative bg-zinc-950 rounded-[32px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
-        <Image
-          src={src}
-          alt={caption}
-          fill
-          className="object-contain object-center"
-          sizes="200px"
-        />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-[#0b1428] rounded-b-xl z-20" />
+      <div className="relative bg-black rounded-[28px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
+        <Image src={src} alt={caption} fill className="object-contain object-center" sizes="190px" />
       </div>
-      {/* Home indicator */}
-      <div className="mt-1.5 mx-auto w-20 h-1 bg-zinc-600 rounded-full" />
-      {/* Buttons */}
-      <div className="absolute -left-[3px] top-24 w-[3px] h-8 bg-zinc-700 rounded-l" />
-      <div className="absolute -left-[3px] top-36 w-[3px] h-12 bg-zinc-700 rounded-l" />
-      <div className="absolute -right-[3px] top-32 w-[3px] h-14 bg-zinc-700 rounded-r" />
     </div>
-    <p className="text-xs text-zinc-500 font-mono text-center max-w-[200px] leading-relaxed">
-      {caption}
-    </p>
-  </div>
+    <figcaption className="text-sm text-muted text-center max-w-[190px] leading-relaxed">{caption}</figcaption>
+  </figure>
 );
 
-/* ─────────────────── section heading component ─────────────────── */
+/* ─────────────────── sección con título a la izquierda ─────────────────── */
 const SectionHead = ({
-  icon: Icon,
-  label,
+  id,
   title,
   subtitle,
+  children,
 }: {
-  icon: React.ElementType;
-  label: string;
+  id: string;
   title: string;
   subtitle?: string;
+  children: React.ReactNode;
 }) => (
-  <div className="mb-12">
-    <div className="flex items-center gap-2 text-emerald-500 font-mono text-xs uppercase tracking-widest mb-3">
-      <Icon size={12} />
-      <span>{label}</span>
+  <section aria-labelledby={id} className="py-12 sm:py-16 border-t border-line">
+    <div className="grid md:grid-cols-[16rem_1fr] gap-6 md:gap-10">
+      <h2 id={id} className="display-tight text-3xl font-bold text-albero break-words">
+        {title}
+      </h2>
+      <div className="min-w-0">
+        {subtitle && <p className="text-lg text-muted leading-relaxed mb-8 max-w-3xl">{subtitle}</p>}
+        {children}
+      </div>
     </div>
-    <h2 className="text-3xl md:text-4xl font-black text-white mb-3">{title}</h2>
-    {subtitle && (
-      <p className="text-zinc-400 max-w-3xl text-base leading-relaxed">{subtitle}</p>
-    )}
-    <div className="mt-4 h-[1px] bg-zinc-800" />
-  </div>
+  </section>
 );
+
 
 /* ──────────────────────────── page ──────────────────────────── */
 
@@ -461,10 +429,10 @@ const GALLERY_DATA: Record<GalleryTab, { src: string; caption: string; type: "de
 
 export default function NexusAppPage() {
   const [activeTab, setActiveTab] = useState<GalleryTab>("main");
-  const { language, t, mounted } = useLanguage();
+  const { language, mounted } = useLanguage();
 
   useEffect(() => {
-    document.title = "Nexus | José Manuel";
+    document.title = "Nexus App | José Manuel Jiménez";
   }, []);
 
   const text = {
@@ -472,7 +440,7 @@ export default function NexusAppPage() {
       tagFullStack: "Full Stack",
       tagCompleted: "Completado",
       description: (
-        <>La plataforma de ahorro definitiva: <strong className="text-white">marketplace de segunda mano</strong>, {" "}<strong className="text-white">chollometro comunitario</strong> con sistema de votos Spark/Drip y <strong className="text-white">publicidad B2B</strong> para empresas, todo en un único ecosistema multiplataforma.</>
+        <>La plataforma de ahorro definitiva: <strong className="font-bold text-ink">marketplace de segunda mano</strong>, {" "}<strong className="font-bold text-ink">chollometro comunitario</strong> con sistema de votos Spark/Drip y <strong className="font-bold text-ink">publicidad B2B</strong> para empresas, todo en un único ecosistema multiplataforma.</>
       ),
       bullets: [
         "48 controladores REST + WebSocket STOMP",
@@ -678,7 +646,7 @@ export default function NexusAppPage() {
       tagFullStack: "Full Stack",
       tagCompleted: "Completed",
       description: (
-        <>The ultimate savings platform: <strong className="text-white">second-hand marketplace</strong>, {" "}<strong className="text-white">community deal-sharing</strong> with Spark/Drip voting system and <strong className="text-white">B2B advertising</strong> for businesses, all in a single cross-platform ecosystem.</>
+        <>The ultimate savings platform: <strong className="font-bold text-ink">second-hand marketplace</strong>, {" "}<strong className="font-bold text-ink">community deal-sharing</strong> with Spark/Drip voting system and <strong className="font-bold text-ink">B2B advertising</strong> for businesses, all in a single cross-platform ecosystem.</>
       ),
       bullets: [
         "48 REST controllers + WebSocket STOMP",
@@ -884,528 +852,356 @@ export default function NexusAppPage() {
 
   if (!mounted) return null;
 
+  const es = language === "es";
+  const NEXUS_COLOR = projectColor("nexus-app");
+
+  const stats = [
+    { v: "48+", l: es ? "Controladores REST" : "REST controllers" },
+    { v: "4", l: es ? "Aplicaciones" : "Apps" },
+    { v: "19", l: es ? "Módulos de admin" : "Admin modules" },
+    { v: "RGPD", l: es ? "Cumplimiento" : "Compliant" },
+  ];
+
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100 relative overflow-x-hidden font-sans selection:bg-violet-500/30">
-      <BackButton />
+    <div className="relative min-h-screen overflow-x-clip">
+      <SkipLink />
+      <SiteHeader />
 
-      {/* Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-violet-500/5 blur-[120px]" />
-        <div className="absolute top-[200px] right-0 w-[400px] h-[400px] bg-emerald-500/3 blur-[100px]" />
-      </div>
+      <main id="main" tabIndex={-1} className="focus:outline-none pt-24 sm:pt-28 pb-16">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+          <BackButton />
 
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
+          {/* ── CABECERA ── */}
+          <header
+            style={{ backgroundColor: NEXUS_COLOR }}
+            className="relative mt-6 overflow-hidden rounded-[2.5rem] text-ink"
+          >
+            <div className="relative z-10 p-6 sm:p-10 md:p-14 md:pb-10 max-w-3xl">
+              <p className="text-sm font-bold uppercase tracking-[0.14em] text-ink/70">
+                {text[language].tagFullStack} · {text[language].tagCompleted} · {es ? "Proyecto final de DAM" : "Final degree project"}
+              </p>
+              <h1 className="mt-3 display-tight font-bold text-6xl sm:text-7xl md:text-8xl">Nexus App</h1>
+              <p className="mt-5 text-lg sm:text-xl leading-relaxed text-ink/85">{text[language].description}</p>
 
-        {/* ── BREADCRUMB ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="border-b border-zinc-800 pb-6 mb-16 flex flex-col md:flex-row justify-between items-end gap-4"
-        >
-          <div className="space-y-2 font-mono">
-            <div className="flex items-center gap-2 text-xs md:text-sm text-zinc-500">
-              <span className="text-emerald-500 font-bold">root</span>
-              <span>/</span>
-              <span>projects</span>
-              <span>/</span>
-              <span className="text-violet-300 font-bold bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">nexus-app</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-emerald-500 animate-pulse text-xs uppercase tracking-widest">
-                <FaDatabase size={10} />
-                <span>{t.accessingSecureFile}</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="px-3 py-1.5 rounded-sm border border-violet-500/40 bg-violet-500/10 text-violet-300 text-xs font-mono uppercase tracking-widest flex items-center gap-2">
-              <FaTerminal size={10} /> {text[language].tagFullStack}
-            </span>
-            <span className="px-3 py-1.5 rounded-sm border border-green-500/40 bg-green-500/10 text-green-300 text-xs font-mono uppercase tracking-widest flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              {text[language].tagCompleted}
-            </span>
-          </div>
-        </motion.div>
-
-        {/* ── HERO ── */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-24"
-        >
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div>
-                <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(139,92,246,0.15)]">
-                  Nexus<span className="text-violet-500">.</span>
-                </h1>
-              </div>
-
-              <div className="relative bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl backdrop-blur-sm group hover:border-violet-500/30 transition-colors duration-500">
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-violet-500 to-transparent opacity-60" />
-                <p className="text-lg text-zinc-300 leading-relaxed font-light">
-                  {text[language].description}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {text[language].bullets.map((h, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-zinc-400">
-                    <FaStar className="text-violet-500 mt-0.5 shrink-0" size={10} />
-                    <span>{h}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap gap-4 pt-2">
+              <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href="https://github.com/SomosNexusApp/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative overflow-hidden flex items-center gap-3 px-7 py-3.5 bg-zinc-950 border border-zinc-700 text-white rounded transition-all group hover:border-violet-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                  className="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-ink text-cream font-bold hover:bg-ink/85 transition-colors"
                 >
-                  <div className="absolute inset-0 bg-violet-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <FaGithub size={20} className="relative z-10" />
-                  <div className="flex flex-col text-left leading-none relative z-10">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase group-hover:text-violet-400">{language === 'es' ? 'Repositorio' : 'Repository'}</span>
-                    <span className="font-bold">{text[language].viewSource}</span>
-                  </div>
+                  <FaGithub aria-hidden="true" size={18} />
+                  {text[language].viewSource}
                 </a>
               </div>
             </div>
 
-            {/* Hero image */}
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600/20 to-emerald-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-2xl">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent_70%)]" />
-                <Image
-                  src="/images/projects/nexus/nexus.webp"
-                  alt="Nexus App"
-                  fill
-                  className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
-                />
-                {/* CRT scanlines */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none z-20 mix-blend-overlay opacity-30" />
-              </div>
-              {/* Floating stats */}
-              <div className="absolute -bottom-4 -right-4 grid grid-cols-2 gap-2">
-                {[
-                  { v: "48+", l: "Controllers" },
-                  { v: "4", l: "Subapps" },
-                  { v: "19", l: "Admin Modules" },
-                  { v: "RGPD", l: "Compliant" },
-                ].map((s) => (
-                  <div key={s.l} className="bg-zinc-900/90 border border-zinc-800 rounded-lg p-2.5 text-center backdrop-blur-sm">
-                    <div className="text-lg font-black text-violet-400">{s.v}</div>
-                    <div className="text-[10px] font-mono text-zinc-500 uppercase">{s.l}</div>
-                  </div>
-                ))}
-              </div>
+            <div className="relative mx-6 sm:mx-10 md:ml-auto md:mr-14 md:w-[70%] h-56 sm:h-80 md:h-[22rem] rounded-t-2xl overflow-hidden bg-ink shadow-[0_-20px_60px_-20px_rgba(19,33,63,0.5)]">
+              <Image
+                src="/images/projects/nexus/nexus.webp"
+                alt={es ? "Portada de Nexus App" : "Nexus App cover"}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 70vw"
+                className="object-contain p-3"
+              />
             </div>
-          </div>
-        </motion.section>
+          </header>
 
-        {/* ── TECH STACK ── */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <SectionHead
-            icon={FaLayerGroup}
-            label="System Architecture"
-            title={text[language].techTitle}
-            subtitle={text[language].techSubtitle}
-          />
-
-          {/* Architecture diagram */}
-          <div className="mb-10 rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden">
-            {/* Client layer */}
-            <div className="p-5 border-b border-zinc-800">
-              <p className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-4">
-                {text[language].techClientTitle}
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {[
-                  { title: "nexus-angular-app", sub: "Angular 21 + Ionic 8", detail: text[language].techClientDetail1, color: "border-violet-500/30 bg-violet-500/5" },
-                  { title: "nexus-admin-web-app", sub: "Angular 21", detail: text[language].techClientDetail2, color: "border-emerald-500/30 bg-emerald-500/5" },
-                  { title: "nexus-web-about", sub: "Astro (estático)", detail: text[language].techClientDetail3, color: "border-blue-500/30 bg-blue-500/5" },
-                ].map((app) => (
-                  <div key={app.title} className={`rounded-lg border ${app.color} p-4`}>
-                    <p className="font-bold text-white text-sm mb-1 font-mono">{app.title}</p>
-                    <p className="text-xs text-zinc-400">{app.sub}</p>
-                    <p className="text-xs text-zinc-500 mt-1">{app.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Protocol layer */}
-            <div className="py-2.5 px-5 border-b border-zinc-800 bg-zinc-900/50 text-center">
-              <p className="text-xs text-zinc-500 font-mono">
-                HTTP REST + JWT Bearer &nbsp;·&nbsp; WebSocket STOMP (solo app usuario)
-              </p>
-            </div>
-            {/* Backend layer */}
-            <div className="p-5 border-b border-zinc-800">
-              <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-4">
-                {text[language].techBackendTitle}
-              </p>
-              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
-                <p className="font-bold text-white text-sm mb-3 font-mono">nexus-backend — Spring Boot 3.5.13 (Java 17)</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {[
-                    { v: "48 REST + 1 WS", l: "Controllers" },
-                    { v: "44", l: "Services" },
-                    { v: "JWT + 2FA + reCAPTCHA", l: "Security" },
-                    { v: text[language].techBackendDetail1, l: "Schedulers" },
-                  ].map((s) => (
-                    <div key={s.l} className="bg-zinc-950/50 rounded p-2 text-center">
-                      <p className="text-xs font-bold text-emerald-300">{s.v}</p>
-                      <p className="text-[10px] text-zinc-500 mt-0.5">{s.l}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            {/* ORM layer */}
-            <div className="py-2.5 px-5 border-b border-zinc-800 bg-zinc-900/50 text-center">
-              <p className="text-xs text-zinc-500 font-mono">Spring Data JPA / Hibernate</p>
-            </div>
-            {/* External services */}
-            <div className="p-5">
-              <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">
-                {text[language].techServicesTitle}
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {[
-                  { name: "PostgreSQL", detail: text[language].servicesDetails["PostgreSQL"], color: "text-blue-400" },
-                  { name: "Cloudinary", detail: text[language].servicesDetails["Cloudinary"], color: "text-yellow-400" },
-                  { name: "Stripe", detail: text[language].servicesDetails["Stripe"], color: "text-indigo-400" },
-                  { name: "Gmail SMTP", detail: text[language].servicesDetails["Gmail SMTP"], color: "text-red-400" },
-                ].map((s) => (
-                  <div key={s.name} className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3 text-center">
-                    <p className={`font-bold text-sm ${s.color}`}>{s.name}</p>
-                    <p className="text-[10px] text-zinc-500 mt-1">{s.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Tech icons grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-            {[
-              { img: "/images/tools/srping.png", name: "Spring Boot" },
-              { img: "/images/tools/java.png", name: "Java 17" },
-              { img: "/images/tools/angular.png", name: "Angular 21" },
-              { icon: <SiIonic className="text-blue-400 w-7 h-7" />, name: "Ionic 8" },
-              { img: "/images/tools/postgresql.png", name: "PostgreSQL" },
-              { icon: <SiStripe className="text-violet-400 w-7 h-7" />, name: "Stripe" },
-              { icon: <SiDocker className="text-blue-500 w-7 h-7" />, name: "Docker" },
-              { icon: <FaLock className="text-amber-400 w-6 h-6" />, name: "JWT + 2FA" },
-            ].map((t) => (
-              <div
-                key={t.name}
-                className="group bg-zinc-900/40 border border-zinc-800 p-4 rounded-lg hover:bg-zinc-900 hover:border-violet-500/40 transition-all flex flex-col items-center gap-2.5"
-              >
-                <div className="flex items-center justify-center w-8 h-8 transition-all group-hover:scale-110">
-                  {"img" in t ? (
-                    <Image src={(t as { img: string; name: string }).img} alt={t.name} width={32} height={32} className="object-contain" />
-                  ) : (
-                    <div className="text-zinc-400 group-hover:text-white transition-colors">{(t as { icon: React.ReactNode; name: string }).icon}</div>
-                  )}
-                </div>
-                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider group-hover:text-violet-400 text-center leading-tight">
-                  {t.name}
-                </span>
+          {/* ── CIFRAS ── */}
+          <dl className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden">
+            {stats.map((s) => (
+              <div key={s.l} className="bg-navy p-5">
+                <dt className="text-sm text-muted">{s.l}</dt>
+                <dd className="mt-1 display-tight text-4xl font-bold text-cream">{s.v}</dd>
               </div>
             ))}
-          </div>
-        </motion.section>
+          </dl>
 
-        {/* ── FEATURES ── */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <SectionHead
-            icon={FaLightbulb}
-            label="Modules"
-            title={text[language].featuresTitle}
-            subtitle={text[language].featuresSubtitle}
-          />
+          <div className="mt-12">
+            {/* ── RESUMEN ── */}
+            <SectionHead id="nexus-overview" title={es ? "Resumen" : "Overview"}>
+              <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3">
+                {text[language].bullets.map((h) => (
+                  <li key={h} className="flex gap-3 text-lg text-cream leading-relaxed">
+                    <span aria-hidden="true" className="text-albero">✦</span>
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </SectionHead>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {text[language].features.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="group relative bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl hover:border-violet-500/30 transition-all duration-300"
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/3 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${text[language].features[i].title.includes('Marketplace') || text[language].features[i].title.includes('Second-Hand') ? 'bg-violet-500/10 text-violet-400' : text[language].features[i].title.includes('Chollometro') || text[language].features[i].title.includes('Spark/Drip') ? 'bg-yellow-500/10 text-yellow-400' : text[language].features[i].title.includes('Stripe') ? 'bg-indigo-500/10 text-indigo-400' : text[language].features[i].title.includes('Chat') ? 'bg-emerald-500/10 text-emerald-400' : text[language].features[i].title.includes('Autenticación') || text[language].features[i].title.includes('Authentication') ? 'bg-red-500/10 text-red-400' : text[language].features[i].title.includes('Panel Admin') || text[language].features[i].title.includes('Admin Panel') ? 'bg-blue-500/10 text-blue-400' : text[language].features[i].title.includes('Asistente') || text[language].features[i].title.includes('AI Support') ? 'bg-pink-500/10 text-pink-400' : 'bg-orange-500/10 text-orange-400'}`}>
-                  {/* Let's map icons from the loop key index */}
-                  {i === 0 ? <FaStore size={22} /> :
-                   i === 1 ? <FaBolt size={22} /> :
-                   i === 2 ? <FaShoppingCart size={22} /> :
-                   i === 3 ? <FaComments size={22} /> :
-                   i === 4 ? <FaLock size={22} /> :
-                   i === 5 ? <FaShieldAlt size={22} /> :
-                   i === 6 ? <FaRocket size={22} /> :
-                   <FaServer size={22} />}
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-4">{f.desc}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {text[language].features[i].techs.map((t) => (
-                    <span key={t} className="text-[10px] font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* ── GALLERY ── */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <SectionHead
-            icon={FaServer}
-            label="Screenshots"
-            title={text[language].galleryTitle}
-            subtitle={text[language].gallerySubtitle}
-          />
-
-          {/* Tab navigation */}
-          <div className="flex flex-wrap gap-2 mb-10">
-            {GALLERY_TABS.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs transition-all ${
-                  activeTab === tab.id
-                    ? "bg-violet-500/15 text-violet-300 border border-violet-500/40 shadow-[0_0_10px_rgba(139,92,246,0.15)]"
-                    : "bg-zinc-900/50 text-zinc-500 border border-zinc-800 hover:text-zinc-300 hover:border-zinc-700"
-                }`}
-              >
-                <tab.icon size={11} />
-                {tabLabels[language][tab.id]}
-                <span className={`ml-0.5 text-[9px] px-1 py-0.5 rounded ${activeTab === tab.id ? "bg-violet-500/20 text-violet-400" : "bg-zinc-800 text-zinc-600"}`}>
-                  {GALLERY_DATA[tab.id].length}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Gallery grid */}
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {(() => {
-              const items = GALLERY_DATA[activeTab];
-              const desktopItems = items.filter((i) => i.type === "desktop");
-              const mobileItems = items.filter((i) => i.type === "mobile");
-
-              return (
-                <div className="space-y-16">
-                  {desktopItems.length > 0 && (
-                    <div>
-                      {mobileItems.length > 0 && (
-                        <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                          <FaServer size={10} /> {language === 'es' ? 'Vista Desktop / PC' : 'Desktop / PC View'}
-                        </p>
-                      )}
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {desktopItems.map((img, idx) => (
-                          <DesktopMockup
-                            key={idx}
-                            src={img.src}
-                            caption={translateCaption(img.caption, language)}
-                            url={img.url}
-                          />
-                        ))}
+            {/* ── ARQUITECTURA ── */}
+            <SectionHead id="nexus-tech" title={text[language].techTitle} subtitle={text[language].techSubtitle}>
+              <div className="rounded-3xl bg-cream text-ink p-5 sm:p-8 space-y-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/70 mb-3">
+                    {text[language].techClientTitle}
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {[
+                      { title: "nexus-angular-app", sub: "Angular 21 + Ionic 8", detail: text[language].techClientDetail1, bg: "#cbbcff" },
+                      { title: "nexus-admin-web-app", sub: "Angular 21", detail: text[language].techClientDetail2, bg: "#b9eccb" },
+                      { title: "nexus-web-about", sub: es ? "Astro (estático)" : "Astro (static)", detail: text[language].techClientDetail3, bg: "#a9dcff" },
+                    ].map((app) => (
+                      <div key={app.title} className="rounded-2xl p-4" style={{ backgroundColor: app.bg }}>
+                        <p className="font-mono font-bold text-sm">{app.title}</p>
+                        <p className="mt-1 text-sm font-semibold">{app.sub}</p>
+                        <p className="mt-1 text-sm text-ink/75">{app.detail}</p>
                       </div>
-                    </div>
-                  )}
-
-                  {mobileItems.length > 0 && (
-                    <div>
-                      {desktopItems.length > 0 && (
-                        <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                          <FaMobile size={10} /> {language === 'es' ? 'Vista Responsive — Web & Móvil' : 'Responsive View — Web & Mobile'}
-                        </p>
-                      )}
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 justify-items-center">
-                        {mobileItems.map((img, idx) => (
-                          <MobileMockup
-                            key={idx}
-                            src={img.src}
-                            caption={translateCaption(img.caption, language)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-          </motion.div>
-        </motion.section>
-
-        {/* ── USE CASES ── */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <SectionHead
-            icon={FaRocket}
-            label="Use Cases"
-            title={text[language].useCasesTitle}
-            subtitle={text[language].useCasesSubtitle}
-          />
-
-          <div className="space-y-6">
-            {text[language].useCases.map((uc) => (
-              <motion.div
-                key={uc.id}
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className={`border rounded-xl overflow-hidden ${uc.color}`}
-              >
-                <div className="flex flex-wrap items-center gap-3 p-5 border-b border-zinc-800/60">
-                  <span className={`font-mono text-xs px-2.5 py-1 rounded border ${uc.badgeColor} font-bold`}>
-                    {uc.id}
-                  </span>
-                  <h3 className="font-bold text-white text-lg">{uc.title}</h3>
-                  <span className="text-xs text-zinc-500 font-mono ml-auto">Actor: {uc.actor}</span>
-                </div>
-                <div className="p-5">
-                  <ol className="space-y-2">
-                    {uc.steps.map((step, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
-                        <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-zinc-800 text-zinc-500 font-mono text-[10px] mt-0.5">
-                          {i + 1}
-                        </span>
-                        <span>{step}</span>
-                      </li>
                     ))}
-                  </ol>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
 
-        {/* ── INSTALLATION ── */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <SectionHead
-            icon={FaCog}
-            label="Setup"
-            title={text[language].setupTitle}
-            subtitle={text[language].setupSubtitle}
-          />
+                <p className="text-center font-mono text-sm text-ink/70">
+                  ↓ HTTP REST + JWT Bearer · WebSocket STOMP ↓
+                </p>
 
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
-            {text[language].setupReqs.map((req, i) => (
-              <div key={i} className="flex items-center gap-3 p-3.5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-                <FaCheckCircle className="text-violet-500 shrink-0" size={14} />
-                <span className="text-sm text-zinc-300">{req}</span>
+                <div className="rounded-2xl bg-ink text-cream p-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-albero mb-2">
+                    {text[language].techBackendTitle}
+                  </p>
+                  <p className="font-mono font-bold text-sm mb-4">nexus-backend — Spring Boot 3.5.13 (Java 17)</p>
+                  <dl className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {[
+                      { v: "48 REST + 1 WS", l: "Controllers" },
+                      { v: "44", l: "Services" },
+                      { v: "JWT + 2FA + reCAPTCHA", l: "Security" },
+                      { v: text[language].techBackendDetail1, l: "Schedulers" },
+                    ].map((s) => (
+                      <div key={s.l}>
+                        <dt className="text-xs text-muted">{s.l}</dt>
+                        <dd className="text-sm font-bold">{s.v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+
+                <p className="text-center font-mono text-sm text-ink/70">↓ Spring Data JPA / Hibernate ↓</p>
+
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/70 mb-3">
+                    {text[language].techServicesTitle}
+                  </p>
+                  <dl className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {(["PostgreSQL", "Cloudinary", "Stripe", "Gmail SMTP"] as const).map((name) => (
+                      <div key={name} className="rounded-2xl border-2 border-ink/15 p-3">
+                        <dt className="font-bold text-sm">{name}</dt>
+                        <dd className="text-sm text-ink/75">{text[language].servicesDetails[name]}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="space-y-6">
-            {text[language].setupSteps.map((step) => (
-              <div key={step.n} className="space-y-3">
-                <h4 className="text-base font-bold text-white flex items-center gap-3">
-                  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-violet-500/15 text-violet-400 font-mono text-sm border border-violet-500/30">
-                    {step.n}
-                  </span>
-                  {step.title}
-                </h4>
-                {step.desc && <p className="text-sm text-zinc-500 ml-10">{step.desc}</p>}
-                <div className="ml-10 bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                  {step.cmds.map((cmd, j) => (
-                    <div key={j} className="mb-1.5 last:mb-0 flex items-start gap-3">
-                      <span className="text-violet-500 shrink-0">{cmd.startsWith("#") ? "#" : "$"}</span>
-                      <span className={cmd.startsWith("#") ? "text-zinc-600" : "text-zinc-300"}>
-                        {cmd.startsWith("#") ? cmd.slice(2) : cmd}
-                      </span>
+              <ul className="mt-8 flex flex-wrap gap-2.5">
+                {[
+                  { img: "/images/tools/spring.png", name: "Spring Boot" },
+                  { img: "/images/tools/java.png", name: "Java 17" },
+                  { img: "/images/tools/angular.png", name: "Angular 21" },
+                  { icon: <SiIonic />, name: "Ionic 8" },
+                  { img: "/images/tools/postgresql.png", name: "PostgreSQL" },
+                  { icon: <SiStripe />, name: "Stripe" },
+                  { icon: <SiDocker />, name: "Docker" },
+                  { icon: <FaLock />, name: "JWT + 2FA" },
+                ].map((tech) => (
+                  <li
+                    key={tech.name}
+                    className="inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-2 text-[15px] font-medium text-cream"
+                  >
+                    <span aria-hidden="true" className="flex items-center text-lg text-muted">
+                      {"img" in tech && tech.img ? (
+                        <Image src={tech.img} alt="" width={20} height={20} className="object-contain" />
+                      ) : (
+                        tech.icon
+                      )}
+                    </span>
+                    {tech.name}
+                  </li>
+                ))}
+              </ul>
+            </SectionHead>
+
+            {/* ── FUNCIONALIDADES ── */}
+            <SectionHead id="nexus-features" title={text[language].featuresTitle} subtitle={text[language].featuresSubtitle}>
+              <ol className="border-t border-line">
+                {text[language].features.map((f, i) => (
+                  <li key={f.title} className="py-6 border-b border-line">
+                    <Reveal>
+                      <div className="grid grid-cols-[3rem_1fr] gap-4">
+                        <span aria-hidden="true" className="text-sm font-medium tabular-nums text-muted pt-2">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <h3 className="text-2xl font-bold text-cream">{f.title}</h3>
+                          <p className="mt-2 text-muted leading-relaxed">{f.desc}</p>
+                          <p className="mt-3 text-sm text-cream/70">{f.techs.join(" · ")}</p>
+                        </div>
+                      </div>
+                    </Reveal>
+                  </li>
+                ))}
+              </ol>
+            </SectionHead>
+
+            {/* ── GALERÍA ── */}
+            <SectionHead id="nexus-gallery" title={text[language].galleryTitle} subtitle={text[language].gallerySubtitle}>
+              <div role="group" aria-label={es ? "Categorías de capturas" : "Screenshot categories"} className="flex flex-wrap gap-2 mb-10">
+                {GALLERY_TABS.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setActiveTab(tab.id)}
+                      aria-pressed={isActive}
+                      className={`h-10 px-4 rounded-full text-[15px] font-semibold border-2 transition-colors ${
+                        isActive
+                          ? "bg-albero border-albero text-ink"
+                          : "border-cream/25 text-cream hover:border-albero hover:text-albero"
+                      }`}
+                    >
+                      {tabLabels[language][tab.id]}{" "}
+                      <span className="opacity-60 tabular-nums">{GALLERY_DATA[tab.id].length}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {(() => {
+                const items = GALLERY_DATA[activeTab];
+                const desktopItems = items.filter((i) => i.type === "desktop");
+                const mobileItems = items.filter((i) => i.type === "mobile");
+
+                return (
+                  <div key={activeTab} className="space-y-14">
+                    {desktopItems.length > 0 && (
+                      <div>
+                        {mobileItems.length > 0 && (
+                          <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-albero mb-6">
+                            {es ? "Escritorio" : "Desktop"}
+                          </h3>
+                        )}
+                        <div className="grid sm:grid-cols-2 gap-8">
+                          {desktopItems.map((img) => (
+                            <DesktopMockup key={img.src} src={img.src} caption={translateCaption(img.caption, language)} />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {mobileItems.length > 0 && (
+                      <div>
+                        {desktopItems.length > 0 && (
+                          <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-albero mb-6">
+                            {es ? "Responsive — web y móvil" : "Responsive — web & mobile"}
+                          </h3>
+                        )}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-items-center">
+                          {mobileItems.map((img) => (
+                            <MobileMockup key={img.src} src={img.src} caption={translateCaption(img.caption, language)} />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </SectionHead>
+
+            {/* ── CASOS DE USO ── */}
+            <SectionHead id="nexus-usecases" title={text[language].useCasesTitle} subtitle={text[language].useCasesSubtitle}>
+              <div className="space-y-5">
+                {text[language].useCases.map((uc) => (
+                  <Reveal key={uc.id}>
+                    <article className="rounded-3xl border border-line p-5 sm:p-7">
+                      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                        <span className="rounded-full bg-albero px-3 py-0.5 text-sm font-bold text-ink">{uc.id}</span>
+                        <h3 className="text-xl sm:text-2xl font-bold text-cream">{uc.title}</h3>
+                      </div>
+                      <p className="mt-2 text-sm text-muted">Actor: {uc.actor}</p>
+                      <ol className="mt-5 space-y-2.5">
+                        {uc.steps.map((step, i) => (
+                          <li key={step} className="grid grid-cols-[2rem_1fr] gap-2 text-cream/90 leading-relaxed">
+                            <span aria-hidden="true" className="text-sm font-medium tabular-nums text-muted pt-0.5">
+                              {i + 1}.
+                            </span>
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                    </article>
+                  </Reveal>
+                ))}
+              </div>
+            </SectionHead>
+
+            {/* ── INSTALACIÓN ── */}
+            <SectionHead id="nexus-setup" title={text[language].setupTitle} subtitle={text[language].setupSubtitle}>
+              <ul className="flex flex-wrap gap-2 mb-10">
+                {text[language].setupReqs.map((req) => (
+                  <li key={req} className="rounded-full border border-cream/20 px-4 py-1.5 text-cream">
+                    {req}
+                  </li>
+                ))}
+              </ul>
+
+              <ol className="space-y-6">
+                {text[language].setupSteps.map((step) => (
+                  <li key={step.n} className="grid grid-cols-[2.5rem_1fr] gap-3">
+                    <span aria-hidden="true" className="grid place-items-center w-9 h-9 rounded-full bg-albero text-ink font-bold">
+                      {step.n}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-lg font-semibold text-cream pt-1">{step.title}</p>
+                      {step.desc && <p className="mt-1 text-muted">{step.desc}</p>}
+                      <pre className="mt-3 rounded-xl bg-[#0b1428] border border-line p-4 text-sm font-mono overflow-x-auto">
+                        {step.cmds.map((cmd) => (
+                          <code key={cmd} className={`block ${cmd.startsWith("#") ? "text-muted" : "text-cream"}`}>
+                            {!cmd.startsWith("#") && <span aria-hidden="true" className="text-albero select-none">$ </span>}
+                            {cmd}
+                          </code>
+                        ))}
+                      </pre>
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+                  </li>
+                ))}
+              </ol>
+            </SectionHead>
           </div>
-        </motion.section>
 
-        {/* ── CTA ── */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative rounded-2xl overflow-hidden border border-zinc-800 p-12 text-center"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-950/40 via-zinc-950 to-zinc-950" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-violet-500/10 blur-[80px] rounded-full" />
-          <div className="relative z-10">
-            <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-4">
-              Proyecto Final DAM · IES Francisco Rodríguez Marín · Ecentia
+          {/* ── CIERRE ── */}
+          <section
+            aria-label="Nexus"
+            style={{ backgroundColor: NEXUS_COLOR }}
+            className="mt-8 rounded-[2rem] p-6 sm:p-10 md:p-14 text-ink"
+          >
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-ink/70">
+              {es ? "Proyecto final de DAM" : "Final degree project"} · IES Francisco Rodríguez Marín
             </p>
-            <h2 className="text-4xl font-black text-white mb-4">
-              Nexus<span className="text-violet-500">.</span>
-            </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto mb-8 leading-relaxed">
-              {text[language].ctaText}
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <p className="mt-4 max-w-2xl text-xl sm:text-2xl leading-snug font-semibold">{text[language].ctaText}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="https://github.com/SomosNexusApp/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 px-8 py-4 bg-zinc-950 border border-zinc-700 text-white rounded-lg hover:border-violet-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)] transition-all"
+                className="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-ink text-cream font-bold hover:bg-ink/85 transition-colors"
               >
-                <FaGithub size={20} />
-                <span className="font-bold">{text[language].ctaOrg}</span>
-                <FaExternalLinkAlt size={12} className="text-zinc-500" />
+                <FaGithub aria-hidden="true" size={18} />
+                {text[language].ctaOrg} <span aria-hidden="true">↗</span>
               </a>
               <Link
                 href="/projects"
-                className="flex items-center gap-3 px-8 py-4 bg-violet-600/20 border border-violet-500/40 text-violet-300 rounded-lg hover:bg-violet-600/30 transition-all font-bold"
+                className="inline-flex items-center gap-2 h-12 px-6 rounded-full border-2 border-ink font-bold hover:bg-ink hover:text-cream transition-colors"
               >
-                {text[language].ctaAll}
+                {text[language].ctaAll} →
               </Link>
             </div>
-          </div>
-        </motion.section>
-      </div>
-    </main>
+          </section>
+        </div>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

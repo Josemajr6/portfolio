@@ -2,140 +2,114 @@
 
 import { projectsDataES } from "@/data/project";
 import { projectsDataEN } from "@/data/project_en";
+import { projectColor } from "@/data/projectColors";
 import { notFound } from "next/navigation";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, use, useEffect } from "react";
+import { useState, use, useEffect, ReactNode } from "react";
 import BackButton from "@/components/ui/BackButton";
-// IMPORTAMOS TUS ICONOS PERSONALIZADOS
-import { TechIcons } from "@/components/icons/TechIcons"; 
+import SkipLink from "@/components/layout/SkipLink";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
+import Reveal from "@/components/ui/Reveal";
+import { TechIcons } from "@/components/icons/TechIcons";
 
-import { 
-  FaGithub, 
-  FaExternalLinkAlt, 
-  FaCode, 
-  FaDatabase, 
-  FaLayerGroup, 
-  FaServer,
-  FaTerminal,
-  FaCheckCircle,
-  FaStar,
-  FaRocket,
-  FaLightbulb,
-  FaCog,
-  FaChevronRight
-} from "react-icons/fa";
-import { 
-  SiSpring, SiAngular, SiPostgresql, SiFlutter, SiDart, 
+import { FaGithub, FaCode, FaDatabase, FaServer, FaRocket } from "react-icons/fa";
+import {
+  SiSpring, SiAngular, SiFlutter, SiDart,
   SiAndroid, SiTypescript, SiDocker, SiMysql, SiSwagger,
   SiSwift, SiApple, SiThemoviedatabase, SiMongodb, SiVapor
 } from "react-icons/si";
 
 // Helper de iconos
+const imgIcon = (src: string) => (
+  // eslint-disable-next-line @next/next/no-img-element
+  <img src={src} alt="" className="w-5 h-5 object-contain inline-block" />
+);
+
 const getTechIcon = (techName: string) => {
   const normalize = techName.toLowerCase();
-  
-  // Custom image-based icons from public/images/tools/
-  if (normalize.includes("java")) return <img src="/images/tools/java.png" alt="Java" className="w-8 h-8 object-contain inline-block" />;
-  if (normalize.includes("postgres")) return <img src="/images/tools/postgresql.png" alt="PostgreSQL" className="w-8 h-8 object-contain inline-block" />;
-  if (normalize.includes("ionic")) return <img src="/images/tools/ionic.svg" alt="Ionic" className="w-8 h-8 object-contain inline-block" />;
-  if (normalize.includes("stripe")) return <img src="/images/tools/stripe.svg" alt="Stripe" className="w-8 h-8 object-contain inline-block" />;
-  if (normalize.includes("sqlite")) return <TechIcons.SQLite className="text-blue-300 w-6 h-6" />;
-  if (normalize.includes("gradle")) return <TechIcons.Gradle className="text-white w-6 h-6" />;
-  
-  // Iconos de librerías standard
-  if (normalize.includes("spring")) return <SiSpring className="text-emerald-500" />;
-  if (normalize.includes("angular")) return <SiAngular className="text-red-600" />;
-  if (normalize.includes("mysql")) return <SiMysql className="text-blue-500" />;
-  if (normalize.includes("mongo")) return <SiMongodb className="text-green-500" />;
-  if (normalize.includes("vapor")) return <SiVapor className="text-purple-400" />;
-  if (normalize.includes("type")) return <SiTypescript className="text-blue-600" />;
-  if (normalize.includes("swagger")) return <SiSwagger className="text-green-600" />;
-  if (normalize.includes("docker")) return <SiDocker className="text-blue-500" />;
-  if (normalize.includes("flutter")) return <SiFlutter className="text-cyan-400" />;
-  if (normalize.includes("dart")) return <SiDart className="text-blue-500" />;
-  if (normalize.includes("android")) return <SiAndroid className="text-green-500" />;
-  if (normalize.includes("swift")) return <SiSwift className="text-orange-500" />;
-  if (normalize.includes("ios")) return <SiApple className="text-gray-100" />;
-  if (normalize.includes("tmdb")) return <SiThemoviedatabase className="text-blue-400" />;
-  if (normalize.includes("xml")) return <FaCode className="text-blue-300" />;
-  if (normalize.includes("retrofit")) return <FaServer className="text-green-400" />;
-  if (normalize.includes("room")) return <FaDatabase className="text-yellow-500" />;
-  if (normalize.includes("restcountries")) return <FaCode className="text-indigo-400" />;
-  if (normalize.includes("gamekit")) return <FaRocket className="text-purple-400" />;
-  
-  return <FaCode className="text-zinc-500" />; 
+
+  // Iconos en imagen de public/images/tools/
+  if (normalize.includes("java")) return imgIcon("/images/tools/java.png");
+  if (normalize.includes("postgres")) return imgIcon("/images/tools/postgresql.png");
+  if (normalize.includes("ionic")) return imgIcon("/images/tools/ionic.svg");
+  if (normalize.includes("stripe")) return imgIcon("/images/tools/stripe.svg");
+  if (normalize.includes("sqlite")) return <TechIcons.SQLite className="w-5 h-5" />;
+  if (normalize.includes("gradle")) return <TechIcons.Gradle className="w-5 h-5" />;
+
+  // Iconos de librerías estándar
+  if (normalize.includes("spring")) return <SiSpring />;
+  if (normalize.includes("angular")) return <SiAngular />;
+  if (normalize.includes("mysql")) return <SiMysql />;
+  if (normalize.includes("mongo")) return <SiMongodb />;
+  if (normalize.includes("vapor")) return <SiVapor />;
+  if (normalize.includes("type")) return <SiTypescript />;
+  if (normalize.includes("swagger")) return <SiSwagger />;
+  if (normalize.includes("docker")) return <SiDocker />;
+  if (normalize.includes("flutter")) return <SiFlutter />;
+  if (normalize.includes("dart")) return <SiDart />;
+  if (normalize.includes("android")) return <SiAndroid />;
+  if (normalize.includes("swift")) return <SiSwift />;
+  if (normalize.includes("ios") || normalize.includes("macos")) return <SiApple />;
+  if (normalize.includes("tmdb")) return <SiThemoviedatabase />;
+  if (normalize.includes("retrofit")) return <FaServer />;
+  if (normalize.includes("room")) return <FaDatabase />;
+  if (normalize.includes("gamekit")) return <FaRocket />;
+
+  return <FaCode />;
 };
 
-// === CORRECCIÓN EN MOCKUPS: object-contain ===
+// === MOCKUPS DE DISPOSITIVO (object-contain para no recortar capturas) ===
 
-// COMPONENTE DE MOCKUP DE IPHONE
-const IPhoneMockup = ({ imageUrl, alt, onClick }: { imageUrl: string; alt: string; onClick?: () => void }) => (
-  <div 
-    onClick={onClick} 
-    className={`relative mx-auto ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99] transition-all duration-300' : ''}`} 
-    style={{ width: '300px' }}
-  >
-    <div className="relative bg-black rounded-[55px] p-4 shadow-2xl border-[12px] border-zinc-900">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150px] h-[30px] bg-black rounded-b-[25px] z-20"></div>
-      {/* CAMBIO: bg-black para que si sobra espacio sea negro, y object-contain */}
-      <div className="relative bg-black rounded-[40px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <Image src={imageUrl} alt={alt} fill className="object-contain" />
-      </div>
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[140px] h-[5px] bg-white/30 rounded-full"></div>
-    </div>
-    <div className="absolute -left-[2px] top-[100px] w-[3px] h-[35px] bg-zinc-900 rounded-l"></div>
-    <div className="absolute -left-[2px] top-[145px] w-[3px] h-[70px] bg-zinc-900 rounded-l"></div>
-    <div className="absolute -right-[2px] top-[150px] w-[3px] h-[90px] bg-zinc-900 rounded-r"></div>
-  </div>
-);
-
-// COMPONENTE DE MOCKUP DE ANDROID
-const AndroidMockup = ({ imageUrl, alt, onClick }: { imageUrl: string; alt: string; onClick?: () => void }) => (
-  <div 
-    onClick={onClick} 
-    className={`relative mx-auto ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99] transition-all duration-300' : ''}`} 
-    style={{ width: '300px' }}
-  >
-    <div className="relative bg-zinc-800 rounded-[45px] p-3 shadow-2xl">
-      {/* CAMBIO: bg-black y object-contain */}
-      <div className="relative bg-black rounded-[38px] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <Image src={imageUrl} alt={alt} fill className="object-contain" />
-      </div>
-    </div>
-    <div className="absolute -left-[2px] top-[110px] w-[3px] h-[40px] bg-zinc-700 rounded-l"></div>
-    <div className="absolute -left-[2px] top-[160px] w-[3px] h-[70px] bg-zinc-700 rounded-l"></div>
-    <div className="absolute -right-[2px] top-[140px] w-[3px] h-[80px] bg-zinc-700 rounded-r"></div>
-  </div>
-);
-
-// COMPONENTE DE VENTANA WEB / MACOS
-const DesktopWindowMockup = ({ imageUrl, alt, caption, onClick }: { imageUrl: string; alt: string; caption: string; onClick?: () => void }) => (
-  <div 
-    onClick={onClick} 
-    className={`relative w-full max-w-4xl mx-auto group ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99] transition-all duration-300' : ''}`}
-  >
-    <div className="bg-zinc-900 rounded-t-xl border border-zinc-800 overflow-hidden shadow-2xl transition-colors group-hover:border-zinc-700">
-      <div className="bg-zinc-900 px-4 py-3 flex items-center gap-2 border-b border-zinc-800">
-        <div className="flex gap-2">
-          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-        </div>
-        <div className="ml-4 flex-1 flex justify-center">
-            <div className="bg-zinc-800 px-3 py-1 rounded text-xs text-zinc-500 font-mono truncate max-w-[200px]">
-                {caption}
-            </div>
-        </div>
-      </div>
-      <div className="relative bg-zinc-950" style={{ aspectRatio: '16/10' }}>
-        <Image src={imageUrl} alt={alt} fill className="object-contain" />
+const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
+  <div className="relative mx-auto w-[260px]">
+    <div className="relative bg-ink rounded-[48px] p-3 border-[10px] border-[#0b1428] shadow-2xl">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[24px] bg-[#0b1428] rounded-b-[18px] z-20" />
+      <div className="relative bg-black rounded-[34px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
+        <Image src={imageUrl} alt={alt} fill sizes="260px" className="object-contain" />
       </div>
     </div>
   </div>
 );
+
+const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
+  <div className="relative mx-auto w-[260px]">
+    <div className="relative bg-[#0b1428] rounded-[40px] p-2.5 shadow-2xl">
+      <div className="relative bg-black rounded-[32px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
+        <Image src={imageUrl} alt={alt} fill sizes="260px" className="object-contain" />
+      </div>
+    </div>
+  </div>
+);
+
+const DesktopWindowMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
+  <div className="relative w-full rounded-2xl overflow-hidden bg-cream shadow-2xl">
+    <div className="flex items-center gap-1.5 px-4 py-3">
+      <span className="w-3 h-3 rounded-full bg-[#ff6b5f]" />
+      <span className="w-3 h-3 rounded-full bg-[#f5c451]" />
+      <span className="w-3 h-3 rounded-full bg-[#5cc66a]" />
+    </div>
+    <div className="relative bg-[#0b1428]" style={{ aspectRatio: "16/10" }}>
+      <Image src={imageUrl} alt={alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-contain" />
+    </div>
+  </div>
+);
+
+// Sección con etiqueta a la izquierda, como en la trayectoria de la home
+function DetailSection({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+  return (
+    <section aria-labelledby={id} className="py-12 sm:py-16 border-t border-line">
+      <div className="grid md:grid-cols-[16rem_1fr] gap-6 md:gap-10">
+        <h2 id={id} className="display-tight text-3xl font-bold text-albero break-words">
+          {title}
+        </h2>
+        <div className="min-w-0">{children}</div>
+      </div>
+    </section>
+  );
+}
 
 export default function ProjectDetailPage({
   params,
@@ -144,22 +118,25 @@ export default function ProjectDetailPage({
 }) {
   const { slug } = use(params);
   const { language, t, mounted } = useLanguage();
+  const es = language === "es";
 
-  const projectsData = language === "es" ? projectsDataES : projectsDataEN;
-  const project = projectsData.find((p) => p.slug === slug);
+  const projectsData = es ? projectsDataES : projectsDataEN;
+  const projectIndex = projectsData.findIndex((p) => p.slug === slug);
+  const project = projectsData[projectIndex];
 
-  const [activeTab, setActiveTab] = useState<"overview" | "features" | "tech" | "install">("overview");
   const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedImage(null);
-      }
+      if (e.key === "Escape") setSelectedImage(null);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (project) document.title = `${project.title} | José Manuel Jiménez`;
+  }, [project]);
 
   if (!mounted) return null;
 
@@ -167,432 +144,334 @@ export default function ProjectDetailPage({
     notFound();
   }
 
-  const isCompleted = project.status === "Completed";
-  const isMacOS = project.tech.some(t => t.toLowerCase().includes("macos"));
+  const color = projectColor(project.slug, projectIndex);
+  const isMacOS = project.tech.some((tech) => tech.toLowerCase().includes("macos"));
   const displayCategory = isMacOS ? "macOS" : project.category;
-  const hasDetailedContent = !!(project.overview || project.features || project.techStack || project.installation);
+  const statusText =
+    project.status === "Completed" ? t.statusCompleted : project.status === "In Progress" ? t.statusInProgress : t.statusOnHold;
 
   // Lógica de galería unificada
-  const displayedGallery = project.gallery && project.gallery.length > 0 
-    ? project.gallery 
-    : (project.galleryImages || []).map(img => ({
-        url: img,
-        caption: language === "es" ? "Captura de pantalla" : "Screenshot"
-      }));
+  const displayedGallery =
+    project.gallery && project.gallery.length > 0
+      ? project.gallery
+      : (project.galleryImages || []).map((img) => ({
+          url: img,
+          caption: es ? "Captura de pantalla" : "Screenshot",
+        }));
+
+  const nextProject = projectsData[(projectIndex + 1) % projectsData.length];
+
+  const techStackLabels: Record<string, string> = es
+    ? { frontend: "Frontend", backend: "Backend", apis: "APIs y servicios", mobile: "Móvil", tools: "Herramientas" }
+    : { frontend: "Frontend", backend: "Backend", apis: "APIs & services", mobile: "Mobile", tools: "Tools" };
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100 relative overflow-x-hidden font-sans selection:bg-emerald-500/30">
-      
-      <BackButton />
+    <div className="relative min-h-screen overflow-x-clip">
+      <SkipLink />
+      <SiteHeader />
 
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-emerald-500/5 blur-[100px]" />
-      </div>
+      <main id="main" tabIndex={-1} className="focus:outline-none pt-24 sm:pt-28 pb-16">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+          <BackButton />
 
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
-        
-        {/* Header Breadcrumb */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="border-b border-zinc-800 pb-6 mb-12 flex flex-col md:flex-row justify-between items-end gap-4"
-        >
-          <div className="space-y-2 font-mono">
-            <div className="flex items-center gap-2 text-xs md:text-sm text-zinc-500">
-              <span className="text-emerald-500 font-bold">root</span>
-              <span>/</span>
-              <span>projects</span>
-              <span>/</span>
-              <span className="text-zinc-300 font-bold bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">{slug}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-emerald-500 animate-pulse text-xs uppercase tracking-widest">
-                <FaDatabase />
-                <span>{t.accessingSecureFile}</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Hero Section */}
-        <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
-          
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="space-y-8"
+          {/* --- CABECERA: tarjeta grande con el color del proyecto --- */}
+          <header
+            style={{ backgroundColor: color }}
+            className="relative mt-6 overflow-hidden rounded-[2.5rem] text-ink"
           >
-            
-            <div className="flex flex-wrap gap-3">
-              <span className={`px-4 py-1.5 rounded-sm border text-xs font-mono uppercase tracking-widest flex items-center gap-2 shadow-[0_0_10px_rgba(0,0,0,0.5)] ${
-                isMacOS 
-                  ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300' 
-                  : 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
-              }`}>
-                <FaTerminal size={12}/>
-                {displayCategory}
-              </span>
-
-              <span className={`px-4 py-1.5 rounded-sm border text-xs font-mono uppercase tracking-widest flex items-center gap-2 shadow-[0_0_10px_rgba(0,0,0,0.5)] ${
-                isCompleted 
-                  ? 'border-green-500/40 bg-green-500/10 text-green-300' 
-                  : 'border-amber-500/40 bg-amber-500/10 text-amber-300'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${isCompleted ? 'bg-green-500' : 'bg-amber-500'} animate-pulse`} />
-                {project.status}
-              </span>
-            </div>
-
-            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-              {project.title}
-              <span className="text-emerald-500">.</span>
-            </h1>
-
-            <div className="relative bg-zinc-900/50 border border-zinc-800 p-6 md:p-8 rounded-xl backdrop-blur-sm group hover:border-emerald-500/30 transition-colors duration-500">
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-emerald-500 to-transparent opacity-50" />
-              <p className="text-lg md:text-xl text-zinc-300 leading-relaxed font-light">
+            <div className="relative z-10 p-6 sm:p-10 md:p-14 md:pb-10 max-w-3xl">
+              <p className="text-sm font-bold uppercase tracking-[0.14em] text-ink/70">
+                {displayCategory} · {statusText}
+              </p>
+              <h1 className="mt-3 display-tight font-bold text-6xl sm:text-7xl md:text-8xl">{project.title}</h1>
+              <p className="mt-5 text-lg sm:text-xl leading-relaxed text-ink/85">
                 {project.overview?.tagline || project.description}
               </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {project.githubUrl && (
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-ink text-cream font-bold hover:bg-ink/85 transition-colors"
+                  >
+                    <FaGithub aria-hidden="true" size={18} />
+                    {es ? "Ver código" : "View code"}
+                  </a>
+                )}
+                {project.demoUrl && (
+                  <a
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 h-12 px-6 rounded-full border-2 border-ink font-bold hover:bg-ink hover:text-cream transition-colors"
+                  >
+                    {es ? "Ver demo" : "Live demo"} <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
             </div>
 
-            {project.overview?.highlights && project.overview.highlights.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {project.overview.highlights.slice(0, 4).map((h, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-zinc-400">
-                    <FaStar className="text-emerald-500 mt-1 shrink-0" size={12}/>
-                    <span>{h}</span>
-                  </div>
-                ))}
-              </div>
+            {/* Captura principal que "se sale" por abajo */}
+            <div className="relative mx-6 sm:mx-10 md:ml-auto md:mr-14 md:w-[70%] h-56 sm:h-80 md:h-[22rem] rounded-t-2xl overflow-hidden bg-ink shadow-[0_-20px_60px_-20px_rgba(19,33,63,0.5)]">
+              <Image
+                src={project.mainImage}
+                alt={es ? `Captura principal de ${project.title}` : `${project.title} main screenshot`}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 70vw"
+                className="object-contain p-3"
+              />
+            </div>
+          </header>
+
+          {/* --- DATOS RÁPIDOS --- */}
+          <dl className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-px bg-line rounded-2xl overflow-hidden">
+            <div className="bg-navy p-5">
+              <dt className="text-sm text-muted">{es ? "Plataforma" : "Platform"}</dt>
+              <dd className="mt-1 text-lg font-semibold text-cream">{displayCategory}</dd>
+            </div>
+            <div className="bg-navy p-5">
+              <dt className="text-sm text-muted">{es ? "Estado" : "Status"}</dt>
+              <dd className="mt-1 text-lg font-semibold text-cream">{statusText}</dd>
+            </div>
+            <div className="bg-navy p-5">
+              <dt className="text-sm text-muted">{es ? "Stack principal" : "Main stack"}</dt>
+              <dd className="mt-1 text-lg font-semibold text-cream">
+                {project.tech.filter((tech) => tech.toLowerCase() !== "jwt").slice(0, 3).join(", ")}
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-12">
+            {/* --- RESUMEN --- */}
+            {(project.overview || project.longDescription) && (
+              <DetailSection id="overview-title" title={es ? "Resumen" : "Overview"}>
+                <Reveal>
+                  <p className="text-xl leading-relaxed text-cream">
+                    {project.overview?.description || project.longDescription}
+                  </p>
+                  {project.overview?.highlights && project.overview.highlights.length > 0 && (
+                    <ul className="mt-8 grid sm:grid-cols-2 gap-x-8 gap-y-3">
+                      {project.overview.highlights.map((h) => (
+                        <li key={h} className="flex gap-3 text-muted leading-relaxed">
+                          <span aria-hidden="true" className="text-albero">✦</span>
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </Reveal>
+              </DetailSection>
             )}
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" className="relative overflow-hidden flex items-center gap-3 px-8 py-4 bg-zinc-950 border border-zinc-700 text-white rounded transition-all group hover:border-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                  <div className="absolute inset-0 bg-emerald-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <FaGithub size={22} className="relative z-10" />
-                  <div className="flex flex-col text-left leading-none relative z-10">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase group-hover:text-emerald-400">{language === 'es' ? 'Repositorio' : 'Repository'}</span>
-                    <span className="font-bold">{language === 'es' ? 'Ver Código' : 'View Source'}</span>
-                  </div>
-                </a>
-              )}
-              {project.demoUrl && (
-                <a href={project.demoUrl} target="_blank" className="relative overflow-hidden flex items-center gap-3 px-8 py-4 bg-emerald-600 text-black rounded transition-all hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)] group">
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <FaExternalLinkAlt size={20} className="relative z-10" />
-                  <div className="flex flex-col text-left leading-none relative z-10">
-                    <span className="text-[10px] font-mono text-emerald-900 uppercase font-bold">{language === 'es' ? 'Despliegue' : 'Deploy'}</span>
-                    <span className="font-bold">{language === 'es' ? 'Demo en Vivo' : 'Live Demo'}</span>
-                  </div>
-                </a>
-              )}
-            </div>
-          </motion.div>
+            {/* --- TECNOLOGÍAS --- */}
+            <DetailSection id="tech-title" title={t.systemArchitecture}>
+              <ul className="flex flex-wrap gap-2.5">
+                {project.tech.map((tech) => (
+                  <li
+                    key={tech}
+                    className="inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-2 text-[15px] font-medium text-cream"
+                  >
+                    <span aria-hidden="true" className="flex items-center text-lg text-muted">
+                      {getTechIcon(tech)}
+                    </span>
+                    {tech}
+                  </li>
+                ))}
+              </ul>
 
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="relative group w-full"
-          >
-            <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-950 shadow-2xl">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
-              <Image 
-                src={project.mainImage}
-                alt={project.title}
-                fill
-                className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,6px_100%] pointer-events-none z-20 mix-blend-overlay opacity-50" />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Tech Stack Icons Grid */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="mb-16"
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <FaLayerGroup className="text-emerald-500 text-xl" />
-            <h2 className="text-2xl font-bold text-white uppercase tracking-wider">{t.systemArchitecture}</h2>
-            <div className="h-[1px] flex-grow bg-zinc-800" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {project.tech.map((t) => (
-              <div key={t} className="group relative bg-zinc-900/40 border border-zinc-800 p-4 rounded hover:bg-zinc-900 hover:border-emerald-500/50 transition-all flex flex-col items-center justify-center gap-3">
-                <div className="text-3xl text-zinc-500 group-hover:text-white transition-colors">
-                  {getTechIcon(t)}
-                </div>
-                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider group-hover:text-emerald-400 text-center">
-                  {t}
-                </span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Tabs Content */}
-        {hasDetailedContent && (
-          <>
-            <div className="flex flex-wrap gap-2 mb-12 border-b border-zinc-800 pb-4">
-              {[
-                { id: "overview", label: language === 'es' ? "Resumen" : "Overview", icon: FaRocket, show: !!project.overview },
-                { id: "features", label: language === 'es' ? "Características" : "Features", icon: FaLightbulb, show: !!project.features },
-                { id: "tech", label: language === 'es' ? "Tecnologías" : "Tech Stack", icon: FaLayerGroup, show: !!project.techStack },
-                { id: "install", label: language === 'es' ? "Instalación" : "Installation", icon: FaCog, show: !!project.installation }
-              ].filter(tab => tab.show).map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-sm transition-all ${
-                    activeTab === tab.id
-                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
-                      : "bg-zinc-900/50 text-zinc-500 border border-zinc-800 hover:text-zinc-300"
-                  }`}
-                >
-                  <tab.icon size={14}/>
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            <AnimatePresence mode="wait">
-              {activeTab === "overview" && project.overview && (
-                <motion.div
-                  key="overview"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="space-y-8 mb-16"
-                >
-                  <div className="prose prose-invert max-w-none">
-                    <h2 className="text-3xl font-bold text-white mb-6">{t.projectOverview}</h2>
-                    <p className="text-zinc-400 text-lg leading-relaxed">
-                      {project.overview.description}
-                    </p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {project.overview.highlights.map((h, i) => (
-                        <div key={i} className="flex items-start gap-4 p-4 bg-zinc-900/30 border border-zinc-800 rounded-lg hover:border-emerald-500/30 transition-colors">
-                          <FaCheckCircle className="text-emerald-500 mt-1" />
-                          <span className="text-zinc-300">{h}</span>
-                        </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {activeTab === "features" && project.features && (
-                <motion.div
-                  key="features"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="grid md:grid-cols-2 gap-8 mb-16"
-                >
-                  {project.features.map((feature, i) => (
-                    <div key={i} className="group relative bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl hover:border-emerald-500/30 transition-all">
-                      <div className="text-4xl mb-4">{feature.icon}</div>
-                      <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                      <p className="text-zinc-400 mb-4 leading-relaxed">{feature.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {feature.techs.map((tech) => (
-                          <span key={tech} className="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-
-              {activeTab === "tech" && project.techStack && (
-                <motion.div
-                  key="tech"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="space-y-12 mb-16"
-                >
-                  {Object.entries(project.techStack).map(([category, items]) => (
-                    items && items.length > 0 && (
+              {project.techStack && (
+                <div className="mt-10 space-y-8">
+                  {Object.entries(project.techStack).map(([category, items]) =>
+                    items && items.length > 0 ? (
                       <div key={category}>
-                        <h3 className="text-2xl font-bold text-white mb-6 capitalize flex items-center gap-3">
-                          <FaLayerGroup className="text-emerald-500"/>
-                          {language === 'es' ? (
-                            category === 'frontend' ? 'Frontend' :
-                            category === 'backend' ? 'Backend' :
-                            category === 'apis' ? 'APIs / Servicios' :
-                            category === 'mobile' ? 'Dispositivos Móviles' :
-                            category === 'tools' ? 'Herramientas' : category
-                          ) : category}
+                        <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-albero mb-3">
+                          {techStackLabels[category] ?? category}
                         </h3>
-                        <div className="grid md:grid-cols-3 gap-6">
-                          {items.map((item: { name: string; role: string }, i: number) => (
-                            <div key={i} className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl hover:border-emerald-500/30 transition-all">
-                              <h4 className="text-lg font-bold text-white mb-2">{item.name}</h4>
-                              <p className="text-sm text-zinc-400">{item.role}</p>
+                        <dl className="border-t border-line">
+                          {items.map((item: { name: string; role: string }) => (
+                            <div key={item.name} className="grid sm:grid-cols-[12rem_1fr] gap-x-6 gap-y-1 py-3 border-b border-line">
+                              <dt className="font-semibold text-cream">{item.name}</dt>
+                              <dd className="text-muted">{item.role}</dd>
                             </div>
                           ))}
-                        </div>
+                        </dl>
                       </div>
-                    )
-                  ))}
-                </motion.div>
+                    ) : null,
+                  )}
+                </div>
               )}
+            </DetailSection>
 
-              {activeTab === "install" && project.installation && (
-                <motion.div
-                  key="install"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="space-y-8 mb-16"
-                >
-                   <div className="grid md:grid-cols-2 gap-4">
-                      {project.installation.requirements.map((req, i) => (
-                          <div key={i} className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-                            <FaCheckCircle className="text-emerald-500" />
-                            <span className="text-zinc-300">{req}</span>
-                          </div>
-                      ))}
-                    </div>
-                    <div className="space-y-8 mt-8">
-                    {project.installation.steps.map((step, i) => (
-                      <div key={i} className="space-y-4">
-                        <h4 className="text-xl font-bold text-white flex items-center gap-3">
-                          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-500 font-mono text-sm border border-emerald-500/30">
-                            {i + 1}
+            {/* --- CARACTERÍSTICAS --- */}
+            {project.features && project.features.length > 0 && (
+              <DetailSection id="features-title" title={es ? "Características" : "Features"}>
+                <ol className="border-t border-line">
+                  {project.features.map((feature, i) => (
+                    <li key={feature.title} className="py-6 border-b border-line">
+                      <Reveal>
+                        <div className="grid grid-cols-[3rem_1fr] gap-4">
+                          <span aria-hidden="true" className="text-sm font-medium tabular-nums text-muted pt-2">
+                            {String(i + 1).padStart(2, "0")}
                           </span>
-                          {step.title}
-                        </h4>
-                        {step.description && <p className="text-zinc-400 ml-11">{step.description}</p>}
-                        <div className="ml-11 bg-black/50 border border-zinc-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                          {step.commands.map((cmd, j) => (
-                            <div key={j} className="mb-2 last:mb-0">
-                              <div className="flex items-center gap-3">
-                                  <span className="text-emerald-500">$</span>
-                                  <span className="text-zinc-300">{cmd}</span>
-                              </div>
-                            </div>
-                          ))}
+                          <div>
+                            <h3 className="text-2xl font-bold text-cream">
+                              <span aria-hidden="true" className="mr-2">{feature.icon}</span>
+                              {feature.title}
+                            </h3>
+                            <p className="mt-2 text-muted leading-relaxed">{feature.description}</p>
+                            {feature.techs.length > 0 && (
+                              <p className="mt-3 text-sm text-cream/70">{feature.techs.join(" · ")}</p>
+                            )}
+                          </div>
                         </div>
+                      </Reveal>
+                    </li>
+                  ))}
+                </ol>
+              </DetailSection>
+            )}
+
+            {/* --- GALERÍA --- */}
+            {displayedGallery.length > 0 && (
+              <DetailSection id="gallery-title" title={es ? "Capturas" : "Screenshots"}>
+                <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-12">
+                  {displayedGallery.map((img, idx) => {
+                    const isMacWindow =
+                      img.caption?.includes("(macOS)") ||
+                      project.category.includes("Full Stack") ||
+                      project.category.includes("Backend");
+                    const isAndroid = project.category === "Android";
+                    const alt = img.caption || project.title;
+
+                    return (
+                      <li key={`${img.url}-${idx}`} className={isMacWindow ? "sm:col-span-2" : ""}>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedImage({ url: img.url, caption: alt })}
+                          aria-label={`${es ? "Ampliar" : "Enlarge"}: ${alt}`}
+                          className="block w-full cursor-zoom-in transition-transform duration-300 hover:-translate-y-1"
+                        >
+                          {isMacWindow ? (
+                            <DesktopWindowMockup imageUrl={img.url} alt={alt} />
+                          ) : isAndroid ? (
+                            <AndroidMockup imageUrl={img.url} alt={alt} />
+                          ) : (
+                            <IPhoneMockup imageUrl={img.url} alt={alt} />
+                          )}
+                        </button>
+                        {img.caption && <p className="mt-4 text-center text-muted">{img.caption}</p>}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </DetailSection>
+            )}
+
+            {/* --- INSTALACIÓN --- */}
+            {project.installation && (
+              <DetailSection id="install-title" title={es ? "Instalación" : "Setup"}>
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-albero mb-3">
+                  {t.installationRequirements}
+                </h3>
+                <ul className="flex flex-wrap gap-2 mb-10">
+                  {project.installation.requirements.map((req) => (
+                    <li key={req} className="rounded-full border border-cream/20 px-4 py-1.5 text-cream">
+                      {req}
+                    </li>
+                  ))}
+                </ul>
+
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-albero mb-3">
+                  {t.installationSteps}
+                </h3>
+                <ol className="space-y-6">
+                  {project.installation.steps.map((step, i) => (
+                    <li key={step.title} className="grid grid-cols-[2.5rem_1fr] gap-3">
+                      <span
+                        aria-hidden="true"
+                        className="grid place-items-center w-9 h-9 rounded-full bg-albero text-ink font-bold"
+                      >
+                        {i + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-lg font-semibold text-cream pt-1">{step.title}</p>
+                        {step.description && <p className="mt-1 text-muted">{step.description}</p>}
+                        <pre className="mt-3 rounded-xl bg-[#0b1428] border border-line p-4 text-sm font-mono text-cream overflow-x-auto">
+                          {step.commands.map((cmd) => (
+                            <code key={cmd} className="block">
+                              <span aria-hidden="true" className="text-albero select-none">$ </span>
+                              {cmd}
+                            </code>
+                          ))}
+                        </pre>
                       </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </>
-        )}
+                    </li>
+                  ))}
+                </ol>
+              </DetailSection>
+            )}
+          </div>
 
-        {/* Galería (Actualizada con lógica corregida) */}
-        {displayedGallery.length > 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
-            <div className="flex items-center gap-4 mb-12">
-              <FaServer className="text-emerald-500 text-xl" />
-              <h2 className="text-2xl font-bold text-white uppercase tracking-wider">Screenshots</h2>
-              <div className="h-[1px] flex-grow bg-zinc-800" />
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-              {displayedGallery.map((img, idx) => {
-                const isMacWindow = img.caption?.includes("(macOS)") || project.category.includes("Full Stack") || project.category.includes("Backend");
-                const isAndroid = project.category === "Android";
-                
-                return (
-                  <div key={idx} className="flex flex-col items-center gap-4">
-                    {isMacWindow ? (
-                      <DesktopWindowMockup 
-                        imageUrl={img.url} 
-                        alt={img.caption || ""} 
-                        caption={img.caption || "Screenshot"} 
-                        onClick={() => setSelectedImage({ url: img.url, caption: img.caption || "Screenshot" })}
-                      />
-                    ) : isAndroid ? (
-                      <AndroidMockup 
-                        imageUrl={img.url} 
-                        alt={img.caption || ""} 
-                        onClick={() => setSelectedImage({ url: img.url, caption: img.caption || "Screenshot" })}
-                      />
-                    ) : (
-                      <IPhoneMockup 
-                        imageUrl={img.url} 
-                        alt={img.caption || ""} 
-                        onClick={() => setSelectedImage({ url: img.url, caption: img.caption || "Screenshot" })}
-                      />
-                    )}
-                    <p className="text-xs text-zinc-500 font-mono text-center max-w-[300px]">
-                      {img.caption}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </div>
-
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-zoom-out"
-            onClick={() => setSelectedImage(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 350 }}
-              className="relative max-w-5xl w-full flex flex-col items-center justify-center cursor-default"
-              onClick={(e) => e.stopPropagation()}
+          {/* --- SIGUIENTE PROYECTO --- */}
+          {nextProject && nextProject.slug !== project.slug && (
+            <Link
+              href={`/projects/${nextProject.slug}`}
+              style={{ backgroundColor: projectColor(nextProject.slug, projectIndex + 1) }}
+              className="group mt-8 flex items-center justify-between gap-6 rounded-[2rem] p-6 sm:p-10 text-ink"
             >
-              {/* Close Button */}
-              <button 
-                onClick={() => setSelectedImage(null)}
-                className="absolute -top-14 right-0 text-zinc-400 hover:text-white transition-colors duration-300 font-mono flex items-center gap-2 text-xs bg-zinc-900/80 border border-zinc-800 px-3 py-1.5 rounded-lg backdrop-blur"
-              >
-                <span>ESC</span>
-                <span className="w-[1px] h-3 bg-zinc-800" />
-                <span>CLOSE</span>
-              </button>
-
-              {/* Image Box */}
-              <div className="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950/80 flex items-center justify-center max-w-full max-h-[75vh] p-2">
-                <img
-                  src={selectedImage.url}
-                  alt={selectedImage.caption}
-                  className="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl"
-                />
-              </div>
-
-              {/* Caption */}
-              <div className="mt-4 text-center">
-                <span className="font-mono text-xs text-zinc-300 bg-zinc-900/50 border border-zinc-800 px-4 py-2 rounded-xl backdrop-blur">
-                  {selectedImage.caption}
+              <span>
+                <span className="block text-sm font-bold uppercase tracking-[0.14em] text-ink/70">
+                  {es ? "Siguiente proyecto" : "Next project"}
                 </span>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </main>
+                <span className="mt-1 block display-tight text-4xl sm:text-6xl font-bold">{nextProject.title}</span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="grid place-items-center shrink-0 w-14 h-14 rounded-full bg-ink text-cream text-2xl transition-transform group-hover:rotate-45"
+              >
+                ↗
+              </span>
+            </Link>
+          )}
+        </div>
+      </main>
+
+      <SiteFooter />
+
+      {/* --- VISOR DE IMÁGENES --- */}
+      {selectedImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedImage.caption}
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#0b1428]/95 backdrop-blur-sm cursor-zoom-out"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative max-w-5xl w-full flex flex-col items-center cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              autoFocus
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-14 right-0 h-10 px-4 rounded-full bg-albero text-ink text-sm font-bold"
+            >
+              {es ? "Cerrar" : "Close"} <span aria-hidden="true">✕</span>
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedImage.url}
+              alt={selectedImage.caption}
+              className="max-w-full max-h-[78vh] object-contain rounded-2xl shadow-2xl"
+            />
+            <p className="mt-4 text-center text-cream">{selectedImage.caption}</p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

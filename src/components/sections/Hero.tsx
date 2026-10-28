@@ -1,48 +1,94 @@
 "use client";
-import { motion } from "framer-motion";
-import { personalData } from "@/lib/data";
+import Image from "next/image";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { projectsDataES } from "@/data/project";
+import { CONTACT } from "@/data/contact";
+
+// Insignia circular con la foto y un texto que gira alrededor
+function PhotoBadge({ text }: { text: string }) {
+  return (
+    <div className="relative w-40 h-40 sm:w-48 sm:h-48 shrink-0 -rotate-6">
+      <svg viewBox="0 0 200 200" aria-hidden="true" className="absolute inset-0 w-full h-full animate-badge">
+        <defs>
+          <path id="badge-circle" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0" />
+        </defs>
+        <circle cx="100" cy="100" r="98" fill="#f5c451" />
+        {/* textLength reparte el texto por toda la circunferencia (2·π·82 ≈ 515) */}
+        <text className="fill-[#13213f] font-sans font-bold uppercase" fontSize="15">
+          <textPath href="#badge-circle" textLength="510" lengthAdjust="spacing">
+            {text}
+          </textPath>
+        </text>
+      </svg>
+      <div className="absolute inset-[22%] rounded-full overflow-hidden ring-4 ring-[#13213f]">
+        <Image
+          src="/avatar.webp"
+          alt="José Manuel Jiménez Rodríguez"
+          fill
+          priority
+          sizes="120px"
+          className="object-cover"
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
+  const { t } = useLanguage();
+
+  const facts = [
+    t.factDam,
+    t.factCompanies,
+    `${projectsDataES.length} ${t.factProjects}`,
+    t.factEnglish,
+  ];
+
   return (
-    <section className="relative h-[85vh] flex flex-col justify-center items-start overflow-hidden">
-      
-      {/* Fondo sutil */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/20 via-zinc-950 to-zinc-950"></div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 space-y-8 max-w-3xl"
-      >
-        {/* BADGE DE ESTADO ACTUALIZADO */}
-        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          Buscando prácticas para 2025
+    <section id="top" aria-labelledby="hero-title" className="pt-32 sm:pt-40 pb-20 sm:pb-28">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+        <div className="relative">
+          <div className="mb-8 lg:mb-0 lg:absolute lg:right-0 lg:-top-24">
+            <PhotoBadge text={t.heroBadge} />
+          </div>
+          <h1
+            id="hero-title"
+            className="display-tight font-bold text-albero text-[3.4rem] sm:text-7xl md:text-8xl lg:text-[7.4rem]"
+          >
+            {t.heroHello}
+            <br />
+            <span className="text-cream">{t.heroLine}</span>
+          </h1>
         </div>
 
-        <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tighter leading-[1.1]">
-          {personalData.name.split(" ")[0]} <br />
-          <span className="text-zinc-500">{personalData.name.split(" ").slice(1).join(" ")}</span>
-        </h1>
-        
-        <p className="text-xl text-zinc-400 max-w-2xl leading-relaxed">
-          Estudiante de 2º DAM especializado en <span className="text-zinc-200">Backend</span> y desarrollo <span className="text-zinc-200">Móvil</span>. 
-          Preparado para aportar valor en entornos de producción reales.
-        </p>
+        <div className="mt-10 sm:mt-14 grid md:grid-cols-[1.3fr_1fr] gap-8 md:gap-16 items-end">
+          <p className="text-lg sm:text-xl text-muted leading-relaxed max-w-xl">{t.heroIntro}</p>
 
-        <div className="flex flex-wrap gap-4 pt-4">
-          <button onClick={() => document.getElementById('projects')?.scrollIntoView({behavior: 'smooth'})} className="px-8 py-3.5 bg-white text-black font-bold rounded-full hover:bg-zinc-200 transition-colors">
-            Ver mis Proyectos
-          </button>
-          <a href="mailto:tu-email@ejemplo.com" className="px-8 py-3.5 bg-zinc-900 text-white font-medium border border-zinc-800 rounded-full hover:bg-zinc-800 transition-colors">
-            Contactar ahora
-          </a>
+          <div className="flex flex-wrap gap-3 md:justify-end">
+            <a
+              href="#work"
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-cream text-ink font-bold hover:bg-albero transition-colors"
+            >
+              {t.heroCtaWork} <span aria-hidden="true">↓</span>
+            </a>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-full border-2 border-cream/30 text-cream font-bold hover:border-albero hover:text-albero transition-colors"
+            >
+              {t.heroCtaEmail}
+            </a>
+          </div>
         </div>
-      </motion.div>
+
+        <ul className="mt-14 sm:mt-20 pt-6 border-t border-line flex flex-wrap gap-x-3 gap-y-2 text-[15px] font-medium text-cream">
+          {facts.map((fact, i) => (
+            <li key={fact} className="flex items-center gap-3">
+              {i > 0 && <span aria-hidden="true" className="text-albero">✦</span>}
+              {fact}
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }
