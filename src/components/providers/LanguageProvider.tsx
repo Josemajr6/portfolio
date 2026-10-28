@@ -30,7 +30,7 @@ const translations = {
     heroBadge: "disponible · prácticas · sevilla · ",
     heroCtaWork: "Ver proyectos",
     heroCtaEmail: "Escríbeme",
-    factDam: "DAM con un 9,00 de media",
+    factDam: "Técnico Superior en DAM",
     factCompanies: "3 empresas",
     factProjects: "proyectos publicados",
     factEnglish: "Inglés B1",
@@ -45,7 +45,7 @@ const translations = {
     // Sobre mí
     aboutTitle: "Sobre mí.",
     aboutText1:
-      "Terminé el Grado Superior de DAM con un 9 de media y ahora estoy haciendo DAW en Digitech para centrarme en el desarrollo web.",
+      "Terminé el Grado Superior de DAM y ahora estoy haciendo DAW en Digitech para centrarme en el desarrollo web.",
     aboutText2:
       "He trabajado con Laravel, Angular y WordPress en EveryBind, y en el Ayuntamiento de Arahal monté servidores web en Linux. Me gusta hacer proyectos por mi cuenta y aprender tecnologías nuevas.",
     aboutText3:
@@ -149,7 +149,7 @@ const translations = {
     heroBadge: "available · internship · seville · ",
     heroCtaWork: "See my work",
     heroCtaEmail: "Email me",
-    factDam: "Diploma with a 9/10 average",
+    factDam: "Multiplatform App Development diploma",
     factCompanies: "3 companies",
     factProjects: "published projects",
     factEnglish: "English B1",
@@ -164,7 +164,7 @@ const translations = {
     // About
     aboutTitle: "About.",
     aboutText1:
-      "I finished a Higher VET Diploma in Multiplatform Application Development with a 9/10 average, and I'm now studying Web Application Development at Digitech to focus on the web.",
+      "I finished a Higher VET Diploma in Multiplatform Application Development, and I'm now studying Web Application Development at Digitech to focus on the web.",
     aboutText2:
       "I've worked with Laravel, Angular and WordPress at EveryBind, and I set up Linux web servers at Arahal City Council. I enjoy building my own projects and learning new technologies.",
     aboutText3:
