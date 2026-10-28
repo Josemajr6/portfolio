@@ -36,38 +36,29 @@ const DesktopMockup = ({
   url?: string;
 }) => (
   <figure className="flex flex-col gap-3">
-    <div className="relative rounded-2xl overflow-hidden bg-cream shadow-2xl transition-transform duration-300 hover:-translate-y-1">
-      <div className="flex items-center gap-1.5 px-4 py-2.5">
-        <span className="w-2.5 h-2.5 rounded-full bg-[#ff6b5f]" />
-        <span className="w-2.5 h-2.5 rounded-full bg-[#f5c451]" />
-        <span className="w-2.5 h-2.5 rounded-full bg-[#5cc66a]" />
-      </div>
-      <div className="relative bg-[#0b1428]" style={{ aspectRatio: "16/10" }}>
-        <Image
-          src={src}
-          alt={caption}
-          fill
-          className="object-contain object-center"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-      </div>
-    </div>
+    <Image
+      src={src}
+      alt={caption}
+      width={0}
+      height={0}
+      sizes="(max-width: 768px) 100vw, 50vw"
+      className="w-full h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)]"
+    />
     <figcaption className="text-sm text-muted leading-relaxed px-1">{caption}</figcaption>
   </figure>
 );
 
 const MobileMockup = ({ src, caption }: { src: string; caption: string }) => (
-  <figure className="flex flex-col items-center gap-3">
-    <div
-      className="relative mx-auto bg-[#0b1428] rounded-[36px] p-2 shadow-2xl transition-transform duration-300 hover:-translate-y-1"
-      style={{ width: 190 }}
-    >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-[#0b1428] rounded-b-xl z-20" />
-      <div className="relative bg-black rounded-[28px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
-        <Image src={src} alt={caption} fill className="object-contain object-center" sizes="190px" />
-      </div>
-    </div>
-    <figcaption className="text-sm text-muted text-center max-w-[190px] leading-relaxed">{caption}</figcaption>
+  <figure className="flex flex-col items-center gap-3 w-full max-w-[220px]">
+    <Image
+      src={src}
+      alt={caption}
+      width={0}
+      height={0}
+      sizes="220px"
+      className="w-full h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)]"
+    />
+    <figcaption className="text-sm text-muted text-center leading-relaxed">{caption}</figcaption>
   </figure>
 );
 

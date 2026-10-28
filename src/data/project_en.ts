@@ -1100,11 +1100,11 @@ export const projectsDataEN: Project[] = [
     title: "ManyWorker API",
     category: "Backend",
     tech: ["Spring Boot", "Swagger", "JUNIT"],
-    description: "REST API in development for task and user management.",
+    description: "REST API for task and user management.",
     githubUrl: "https://github.com/Josemajr6/ManyWorker",
     mainImage: "/images/projects/manyworker/manyworker.webp",
     galleryImages: [],
-    status: "In Progress",
+    status: "Completed",
     isFeatured: false,
   },
 

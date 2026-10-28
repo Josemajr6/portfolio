@@ -36,11 +36,10 @@ export default function ProjectCard({ project, index, size = "small" }: ProjectC
   return (
     <article
       style={{ backgroundColor: projectColor(project.slug, index) }}
-      className={`group relative isolate overflow-hidden rounded-[2rem] text-ink ${
-        large ? "h-[440px] sm:h-[500px]" : "h-[400px]"
-      }`}
+      className="group relative isolate flex flex-col h-full overflow-hidden rounded-[2rem] text-ink"
     >
-      <div className="relative z-10 p-6 pr-20 sm:p-8 sm:pr-20">
+      {/* Sin "relative" aquí: el enlace estirado (::after) debe cubrir toda la tarjeta, captura incluida */}
+      <div className="p-6 pr-20 sm:p-8 sm:pr-20">
         <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/70">
           {project.category} · {techs.join(", ")}
         </p>
@@ -61,25 +60,25 @@ export default function ProjectCard({ project, index, size = "small" }: ProjectC
         )}
       </div>
 
-      {/* La captura "se sale" de la tarjeta por abajo a la derecha */}
-      <div
-        className={`absolute right-0 bottom-0 overflow-hidden rounded-tl-2xl bg-ink shadow-[0_-10px_40px_-10px_rgba(19,33,63,0.45)] transition-transform duration-500 ease-out group-hover:-translate-y-2 ${
-          large ? "left-10 sm:left-24 h-[48%]" : "left-8 h-[42%]"
-        }`}
-      >
-        <Image
-          src={project.mainImage}
-          alt=""
-          fill
-          sizes="(max-width: 768px) 90vw, 50vw"
-          className={contain ? "object-contain p-3" : "object-cover object-top"}
-        />
+      {/* La captura "se sale" por abajo a la derecha; el hueco es 16:9 como las imágenes, así no se recorta */}
+      <div className={`mt-auto pt-2 ${large ? "pl-10 sm:pl-20" : "pl-8 sm:pl-12"}`}>
+        <div className="relative aspect-video overflow-hidden rounded-tl-2xl bg-ink shadow-[0_-10px_40px_-10px_rgba(19,33,63,0.45)]">
+          <Image
+            src={project.mainImage}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 90vw, 50vw"
+            className={`origin-bottom-left transition-transform duration-500 ease-out group-hover:scale-[1.03] ${
+              contain ? "object-contain p-3" : "object-cover"
+            }`}
+          />
+        </div>
       </div>
 
       {/* Indicador visible al pasar el ratón o al enfocar con teclado */}
       <span
         aria-hidden="true"
-        className="glass-light absolute top-6 right-6 z-10 grid place-items-center w-11 h-11 rounded-full text-ink text-lg font-bold transition-transform duration-300 group-hover:rotate-45 group-focus-within:rotate-45"
+        className="glass-light pointer-events-none absolute top-6 right-6 z-10 grid place-items-center w-11 h-11 rounded-full text-ink text-lg font-bold transition-transform duration-300 group-hover:rotate-45 group-focus-within:rotate-45"
       >
         ↗
       </span>

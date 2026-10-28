@@ -61,40 +61,18 @@ const getTechIcon = (techName: string) => {
   return <FaCode />;
 };
 
-// === MOCKUPS DE DISPOSITIVO (object-contain para no recortar capturas) ===
-
-const IPhoneMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
-  <div className="relative mx-auto w-[260px]">
-    <div className="relative bg-ink rounded-[48px] p-3 border-[10px] border-[#0b1428] shadow-2xl">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[24px] bg-[#0b1428] rounded-b-[18px] z-20" />
-      <div className="relative bg-black rounded-[34px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
-        <Image src={imageUrl} alt={alt} fill sizes="260px" className="object-contain" />
-      </div>
-    </div>
-  </div>
-);
-
-const AndroidMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
-  <div className="relative mx-auto w-[260px]">
-    <div className="relative bg-[#0b1428] rounded-[40px] p-2.5 shadow-2xl">
-      <div className="relative bg-black rounded-[32px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
-        <Image src={imageUrl} alt={alt} fill sizes="260px" className="object-contain" />
-      </div>
-    </div>
-  </div>
-);
-
-const DesktopWindowMockup = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => (
-  <div className="relative w-full rounded-2xl overflow-hidden bg-cream shadow-2xl">
-    <div className="flex items-center gap-1.5 px-4 py-3">
-      <span className="w-3 h-3 rounded-full bg-[#ff6b5f]" />
-      <span className="w-3 h-3 rounded-full bg-[#f5c451]" />
-      <span className="w-3 h-3 rounded-full bg-[#5cc66a]" />
-    </div>
-    <div className="relative bg-[#0b1428]" style={{ aspectRatio: "16/10" }}>
-      <Image src={imageUrl} alt={alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-contain" />
-    </div>
-  </div>
+// Captura sin marco: tamaño natural, bordes redondeados y sombra suave
+const Screenshot = ({ imageUrl, alt, narrow }: { imageUrl: string; alt: string; narrow?: boolean }) => (
+  <Image
+    src={imageUrl}
+    alt={alt}
+    width={0}
+    height={0}
+    sizes={narrow ? "300px" : "(max-width: 768px) 100vw, 900px"}
+    className={`h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)] ${
+      narrow ? "w-full max-w-[300px] mx-auto" : "w-full"
+    }`}
+  />
 );
 
 // Sección con etiqueta a la izquierda, como en la trayectoria de la home
@@ -214,14 +192,17 @@ export default function ProjectDetailPage({
             </div>
 
             {/* Captura principal que "se sale" por abajo */}
-            <div className="relative mx-6 sm:mx-10 md:ml-auto md:mr-14 md:w-[70%] h-56 sm:h-80 md:h-[22rem] rounded-t-2xl overflow-hidden bg-ink shadow-[0_-20px_60px_-20px_rgba(19,33,63,0.5)]">
+            {/* Hueco 16:9 como las imágenes principales, para que se vean enteras y sin barras */}
+            <div className="relative mx-6 sm:mx-10 md:ml-auto md:mr-14 md:w-[62%] aspect-video rounded-t-2xl overflow-hidden bg-ink shadow-[0_-20px_60px_-20px_rgba(19,33,63,0.5)]">
               <Image
                 src={project.mainImage}
                 alt={es ? `Captura principal de ${project.title}` : `${project.title} main screenshot`}
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 70vw"
-                className="object-contain p-3"
+                sizes="(max-width: 768px) 100vw, 62vw"
+                className={
+                  ["nexus-app", "aura-notch"].includes(project.slug) ? "object-contain p-3" : "object-cover"
+                }
               />
             </div>
           </header>
@@ -343,7 +324,6 @@ export default function ProjectDetailPage({
                       img.caption?.includes("(macOS)") ||
                       project.category.includes("Full Stack") ||
                       project.category.includes("Backend");
-                    const isAndroid = project.category === "Android";
                     const alt = img.caption || project.title;
 
                     return (
@@ -354,13 +334,7 @@ export default function ProjectDetailPage({
                           aria-label={`${es ? "Ampliar" : "Enlarge"}: ${alt}`}
                           className="block w-full cursor-zoom-in transition-transform duration-300 hover:-translate-y-1"
                         >
-                          {isMacWindow ? (
-                            <DesktopWindowMockup imageUrl={img.url} alt={alt} />
-                          ) : isAndroid ? (
-                            <AndroidMockup imageUrl={img.url} alt={alt} />
-                          ) : (
-                            <IPhoneMockup imageUrl={img.url} alt={alt} />
-                          )}
+                          <Screenshot imageUrl={img.url} alt={alt} narrow={!isMacWindow} />
                         </button>
                         {img.caption && <p className="mt-4 text-center text-muted">{img.caption}</p>}
                       </li>

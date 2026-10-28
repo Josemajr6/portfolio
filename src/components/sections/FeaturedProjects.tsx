@@ -37,7 +37,7 @@ export default function FeaturedProjects() {
           <ul className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6">
             {featured.map((project, index) => (
               <li key={project.slug} className={SPANS[index % SPANS.length]}>
-                <Reveal delay={(index % 2) * 0.08}>
+                <Reveal delay={(index % 2) * 0.08} className="h-full">
                   <ProjectCard project={project} index={index} size="large" />
                 </Reveal>
               </li>
