@@ -50,13 +50,13 @@ export default function Contact() {
             </span>
           </div>
 
-          <ul className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-px bg-ink/15 rounded-2xl overflow-hidden">
+          <ul className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3">
             {links.map((link) => (
-              <li key={link.label} className="bg-albero">
+              <li key={link.label}>
                 <a
                   href={link.href}
                   {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group block p-4 sm:p-5 h-full hover:bg-ink hover:text-cream transition-colors"
+                  className="glass-light group block p-4 sm:p-5 h-full rounded-2xl hover:bg-none hover:bg-ink hover:text-cream hover:border-ink transition-colors"
                 >
                   <span className="block text-sm font-semibold opacity-70">{link.label}</span>
                   <span className="mt-1 block font-bold">

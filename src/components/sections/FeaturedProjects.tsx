@@ -84,7 +84,7 @@ export default function FeaturedProjects() {
                   </span>
                   <span
                     aria-hidden="true"
-                    className="grid place-items-center w-10 h-10 rounded-full border border-line text-cream transition-all group-hover:bg-albero group-hover:text-ink group-hover:border-albero group-hover:rotate-45"
+                    className="glass grid place-items-center w-10 h-10 rounded-full text-cream transition-all group-hover:bg-none group-hover:bg-albero group-hover:text-ink group-hover:border-albero group-hover:rotate-45"
                   >
                     ↗
                   </span>

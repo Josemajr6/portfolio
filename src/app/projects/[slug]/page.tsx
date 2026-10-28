@@ -227,16 +227,16 @@ export default function ProjectDetailPage({
           </header>
 
           {/* --- DATOS RÁPIDOS --- */}
-          <dl className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-px bg-line rounded-2xl overflow-hidden">
-            <div className="bg-navy p-5">
+          <dl className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="glass rounded-2xl p-5">
               <dt className="text-sm text-muted">{es ? "Plataforma" : "Platform"}</dt>
               <dd className="mt-1 text-lg font-semibold text-cream">{displayCategory}</dd>
             </div>
-            <div className="bg-navy p-5">
+            <div className="glass rounded-2xl p-5">
               <dt className="text-sm text-muted">{es ? "Estado" : "Status"}</dt>
               <dd className="mt-1 text-lg font-semibold text-cream">{statusText}</dd>
             </div>
-            <div className="bg-navy p-5">
+            <div className="glass rounded-2xl p-5">
               <dt className="text-sm text-muted">{es ? "Stack principal" : "Main stack"}</dt>
               <dd className="mt-1 text-lg font-semibold text-cream">
                 {project.tech.filter((tech) => tech.toLowerCase() !== "jwt").slice(0, 3).join(", ")}
@@ -430,7 +430,7 @@ export default function ProjectDetailPage({
               </span>
               <span
                 aria-hidden="true"
-                className="grid place-items-center shrink-0 w-14 h-14 rounded-full bg-ink text-cream text-2xl transition-transform group-hover:rotate-45"
+                className="glass-light grid place-items-center shrink-0 w-14 h-14 rounded-full text-ink text-2xl font-bold transition-transform group-hover:rotate-45"
               >
                 ↗
               </span>

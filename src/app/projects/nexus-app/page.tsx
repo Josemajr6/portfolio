@@ -909,9 +909,9 @@ export default function NexusAppPage() {
           </header>
 
           {/* ── CIFRAS ── */}
-          <dl className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden">
+          <dl className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
             {stats.map((s) => (
-              <div key={s.l} className="bg-navy p-5">
+              <div key={s.l} className="glass rounded-2xl p-5">
                 <dt className="text-sm text-muted">{s.l}</dt>
                 <dd className="mt-1 display-tight text-4xl font-bold text-cream">{s.v}</dd>
               </div>

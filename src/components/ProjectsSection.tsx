@@ -46,10 +46,10 @@ export default function ProjectsSection() {
               type="button"
               onClick={() => setFilter(cat)}
               aria-pressed={isActive}
-              className={`h-10 px-4 rounded-full text-[15px] font-semibold border-2 transition-colors ${
+              className={`h-10 px-4 rounded-full text-[15px] font-semibold transition-colors ${
                 isActive
-                  ? "bg-albero border-albero text-ink"
-                  : "border-cream/25 text-cream hover:border-albero hover:text-albero"
+                  ? "bg-albero border border-albero text-ink"
+                  : "glass text-cream hover:text-albero"
               }`}
             >
               {cat === "all" ? t.filterAll : cat} <span className="opacity-60 tabular-nums">{count}</span>

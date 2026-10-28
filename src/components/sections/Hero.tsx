@@ -73,7 +73,7 @@ export default function Hero() {
             </a>
             <a
               href={`mailto:${CONTACT.email}`}
-              className="inline-flex items-center gap-2 h-12 px-6 rounded-full border-2 border-cream/30 text-cream font-bold hover:border-albero hover:text-albero transition-colors"
+              className="glass inline-flex items-center gap-2 h-12 px-6 rounded-full text-cream font-bold hover:text-albero transition-colors"
             >
               {t.heroCtaEmail}
             </a>

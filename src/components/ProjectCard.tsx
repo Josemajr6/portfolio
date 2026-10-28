@@ -79,7 +79,7 @@ export default function ProjectCard({ project, index, size = "small" }: ProjectC
       {/* Indicador visible al pasar el ratón o al enfocar con teclado */}
       <span
         aria-hidden="true"
-        className="absolute top-6 right-6 z-10 grid place-items-center w-11 h-11 rounded-full bg-ink text-cream text-lg transition-transform duration-300 group-hover:rotate-45 group-focus-within:rotate-45"
+        className="glass-light absolute top-6 right-6 z-10 grid place-items-center w-11 h-11 rounded-full text-ink text-lg font-bold transition-transform duration-300 group-hover:rotate-45 group-focus-within:rotate-45"
       >
         ↗
       </span>

@@ -20,7 +20,7 @@ export default function BackButton() {
     <button
       type="button"
       onClick={handleBack}
-      className="group inline-flex items-center gap-2 py-2 text-muted font-semibold hover:text-albero transition-colors"
+      className="glass group inline-flex items-center gap-2 h-10 px-4 rounded-full text-cream font-semibold hover:text-albero transition-colors"
     >
       <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">←</span>
       {language === 'es' ? 'Volver' : 'Back'}

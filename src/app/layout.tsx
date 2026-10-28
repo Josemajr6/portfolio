@@ -5,7 +5,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 
-
 // Configuración de fuentes
 const inter = Inter({
   subsets: ["latin"],
