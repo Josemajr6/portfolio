@@ -41,7 +41,6 @@ export default function Hero() {
     t.factDam,
     t.factCompanies,
     `${projectsDataES.length} ${t.factProjects}`,
-    t.factEnglish,
   ];
 
   return (

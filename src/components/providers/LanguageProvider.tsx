@@ -33,7 +33,6 @@ const translations = {
     factDam: "DAW en curso · DAM terminado",
     factCompanies: "3 empresas",
     factProjects: "proyectos publicados",
-    factEnglish: "Inglés B1",
 
     // Proyectos
     workTitle: "Proyectos.",
@@ -152,7 +151,6 @@ const translations = {
     factDam: "Studying Web App Development",
     factCompanies: "3 companies",
     factProjects: "published projects",
-    factEnglish: "English B1",
 
     // Work
     workTitle: "Work.",
