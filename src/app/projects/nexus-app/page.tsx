@@ -27,37 +27,46 @@ import { useLanguage } from "@/components/providers/LanguageProvider";
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
-const DesktopMockup = ({
-  src,
-  caption,
-}: {
-  src: string;
-  caption: string;
-  url?: string;
-}) => (
+type ShotProps = { src: string; caption: string; onOpen: () => void; enlargeLabel: string };
+
+const DesktopMockup = ({ src, caption, onOpen, enlargeLabel }: ShotProps) => (
   <figure className="flex flex-col gap-3">
-    <Image
-      src={src}
-      alt={caption}
-      width={0}
-      height={0}
-      sizes="(max-width: 768px) 100vw, 50vw"
-      className="w-full h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)]"
-    />
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={`${enlargeLabel}: ${caption}`}
+      className="block w-full cursor-zoom-in transition-transform duration-300 hover:-translate-y-1"
+    >
+      <Image
+        src={src}
+        alt={caption}
+        width={0}
+        height={0}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="w-full h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)]"
+      />
+    </button>
     <figcaption className="text-sm text-muted leading-relaxed px-1">{caption}</figcaption>
   </figure>
 );
 
-const MobileMockup = ({ src, caption }: { src: string; caption: string }) => (
+const MobileMockup = ({ src, caption, onOpen, enlargeLabel }: ShotProps) => (
   <figure className="flex flex-col items-center gap-3 w-full max-w-[220px]">
-    <Image
-      src={src}
-      alt={caption}
-      width={0}
-      height={0}
-      sizes="220px"
-      className="w-full h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)]"
-    />
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={`${enlargeLabel}: ${caption}`}
+      className="block w-full cursor-zoom-in transition-transform duration-300 hover:-translate-y-1"
+    >
+      <Image
+        src={src}
+        alt={caption}
+        width={0}
+        height={0}
+        sizes="220px"
+        className="w-full h-auto rounded-2xl shadow-[0_20px_50px_-20px_rgba(5,10,25,0.8)]"
+      />
+    </button>
     <figcaption className="text-sm text-muted text-center leading-relaxed">{caption}</figcaption>
   </figure>
 );
@@ -420,7 +429,16 @@ const GALLERY_DATA: Record<GalleryTab, { src: string; caption: string; type: "de
 
 export default function NexusAppPage() {
   const [activeTab, setActiveTab] = useState<GalleryTab>("main");
+  const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
   const { language, mounted } = useLanguage();
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedImage(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     document.title = "Nexus App | José Manuel Jiménez";
@@ -1074,9 +1092,18 @@ export default function NexusAppPage() {
                           </h3>
                         )}
                         <div className="grid sm:grid-cols-2 gap-8">
-                          {desktopItems.map((img) => (
-                            <DesktopMockup key={img.src} src={img.src} caption={translateCaption(img.caption, language)} />
-                          ))}
+                          {desktopItems.map((img) => {
+                            const caption = translateCaption(img.caption, language);
+                            return (
+                              <DesktopMockup
+                                key={img.src}
+                                src={img.src}
+                                caption={caption}
+                                enlargeLabel={es ? "Ampliar" : "Enlarge"}
+                                onOpen={() => setSelectedImage({ url: img.src, caption })}
+                              />
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -1089,9 +1116,18 @@ export default function NexusAppPage() {
                           </h3>
                         )}
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-items-center">
-                          {mobileItems.map((img) => (
-                            <MobileMockup key={img.src} src={img.src} caption={translateCaption(img.caption, language)} />
-                          ))}
+                          {mobileItems.map((img) => {
+                            const caption = translateCaption(img.caption, language);
+                            return (
+                              <MobileMockup
+                                key={img.src}
+                                src={img.src}
+                                caption={caption}
+                                enlargeLabel={es ? "Ampliar" : "Enlarge"}
+                                onOpen={() => setSelectedImage({ url: img.src, caption })}
+                              />
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -1193,6 +1229,38 @@ export default function NexusAppPage() {
       </main>
 
       <SiteFooter />
+
+      {/* ── VISOR DE IMÁGENES ── */}
+      {selectedImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedImage.caption}
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#0b1428]/95 backdrop-blur-sm cursor-zoom-out"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative max-w-5xl w-full flex flex-col items-center cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              autoFocus
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-14 right-0 h-10 px-4 rounded-full bg-albero text-ink text-sm font-bold"
+            >
+              {es ? "Cerrar" : "Close"} <span aria-hidden="true">✕</span>
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedImage.url}
+              alt={selectedImage.caption}
+              className="max-w-full max-h-[78vh] object-contain rounded-2xl shadow-2xl"
+            />
+            <p className="mt-4 text-center text-cream">{selectedImage.caption}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
