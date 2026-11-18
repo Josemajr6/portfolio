@@ -32,7 +32,7 @@ const translations = {
     heroCtaEmail: "Escríbeme",
     factDam: "DAW en curso · DAM terminado",
     factCompanies: "3 empresas",
-    factProjects: "proyectos publicados",
+    factProjects: "proyectos",
 
     // Proyectos
     workTitle: "Proyectos.",
@@ -46,9 +46,9 @@ const translations = {
     aboutText1:
       "Terminé el Grado Superior de DAM y ahora estoy haciendo DAW en Digitech para centrarme en el desarrollo web.",
     aboutText2:
-      "He trabajado con Laravel, Angular y WordPress en EveryBind, y en el Ayuntamiento de Arahal monté servidores web en Linux. Me gusta hacer proyectos por mi cuenta y aprender tecnologías nuevas.",
+      "Trabajo sobre todo con Spring Boot y Angular, y he participado en Bipsy, una app de reservas ya publicada en la App Store. He hecho prácticas en EveryBind (Laravel, Angular y WordPress) y en el Ayuntamiento de Arahal, donde monté servidores web en Linux.",
     aboutText3:
-      "Busco hacer las prácticas en Sevilla, en una empresa donde pueda trabajar tanto en frontend como en backend.",
+      "Busco empresa para las prácticas de DAW a partir de febrero de 2027, en Sevilla (presencial o híbrido), donde pueda aprender rápido y quedarme a largo plazo.",
     factLocation: "Dónde",
     factLocationValue: "Sevilla, España",
     factLanguages: "Idiomas",
@@ -56,7 +56,7 @@ const translations = {
     factLicense: "Carné",
     factLicenseValue: "B",
     factLooking: "Busco",
-    factLookingValue: "Prácticas full stack",
+    factLookingValue: "Prácticas full stack desde feb. 2027",
     softSkillsTitle: "Cómo trabajo",
     softSkills: [
       "Trabajo en equipo",
@@ -148,9 +148,9 @@ const translations = {
     heroBadge: "available · internship · seville · ",
     heroCtaWork: "See my work",
     heroCtaEmail: "Email me",
-    factDam: "Studying Web App Development",
+    factDam: "Studying Web Dev · Multiplatform Dev diploma",
     factCompanies: "3 companies",
-    factProjects: "published projects",
+    factProjects: "projects",
 
     // Work
     workTitle: "Work.",
@@ -164,9 +164,9 @@ const translations = {
     aboutText1:
       "I finished a Higher VET Diploma in Multiplatform Application Development, and I'm now studying Web Application Development at Digitech to focus on the web.",
     aboutText2:
-      "I've worked with Laravel, Angular and WordPress at EveryBind, and I set up Linux web servers at Arahal City Council. I enjoy building my own projects and learning new technologies.",
+      "I mainly work with Spring Boot and Angular, and I helped build Bipsy, a booking app already live on the App Store. I did internships at EveryBind (Laravel, Angular and WordPress) and at Arahal City Council, where I set up Linux web servers.",
     aboutText3:
-      "I'm looking for a team where I can work on both frontend and backend.",
+      "I'm looking for an internship from February 2027 in Seville (on-site or hybrid), in a team where I can learn fast and stay long term.",
     factLocation: "Where",
     factLocationValue: "Seville, Spain",
     factLanguages: "Languages",
@@ -174,7 +174,7 @@ const translations = {
     factLicense: "Driving licence",
     factLicenseValue: "B",
     factLooking: "Looking for",
-    factLookingValue: "Full stack internship / junior role",
+    factLookingValue: "Full stack internship from Feb 2027",
     softSkillsTitle: "How I work",
     softSkills: [
       "Teamwork",

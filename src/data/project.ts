@@ -72,6 +72,31 @@ export interface Project {
 }
 
 export const projectsDataES: Project[] = [
+  // === BIPSY - APP PUBLICADA EN LA APP STORE ===
+  {
+    slug: "bipsy",
+    title: "Bipsy",
+    category: "Full Stack",
+    tech: ["Spring Boot", "Angular", "iOS"],
+    description:
+      "App para reservar cita en peluquerías, barberías y centros de estética, publicada en la App Store (Android muy pronto). Desarrollada en equipo.",
+    demoUrl: "https://bipsy.es",
+    mainImage: "/images/projects/bipsy/bipsy-banner.webp",
+    galleryImages: [],
+    status: "Completed",
+    isFeatured: true,
+    overview: {
+      tagline: "Pide cita sin llamar ✂️",
+      description:
+        "Bipsy es un ecosistema de dos apps: Bipsy, para que los clientes vean servicios, precios y opiniones y reserven día y hora, y Bipsy Business, para que el negocio gestione sus citas. La hemos desarrollado en equipo y ya está publicada en la App Store; la versión de Android llega en unas semanas. He trabajado en todas las partes del proyecto, sobre todo en el backend con Spring Boot y en la parte web con Angular.",
+      highlights: [
+        "Publicada en la App Store (Android muy pronto)",
+        "Dos apps: Bipsy para clientes y Bipsy Business para negocios",
+        "Mi foco: backend con Spring Boot y parte web con Angular",
+        "Proyecto real, desarrollado en equipo",
+      ],
+    },
+  },
   // === AURA MOVIES - PROYECTO COMPLETO ===
   {
     slug: "aura-movies",

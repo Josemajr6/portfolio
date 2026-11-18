@@ -2,6 +2,31 @@
 import { Project } from "./project";
 
 export const projectsDataEN: Project[] = [
+  // === BIPSY - APP PUBLISHED ON THE APP STORE ===
+  {
+    slug: "bipsy",
+    title: "Bipsy",
+    category: "Full Stack",
+    tech: ["Spring Boot", "Angular", "iOS"],
+    description:
+      "Booking app for hair salons, barbershops and beauty centres, published on the App Store (Android coming soon). Built as a team.",
+    demoUrl: "https://bipsy.es",
+    mainImage: "/images/projects/bipsy/bipsy-banner.webp",
+    galleryImages: [],
+    status: "Completed",
+    isFeatured: true,
+    overview: {
+      tagline: "Book without calling ✂️",
+      description:
+        "Bipsy is a two-app ecosystem: Bipsy, where customers see services, prices and reviews and book a day and time, and Bipsy Business, where businesses manage their appointments. We built it as a team and it is already live on the App Store; the Android version is coming in a few weeks. I worked across the whole project, mainly on the Spring Boot backend and the Angular web side.",
+      highlights: [
+        "Published on the App Store (Android coming soon)",
+        "Two apps: Bipsy for customers and Bipsy Business for businesses",
+        "My focus: Spring Boot backend and Angular web side",
+        "A real product, built as a team",
+      ],
+    },
+  },
   // === AURA MOVIES ===
   {
     slug: "aura-movies",

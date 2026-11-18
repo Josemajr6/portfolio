@@ -1,5 +1,6 @@
 // Color de fondo de cada proyecto en las tarjetas (texto siempre en tinta oscura)
 const PROJECT_COLORS: Record<string, string> = {
+  bipsy: "#f5c451",
   "nexus-app": "#cbbcff",
   "mr-rebujito": "#ffd98a",
   "aura-movies": "#ffb8a6",

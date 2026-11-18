@@ -35,17 +35,6 @@ export const certificationsDataES: Certification[] = [
     linkText: "Ver Certificado",
   },
   {
-    id: "santander-ia",
-    title: "Google: Inteligencia Artificial y productividad",
-    issuer: "Santander Open Academy",
-    date: "feb. 2025",
-    image: "/images/issuers/santander.webp",
-    pdfUrl: "/certifications/santander_ia_productividad.pdf",
-    color:
-      "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
-    linkText: "Ver Certificado",
-  },
-  {
     id: "cisco-js",
     title: "JavaScript Essentials 1",
     issuer: "Cisco Networking Academy",
@@ -82,17 +71,6 @@ export const certificationsDataEN: Certification[] = [
       "https://www.udemy.com/certificate/UC-10ac23a5-2ecc-4a72-9921-629523b4bd5a/",
     color:
       "group-hover:shadow-[0_0_30px_rgba(164,53,240,0.3)] group-hover:border-purple-500/50",
-    linkText: "View Certificate",
-  },
-  {
-    id: "santander-ia",
-    title: "Google: Artificial Intelligence and Productivity",
-    issuer: "Santander Open Academy",
-    date: "Feb 2025",
-    image: "/images/issuers/santander.webp",
-    pdfUrl: "/certifications/santander_ia_productividad.pdf",
-    color:
-      "group-hover:shadow-[0_0_30px_rgba(236,0,0,0.3)] group-hover:border-red-500/50",
     linkText: "View Certificate",
   },
   {

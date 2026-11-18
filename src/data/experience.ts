@@ -15,8 +15,9 @@ export interface Experience {
 export const experienceDataES: Experience[] = [
   {
     id: "work-everybind",
-    role: "Desarrollador Full Stack",
+    role: "Desarrollador Full Stack (prácticas)",
     company: "EveryBind",
+    location: "En remoto",
     period: "02/2026 - 06/2026",
     description: [
       "Desarrollo y mantenimiento de aplicaciones web con Laravel y Angular.",
@@ -27,7 +28,7 @@ export const experienceDataES: Experience[] = [
   },
   {
     id: "work-arahal",
-    role: "Desarrollador Web",
+    role: "Desarrollador Web (prácticas)",
     company: "Ayuntamiento de Arahal",
     period: "01/2025 - 03/2025",
     description: [
@@ -39,7 +40,7 @@ export const experienceDataES: Experience[] = [
   },
   {
     id: "work-tecniarahal",
-    role: "Técnico Informático",
+    role: "Técnico Informático (prácticas)",
     company: "Tecniarahal Quito S.L.",
     period: "04/2024 - 06/2024",
     description: [
@@ -82,8 +83,9 @@ export const experienceDataES: Experience[] = [
 export const experienceDataEN: Experience[] = [
   {
     id: "work-everybind",
-    role: "Full Stack Developer",
+    role: "Full Stack Developer (internship)",
     company: "EveryBind",
+    location: "Remote",
     period: "02/2026 - 06/2026",
     description: [
       "Developed and maintained web applications with Laravel and Angular.",
@@ -94,7 +96,7 @@ export const experienceDataEN: Experience[] = [
   },
   {
     id: "work-arahal",
-    role: "Web Developer",
+    role: "Web Developer (internship)",
     company: "Arahal City Council",
     period: "01/2025 - 03/2025",
     description: [
@@ -106,7 +108,7 @@ export const experienceDataEN: Experience[] = [
   },
   {
     id: "work-tecniarahal",
-    role: "IT Technician",
+    role: "IT Technician (internship)",
     company: "Tecniarahal Quito S.L.",
     period: "04/2024 - 06/2024",
     description: [

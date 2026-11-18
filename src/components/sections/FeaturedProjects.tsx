@@ -9,7 +9,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 
 // Mismo orden que en el CV: primero los proyectos más completos
-const FEATURED_ORDER = ["nexus-app", "mr-rebujito", "aura-movies", "gran-zona-marciana"];
+const FEATURED_ORDER = ["bipsy", "nexus-app", "mr-rebujito", "aura-movies", "gran-zona-marciana"];
 
 // Anchos alternos para que la rejilla no sea monótona
 const SPANS = ["md:col-span-7", "md:col-span-5", "md:col-span-5", "md:col-span-7"];
