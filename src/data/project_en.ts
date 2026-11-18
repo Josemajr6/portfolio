@@ -13,6 +13,10 @@ export const projectsDataEN: Project[] = [
     demoUrl: "https://bipsy.es",
     mainImage: "/images/projects/bipsy/bipsy-banner.webp",
     galleryImages: [],
+    gallery: [
+      { url: "/images/projects/bipsy/bipsy-business.webp", caption: "Bipsy Business: the salon's schedule" },
+      { url: "/images/projects/bipsy/bipsy-logo.webp", caption: "Bipsy logo" },
+    ],
     status: "Completed",
     isFeatured: true,
     overview: {

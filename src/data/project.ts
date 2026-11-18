@@ -83,6 +83,10 @@ export const projectsDataES: Project[] = [
     demoUrl: "https://bipsy.es",
     mainImage: "/images/projects/bipsy/bipsy-banner.webp",
     galleryImages: [],
+    gallery: [
+      { url: "/images/projects/bipsy/bipsy-business.webp", caption: "Bipsy Business: la agenda del salón" },
+      { url: "/images/projects/bipsy/bipsy-logo.webp", caption: "Logotipo de Bipsy" },
+    ],
     status: "Completed",
     isFeatured: true,
     overview: {
